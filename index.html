@@ -7,34 +7,31 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="每天长一点" />
-  <meta name="description" content="每天 1 小时，一年系统补齐诗词、历史、地理、名著与表达力。" />
-  <title>每天长一点｜文化成长打卡 App</title>
+  <meta name="description" content="52 周有实质内容的文化成长课程 App：诗词、历史、地理、名著、哲学、表达力。" />
+  <title>每天长一点｜52 周课程版</title>
   <link rel="manifest" href="./manifest.webmanifest" />
-  <meta name="mobile-web-app-capable" content="yes" />
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
   <link rel="icon" href="./icons/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" sizes="180x180" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
   <style>
     :root {
-      --bg: #091022;
-      --bg-soft: #111b38;
-      --panel: rgba(255,255,255,0.08);
-      --panel-strong: rgba(255,255,255,0.12);
-      --line: rgba(255,255,255,0.10);
-      --text: #edf2ff;
-      --muted: #b7c1e2;
+      --bg: #0a1022;
+      --bg2: #141f41;
+      --panel: rgba(255,255,255,.08);
+      --panel-strong: rgba(255,255,255,.12);
+      --line: rgba(255,255,255,.10);
+      --text: #eef3ff;
+      --muted: #b7c2e5;
       --primary: #7ea4ff;
-      --primary-2: #5de1b0;
       --accent: #ffd36e;
-      --ok: #2fd28c;
-      --warn: #ffbf43;
-      --danger: #ff7f7f;
-      --shadow: 0 24px 60px rgba(0,0,0,0.34);
+      --ok: #34d399;
+      --danger: #ff7a7a;
+      --shadow: 0 24px 60px rgba(0,0,0,.32);
       --radius-xl: 28px;
       --radius-lg: 22px;
       --radius-md: 18px;
-      --tabbar-height: 76px;
+      --tabbar-height: 78px;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; min-height: 100%; }
@@ -42,618 +39,264 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(126,164,255,0.28), transparent 28%),
-        radial-gradient(circle at top right, rgba(93,225,176,0.18), transparent 24%),
-        linear-gradient(180deg, #091022 0%, #131d3c 100%);
+        radial-gradient(circle at top left, rgba(126,164,255,.25), transparent 28%),
+        radial-gradient(circle at top right, rgba(255,211,110,.10), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
       min-height: 100vh;
-      padding: max(14px, env(safe-area-inset-top)) 14px calc(var(--tabbar-height) + 20px + env(safe-area-inset-bottom));
+      padding: max(14px, env(safe-area-inset-top)) 14px calc(var(--tabbar-height) + 18px + env(safe-area-inset-bottom));
     }
-    button, input, textarea {
-      font: inherit;
-    }
+    a { color: #cfe0ff; text-decoration: none; }
+    button, input, textarea { font: inherit; }
     button {
       cursor: pointer;
       border: none;
       border-radius: 16px;
       padding: 12px 14px;
       font-weight: 700;
-      transition: transform 0.08s ease, opacity 0.18s ease;
+      transition: transform .08s ease, opacity .18s ease;
     }
-    button:active { transform: scale(0.98); }
-    .app-shell {
-      max-width: 920px;
-      margin: 0 auto;
-    }
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding-top: 2px;
-      backdrop-filter: blur(14px);
-    }
-    .hero {
-      background: linear-gradient(135deg, rgba(126,164,255,0.22), rgba(93,225,176,0.14));
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius-xl);
-      padding: 18px 16px;
-      margin-bottom: 14px;
-    }
-    .hero-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .mini-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 11px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #f3f7ff;
-      font-size: 12px;
-      margin-right: 6px;
-      margin-bottom: 6px;
-    }
-    .mini-badge.ok { color: #bdf2d8; background: rgba(47,210,140,0.12); border-color: rgba(47,210,140,0.18); }
-    .mini-badge.warn { color: #ffe7a7; background: rgba(255,191,67,0.12); border-color: rgba(255,191,67,0.18); }
-    .hero h1 {
-      margin: 12px 0 8px;
-      font-size: 30px;
-      line-height: 1.1;
-      letter-spacing: 0.2px;
-    }
-    .subtitle, .quote, .helper, .muted {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-    .subtitle { margin: 0; font-size: 14px; }
-    .quote {
-      margin: 12px 0 0;
-      color: #fff1c8;
-      font-size: 14px;
-    }
-    .helper { font-size: 13px; }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
-      min-width: 172px;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #8f79ff);
-      color: white;
-    }
-    .btn-secondary {
-      background: rgba(255,255,255,0.10);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-    .btn-success {
-      background: linear-gradient(135deg, #24c97f, #58e3aa);
-      color: #062617;
-    }
-    .btn-warning {
-      background: linear-gradient(135deg, #ffd36e, #ffb703);
-      color: #4d3000;
-    }
-    .btn-danger {
-      background: linear-gradient(135deg, #ff9696, #ff6b6b);
-      color: #3d0606;
-    }
-    .screen {
-      display: none;
-      animation: fadeIn 0.18s ease;
-    }
-    .screen.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .grid { display: grid; gap: 14px; }
-    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    @media (max-width: 760px) {
-      .grid.two, .grid.three { grid-template-columns: 1fr; }
-      .hero-top { flex-direction: column; }
-      .hero-actions { justify-content: flex-start; min-width: 0; }
-    }
-    .card {
+    button:active { transform: scale(.98); }
+    .app-shell { max-width: 980px; margin: 0 auto; }
+    .hero, .card {
       background: var(--panel);
       border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
       box-shadow: var(--shadow);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
     }
-    .card h2, .card h3 { margin: 0 0 8px; }
-    .card h2 { font-size: 20px; }
-    .card h3 { font-size: 16px; }
-    .subline {
-      color: var(--primary-2);
-      font-size: 13px;
-      margin-bottom: 8px;
+    .hero { padding: 18px 16px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      background: rgba(126,164,255,.16); color: #dbe5ff;
+      border: 1px solid rgba(126,164,255,.28); font-size: 12px;
     }
-    .summary-card {
+    h1 { margin: 12px 0 10px; font-size: 30px; line-height: 1.15; }
+    h2 { margin: 0 0 10px; font-size: 22px; }
+    h3 { margin: 0 0 10px; font-size: 16px; }
+    p { margin: 0; }
+    .subtitle { color: var(--muted); line-height: 1.75; font-size: 15px; }
+    .quote { margin-top: 10px; color: #fff0c5; font-size: 14px; line-height: 1.8; }
+    .hero-metrics {
+      margin-top: 16px;
       display: grid;
-      grid-template-columns: 112px 1fr;
-      gap: 14px;
-      align-items: center;
-    }
-    .ring {
-      width: 112px;
-      height: 112px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.10) 0deg);
-      position: relative;
-      margin: 0 auto;
-    }
-    .ring::after {
-      content: '';
-      position: absolute;
-      inset: 11px;
-      border-radius: 50%;
-      background: linear-gradient(180deg, rgba(10,17,36,0.96), rgba(17,27,56,0.96));
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .ring-inner {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-    }
-    .ring-value { font-size: 24px; font-weight: 800; }
-    .ring-label { font-size: 12px; color: var(--muted); }
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
     .metric {
-      background: rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 12px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 18px;
+      padding: 14px 12px;
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.08);
     }
-    .metric strong {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 6px;
+    .metric strong { display: block; font-size: 24px; margin-bottom: 6px; }
+    .helper { color: var(--muted); line-height: 1.7; }
+    .grid { display: grid; gap: 14px; margin-top: 14px; }
+    @media (min-width: 920px) {
+      .grid.two { grid-template-columns: 1.08fr .92fr; }
     }
-    @media (max-width: 540px) {
-      .summary-card { grid-template-columns: 1fr; }
-      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card { padding: 16px; }
+    .subline { color: #dce5ff; font-size: 13px; margin-bottom: 8px; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 11px; border-radius: 999px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.07);
+      font-size: 12px; color: #f7fbff;
     }
-    .week-strip {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
+    .focus-bar {
+      margin-top: 14px; padding: 12px 14px; border-radius: 18px;
+      background: rgba(255,211,110,.12); border: 1px solid rgba(255,211,110,.22);
+      color: #fff4cf; font-size: 14px; line-height: 1.7;
     }
-    .day-pill {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 10px 6px;
-      text-align: center;
-      min-height: 78px;
-    }
-    .day-pill.today { border-color: rgba(126,164,255,0.45); box-shadow: 0 0 0 1px rgba(126,164,255,0.24) inset; }
-    .day-pill.done { background: rgba(47,210,140,0.14); color: #dcffee; }
-    .day-pill.future { opacity: 0.72; }
-    .day-pill .day-name { font-size: 12px; color: var(--muted); }
-    .day-pill .day-num { font-size: 18px; font-weight: 800; margin-top: 6px; }
-    .day-pill .day-state { margin-top: 4px; font-size: 11px; }
+    .timeline { display: grid; gap: 10px; }
     .time-card {
-      display: grid;
-      grid-template-columns: 94px 1fr;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.07);
-      margin-top: 10px;
+      display: grid; grid-template-columns: 92px 1fr; gap: 12px;
+      padding: 12px 14px; border-radius: 18px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
     }
-    .time-card .time {
-      color: var(--accent);
-      font-size: 18px;
-      font-weight: 800;
+    .time { color: #cddcff; font-weight: 700; font-size: 13px; }
+    .lesson-list { display: grid; gap: 12px; }
+    .lesson-card {
+      padding: 14px; border-radius: 18px; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.07);
     }
-    .time-card .desc {
-      line-height: 1.72;
-      color: #f2f6ff;
-      font-size: 14px;
+    .lesson-card.focus {
+      border-color: rgba(255,211,110,.34);
+      background: rgba(255,211,110,.10);
+      box-shadow: inset 0 0 0 1px rgba(255,211,110,.08);
     }
-    @media (max-width: 560px) {
-      .time-card { grid-template-columns: 1fr; }
+    .lesson-card .index {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(126,164,255,.18); font-size: 12px; margin-right: 8px;
     }
-    textarea, input[type="date"], input[type="text"] {
-      width: 100%;
-      border: none;
-      outline: none;
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.95);
-      color: #111827;
-      font-size: 14px;
+    .lesson-card p { color: var(--muted); line-height: 1.8; margin-top: 10px; }
+    .qa-list { display: grid; gap: 10px; }
+    details.qa {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 12px 14px;
     }
-    textarea { min-height: 140px; resize: vertical; }
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .status-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
+    details.qa summary { cursor: pointer; font-weight: 700; }
+    details.qa .answer { margin-top: 10px; color: var(--muted); line-height: 1.75; }
     .tip-box {
-      background: rgba(126,164,255,0.11);
-      border: 1px solid rgba(126,164,255,0.18);
-      color: #ecf2ff;
-      border-radius: 18px;
-      padding: 12px;
-      line-height: 1.7;
-      font-size: 14px;
-      margin-top: 12px;
+      padding: 12px 14px; border-radius: 16px;
+      background: rgba(52,211,153,.12); border: 1px solid rgba(52,211,153,.22);
+      color: #dafcf0; line-height: 1.75; font-size: 14px;
     }
-    .pill-row, .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    textarea, input[type="date"] {
+      width: 100%; border: none; outline: none; border-radius: 16px;
+      padding: 12px 14px; background: rgba(255,255,255,.94); color: #111827;
     }
-    .pill, .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 11px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px;
+    textarea { min-height: 120px; resize: vertical; }
+    .btn-row, .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), #9a85ff); color: white; }
+    .btn-secondary { background: rgba(255,255,255,.10); color: white; border: 1px solid var(--line); }
+    .btn-warning { background: linear-gradient(135deg, #ffd36e, #ffba3d); color: #543300; }
+    .btn-danger { background: linear-gradient(135deg, #ff9090, #ff6b6b); color: #3f0f0f; }
+    .history-list, .achievement-list { display: grid; gap: 10px; }
+    .history-item, .achievement-item, .summary-item {
+      padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
     }
-    .tag.active {
-      background: rgba(126,164,255,0.16);
-      border-color: rgba(126,164,255,0.28);
-      color: #f4f7ff;
-    }
-    .task-title {
-      font-size: 24px;
-      margin: 0 0 8px;
-      line-height: 1.3;
-    }
-    .roadmap-item {
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      overflow: hidden;
-      margin-top: 10px;
-      background: rgba(255,255,255,0.04);
-    }
-    .roadmap-item.current {
-      border-color: rgba(126,164,255,0.28);
-      box-shadow: 0 0 0 1px rgba(126,164,255,0.16) inset;
-    }
-    .roadmap-head {
-      padding: 14px 14px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: flex-start;
-      cursor: pointer;
-      background: rgba(255,255,255,0.06);
-    }
-    .roadmap-body { display: none; padding: 0 12px 12px; }
-    .roadmap-item.open .roadmap-body { display: block; }
-    .week-card {
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .week-card.current {
-      background: rgba(126,164,255,0.12);
-      border-color: rgba(126,164,255,0.22);
-    }
-    .week-card h4 { margin: 0 0 6px; font-size: 15px; }
-    .week-card p { margin: 0; color: var(--muted); line-height: 1.65; }
-    .mini {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #eef3ff;
-    }
+    .achievement-item.locked { opacity: .62; }
     .heatmap {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 12px;
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 12px;
     }
     .heat-cell {
-      aspect-ratio: 1 / 1;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding: 6px;
-      font-size: 11px;
-      color: var(--muted);
+      aspect-ratio: 1; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.06); color: var(--muted);
     }
-    .heat-cell.done { background: rgba(47,210,140,0.18); color: #dcffee; }
-    .heat-cell.today { box-shadow: 0 0 0 1px rgba(126,164,255,0.28) inset; }
-    .history-list, .achievement-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
+    .heat-cell.done { background: rgba(52,211,153,.18); color: #d8fff0; border-color: rgba(52,211,153,.32); }
+    .heat-cell.today { outline: 2px solid rgba(255,211,110,.56); }
+    .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tag {
+      padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.06);
+      color: #ebf1ff; border: 1px solid rgba(255,255,255,.08); font-size: 13px;
     }
-    .history-item, .achievement-item {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 12px;
-      line-height: 1.65;
+    .tag.active { background: rgba(126,164,255,.18); border-color: rgba(126,164,255,.28); }
+    .roadmap-stage { display: grid; gap: 12px; margin-top: 14px; }
+    details.week-detail {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 12px 14px;
     }
-    .achievement-item.locked { opacity: 0.72; }
-    .form-block { margin-top: 12px; }
-    .link-btn {
-      color: #f7fbff;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-weight: 700;
-    }
-    .small { font-size: 13px; }
+    details.week-detail summary { cursor: pointer; font-weight: 700; }
+    .mini-list { display: grid; gap: 8px; margin-top: 12px; }
+    .mini { color: var(--muted); line-height: 1.75; }
     .footer-note {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
-      margin-top: 18px;
-      padding-bottom: 12px;
+      margin-top: 14px; text-align: center; color: var(--muted); font-size: 13px; line-height: 1.8;
     }
+    .screen { display: none; }
+    .screen.active { display: block; }
     .tabbar {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 10px;
-      width: min(920px, calc(100vw - 16px));
-      padding: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      background: rgba(9,16,34,0.82);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 24px;
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-      z-index: 30;
+      position: fixed; left: 50%; transform: translateX(-50%);
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      width: min(960px, calc(100vw - 18px));
+      padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      background: rgba(10,16,34,.84); border: 1px solid rgba(255,255,255,.10); border-radius: 24px;
+      box-shadow: var(--shadow); backdrop-filter: blur(18px); z-index: 30;
     }
     .tabbar button {
-      background: transparent;
-      color: var(--muted);
-      padding: 10px 8px;
-      border-radius: 18px;
-      font-size: 12px;
-      line-height: 1.3;
+      background: transparent; color: var(--muted); padding: 10px 8px; border-radius: 18px; font-size: 12px; line-height: 1.3;
     }
-    .tabbar button.active {
-      background: rgba(126,164,255,0.16);
-      color: #f7fbff;
-      border: 1px solid rgba(126,164,255,0.22);
-    }
+    .tabbar button.active { background: rgba(126,164,255,.18); color: #f7fbff; border: 1px solid rgba(126,164,255,.26); }
     .toast {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%) translateY(24px);
-      bottom: calc(var(--tabbar-height) + 22px + env(safe-area-inset-bottom));
-      background: rgba(12,18,39,0.94);
-      color: white;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.18s ease;
-      z-index: 40;
-      box-shadow: var(--shadow);
-      max-width: calc(100vw - 40px);
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.6;
+      position: fixed; left: 50%; transform: translateX(-50%) translateY(24px);
+      bottom: calc(var(--tabbar-height) + 18px + env(safe-area-inset-bottom));
+      padding: 12px 14px; border-radius: 14px; max-width: calc(100vw - 40px);
+      background: rgba(12,18,39,.95); color: white; border: 1px solid rgba(255,255,255,.10);
+      opacity: 0; pointer-events: none; transition: all .18s ease; z-index: 40; line-height: 1.7;
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 760px) {
+      .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .time-card { grid-template-columns: 1fr; gap: 8px; }
     }
-.install-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.guide-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 14px;
-  min-height: 150px;
-}
-.guide-card h3 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.guide-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 11px;
-  color: #ecf3ff;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.08);
-  white-space: nowrap;
-}
-.guide-tag.ok { color: #bdf2d8; background: rgba(47,210,140,0.12); border-color: rgba(47,210,140,0.18); }
-.guide-tag.warn { color: #ffe7a7; background: rgba(255,191,67,0.12); border-color: rgba(255,191,67,0.18); }
-.guide-card ol, .guide-card ul {
-  margin: 8px 0 0 18px;
-  padding: 0;
-  color: var(--muted);
-  line-height: 1.75;
-  font-size: 13px;
-}
-.env-list {
-  display: grid;
-  gap: 10px;
-}
-.env-item {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  font-size: 13px;
-}
-.env-item .label {
-  color: var(--muted);
-  min-width: 96px;
-}
-.env-item .value {
-  text-align: right;
-  color: #f4f7ff;
-  flex: 1;
-  word-break: break-word;
-}
-.install-summary {
-  margin-top: 12px;
-}
-@media (max-width: 760px) {
-  .install-grid {
-    grid-template-columns: 1fr;
-  }
-  .env-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .env-item .value {
-    text-align: left;
-  }
-}
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar">
-      <section class="hero">
-        <div class="hero-top">
-          <div>
-            <div class="mini-badge">📚 每天 1 小时 · 365 天成长计划</div>
-            <div class="mini-badge ok" id="onlineBadge">在线状态检测中</div>
-            <div class="mini-badge warn" id="pwaBadge">PWA 状态检测中</div>
-            <h1 id="heroTitle">每天长一点</h1>
-            <p class="subtitle" id="heroSubtitle">把“听不懂就自卑”，慢慢练成“听得懂、说得清、能表达”。</p>
-            <p class="quote" id="dailyQuote"></p>
-          </div>
-          <div class="hero-actions">
-            <button class="btn-primary" id="installBtn">📲 安装到手机</button>
-            <button class="btn-secondary" id="installHelpBtn">🧭 安装帮助</button>
-            <button class="btn-secondary" id="shareBtn">🔗 分享进度</button>
-          </div>
-        </div>
-        <div class="status-row" id="heroStatusRow"></div>
-      </section>
+    <header class="hero">
+      <div class="badge">📚 52 周课程版 · 每天 1 小时</div>
+      <h1>每天长一点</h1>
+      <p class="subtitle">这次不是只有打卡壳子，而是把每一周要学的实质内容放进来了：概念、典故、人物、区别、现实用法、自测题与输出任务。</p>
+      <p class="quote" id="dailyQuote"></p>
+      <div class="hero-metrics">
+        <div class="metric"><strong id="metricDay">1</strong><span class="helper">计划天数</span></div>
+        <div class="metric"><strong id="metricWeek">1</strong><span class="helper">当前周</span></div>
+        <div class="metric"><strong id="metricStreak">0</strong><span class="helper">连续打卡</span></div>
+        <div class="metric"><strong id="metricProgress">0%</strong><span class="helper">全年进度</span></div>
+      </div>
     </header>
 
     <main>
       <section class="screen active" id="screen-today">
         <div class="grid two">
-          <section class="card summary-card">
-            <div class="ring" id="progressRing">
-              <div class="ring-inner">
-                <div class="ring-value" id="ringValue">0%</div>
-                <div class="ring-label">全年进度</div>
-              </div>
-            </div>
-            <div>
-              <h2>今天继续往前走</h2>
-              <p class="helper" id="summaryText">正在加载你的成长数据……</p>
-              <div class="metrics">
-                <div class="metric"><strong id="metricCheckins">0</strong><span class="helper">累计打卡</span></div>
-                <div class="metric"><strong id="metricStreak">0</strong><span class="helper">连续天数</span></div>
-                <div class="metric"><strong id="metricWeek">1</strong><span class="helper">当前主题周</span></div>
-              </div>
-            </div>
-          </section>
-
           <section class="card">
-            <h2>当前 7 天</h2>
-            <p class="helper">这一栏会告诉你：本周的 7 天里，哪些天已经完成。</p>
-            <div class="week-strip" id="weekStrip"></div>
-            <div class="tip-box" id="weekTip">保持节奏，比一时冲刺更重要。</div>
+            <div class="subline" id="todayMeta">今天的课程信息</div>
+            <h2 id="todayTitle">本周主题</h2>
+            <p class="helper" id="todayGoal">本周目标</p>
+            <div class="pill-row" id="keywordRow"></div>
+            <div class="focus-bar" id="focusBar">正在生成今天的重点学习提示……</div>
+          </section>
+          <section class="card">
+            <h2>本周导学</h2>
+            <div class="tip-box" id="weekOverview">正在加载本周导学……</div>
+            <div class="summary-item" style="margin-top:12px;">
+              <div><strong>阶段目标</strong></div>
+              <div class="mini" id="stageTarget" style="margin-top:8px;">正在加载阶段目标……</div>
+            </div>
           </section>
         </div>
 
         <section class="card" style="margin-top:14px;">
-          <div class="subline" id="todayMeta">今天的计划信息</div>
-          <h2 class="task-title" id="todayTitle">本周主题</h2>
-          <p class="helper" id="todayGoal">本周目标</p>
-
-          <div class="pill-row" id="keywordRow" style="margin-top:12px;"></div>
-
-          <div style="margin-top:16px;">
-            <h3>今天的一小时任务</h3>
-            <div id="todayTasks"></div>
-          </div>
-
-          <div class="grid two" style="margin-top:14px;">
-            <div class="card" style="padding:14px; background:rgba(255,255,255,0.05); box-shadow:none;">
-              <h3>本周核心输出</h3>
-              <div id="outputList" class="helper"></div>
-            </div>
-            <div class="card" style="padding:14px; background:rgba(255,255,255,0.05); box-shadow:none;">
-              <h3>建议搜索 / 阅读方向</h3>
-              <div id="resourceText" class="helper"></div>
-            </div>
-          </div>
+          <h2>今天这一小时怎么学</h2>
+          <div class="timeline" id="todayTasks"></div>
         </section>
 
         <section class="card" style="margin-top:14px;">
+          <h2>本周核心知识卡片</h2>
+          <p class="helper">你不用到处搜了，先把这一周最应该懂的概念和故事学明白。</p>
+          <div class="lesson-list" id="lessonList" style="margin-top:12px;"></div>
+        </section>
+
+        <div class="grid two">
+          <section class="card">
+            <h2>本周自测题</h2>
+            <div class="qa-list" id="quizList"></div>
+          </section>
+          <section class="card">
+            <h2>本周输出与资源</h2>
+            <div class="summary-item">
+              <div><strong>核心输出</strong></div>
+              <div class="mini" id="outputText" style="margin-top:8px;"></div>
+            </div>
+            <div class="summary-item" style="margin-top:12px;">
+              <div><strong>阶段里程碑</strong></div>
+              <div class="mini" id="milestoneText" style="margin-top:8px;"></div>
+            </div>
+            <div class="summary-item" style="margin-top:12px;">
+              <div><strong>建议继续搜 / 继续看</strong></div>
+              <div class="mini" id="resourceText" style="margin-top:8px;"></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top:14px;">
           <h2>今天的笔记与打卡</h2>
-          <p class="helper">你可以只写一句话：今天学会了什么，或者今天最想记住哪句话。</p>
-          <textarea id="noteBox" placeholder="写下一句名句、一个故事、一个概念，或者今天最有收获的一点……"></textarea>
-          <div class="row">
-            <button class="btn-success" id="checkinBtn">✅ 今日打卡</button>
-            <button class="btn-warning" id="saveNoteBtn">💾 手动保存</button>
-            <button class="btn-secondary" id="viewPlanBtn">📖 查看全年计划</button>
+          <label class="helper" for="noteBox">把今天真正学到的东西写下来，哪怕只是一句白话解释。</label>
+          <textarea id="noteBox" placeholder="例：今天终于明白‘纸上谈兵’不是会说就算会，而是只会说不会做。"></textarea>
+          <div class="btn-row" style="margin-top:12px;">
+            <button class="btn-primary" id="saveNoteBtn">💾 保存今天笔记</button>
+            <button class="btn-secondary" id="checkinBtn">✅ 今日打卡</button>
           </div>
-          <div class="tip-box" id="checkinStatus">今天还没有打卡。</div>
+          <p class="helper" id="checkinStatus" style="margin-top:12px;">今天还没有打卡。</p>
         </section>
       </section>
 
       <section class="screen" id="screen-roadmap">
         <section class="card">
-          <h2>年度路线图</h2>
-          <p class="helper">你不需要一下学完 52 周。只需要知道自己现在在哪一周，然后继续走下一步。</p>
+          <h2>52 周课程总览</h2>
+          <p class="helper">这里不再只是主题名，而是每周都有导学和核心卡片。先把当前周学透，再往后看。</p>
           <div class="tag-row" id="stageFilterRow" style="margin-top:12px;"></div>
           <div class="tip-box" id="roadmapSummary">正在生成路线图摘要……</div>
           <div id="roadmapList"></div>
@@ -663,426 +306,304 @@
       <section class="screen" id="screen-history">
         <div class="grid two">
           <section class="card">
-            <h2>最近 28 天热力图</h2>
-            <p class="helper">颜色越亮，说明那天完成过打卡。</p>
+            <h2>最近 28 天打卡</h2>
+            <p class="helper">不是为了好看，是为了给自己留下成长证据。</p>
             <div class="heatmap" id="heatmap"></div>
           </section>
           <section class="card">
             <h2>成长徽章</h2>
-            <p class="helper">把长期坚持变成一枚一枚看得见的证据。</p>
             <div class="achievement-list" id="achievementList"></div>
           </section>
         </div>
-
         <section class="card" style="margin-top:14px;">
-          <h2>最近打卡记录</h2>
+          <h2>最近记录</h2>
           <div class="history-list" id="historyList"></div>
         </section>
       </section>
 
       <section class="screen" id="screen-settings">
         <section class="card">
-          <h2>设置与备份</h2>
-          <p class="helper">这里会根据你当前的打开方式，告诉你为什么没有弹出安装提示，以及下一步该怎么做。完整 App 体验建议：把整个文件夹部署到你的 PHP 网站目录、宝塔站点或 localhost，再用手机浏览器打开。</p>
-
-          <div class="form-block">
-            <label class="small helper" for="startDate">你的计划开始日期</label>
+          <h2>设置与数据</h2>
+          <div class="summary-item">
+            <label class="helper" for="startDate">计划开始日期</label>
             <input id="startDate" type="date" />
-          </div>
-          <div class="row">
-            <button class="btn-primary" id="saveStartBtn">保存开始日期</button>
-            <button class="btn-secondary" id="todayBtn">从今天开始</button>
-          </div>
-
-          <div class="form-block">
-            <label class="small helper">数据管理</label>
-            <div class="row">
-              <button class="btn-secondary" id="exportBtn">导出数据</button>
-              <button class="btn-secondary" id="importBtn">导入数据</button>
-              <button class="btn-danger" id="resetBtn">重置本地数据</button>
-            </div>
-            <input id="importInput" type="file" accept="application/json" style="display:none;" />
-          </div>
-
-          <div class="form-block">
-            <label class="small helper">辅助操作</label>
-            <div class="row">
-              <button class="btn-secondary" id="copyInstallBtn">复制安装提示</button>
-              <a class="link-btn" href="./一年成长计划.md" target="_blank" rel="noopener">打开文字版计划</a>
-              <a class="link-btn" href="./README.md" target="_blank" rel="noopener">打开使用说明</a>
+            <div class="btn-row" style="margin-top:12px;">
+              <button class="btn-primary" id="saveDateBtn">📅 保存开始日期</button>
+              <button class="btn-secondary" id="exportBtn">⬇️ 导出数据</button>
+              <button class="btn-secondary" id="importBtn">⬆️ 导入数据</button>
+              <input id="importInput" type="file" accept="application/json" style="display:none;" />
             </div>
           </div>
-
-          <div class="form-block">
-            <label class="small helper">安装环境检测</label>
-            <div class="env-list" id="envChecks"></div>
+          <div class="summary-item" style="margin-top:12px;">
+            <div><strong>文字版资料</strong></div>
+            <div class="row" style="margin-top:10px;">
+              <a class="btn-secondary" href="./一年成长计划.md" target="_blank" rel="noopener">打开文字版课程</a>
+              <a class="btn-secondary" href="./README.md" target="_blank" rel="noopener">打开项目说明</a>
+            </div>
           </div>
-
-          <div class="tip-box install-summary" id="installGuideSummary">
-            正在识别你的安装环境……
-          </div>
-
-          <div class="form-block">
-            <label class="small helper">按你的设备看安装方法</label>
-            <div class="install-grid" id="installGuideCards"></div>
-          </div>
-
-          <div class="tip-box" id="settingsTip">
-            提示：就算浏览器不自动弹“安装”，很多时候也仍然可以从浏览器菜单里手动选择“安装应用”或“添加到主屏幕”。
+          <div class="summary-item" style="margin-top:12px;">
+            <div><strong>重置</strong></div>
+            <div class="mini" style="margin-top:8px;">会清空当前浏览器里的开始日期、打卡记录和笔记，请谨慎操作。</div>
+            <div class="btn-row" style="margin-top:12px;">
+              <button class="btn-danger" id="resetBtn">🗑️ 重置本地数据</button>
+            </div>
           </div>
         </section>
       </section>
     </main>
 
-    <div class="footer-note">你不是“没文化”，你只是还没有被系统训练过这部分知识。把这一年坚持下来，你会非常明显地不一样。</div>
+    <div class="footer-note">先把一周学透，再去下一周。你真正要追求的不是“看过很多”，而是“我现在真的能讲一点东西了”。</div>
   </div>
 
   <nav class="tabbar">
     <button class="active" data-screen="today">🏠<br/>今天</button>
-    <button data-screen="roadmap">🗺️<br/>路线图</button>
+    <button data-screen="roadmap">🗺️<br/>课程</button>
     <button data-screen="history">🔥<br/>记录</button>
     <button data-screen="settings">⚙️<br/>设置</button>
   </nav>
 
   <div class="toast" id="toast"></div>
 
-  <script id="plan-data" type="application/json">[{"stage": 1, "title": "重建自信与学习系统", "goal": "先把‘我不行’改成‘我还没系统学过’，建立一年学习节奏。", "read": "列出你最怕听不懂的 20 个词：专业名词、诗句、历史梗、地理概念各 5 个。再了解‘费曼学习法’和‘刻意练习’的核心思想。", "keywords": ["费曼学习法", "刻意练习", "输出倒逼输入", "长期主义"], "output": "写一段 150 字的自我宣言：一年后你想成为什么样的人。", "resource": "可搜索：认知觉醒 / 费曼学习法 / 如何高效做笔记", "milestone": "完成学习启动，建立自己的成长理由。", "week": 1}, {"stage": 1, "title": "高频成语典故 1：历史战场", "goal": "补上聊天中最常见的一批历史成语。", "read": "了解‘破釜沉舟、背水一战、四面楚歌、纸上谈兵、指鹿为马’的故事出处。", "keywords": ["项羽", "韩信", "赵括", "秦二世", "楚汉争霸"], "output": "每个成语各写一个现代工作场景造句。", "resource": "可搜索：成语故事 楚汉争霸 / 战国典故", "milestone": "能把 5 个成语讲给别人听。", "week": 2}, {"stage": 1, "title": "高频成语典故 2：处世与判断", "goal": "把常被引用的处世类成语真正理解。", "read": "了解‘卧薪尝胆、讳疾忌医、唇亡齿寒、一鼓作气、滥竽充数’的故事。", "keywords": ["勾践", "扁鹊", "齐宣王", "春秋", "战国"], "output": "挑 3 个成语，分别解释‘字面意思 + 典故 + 今天怎么用’。", "resource": "可搜索：春秋战国成语故事 / 成语在职场中的使用", "milestone": "再掌握 5 个高频成语。", "week": 3}, {"stage": 1, "title": "专业表达与术语拆解", "goal": "降低别人说专业词时的压迫感。", "read": "整理你工作中常见但不够熟的词：架构、耦合、抽象、范式、SLA、性能瓶颈、容错、可扩展性。", "keywords": ["架构", "耦合", "抽象", "SLA"], "output": "用‘像给初中生解释’的方式解释 8 个术语。", "resource": "可搜索：系统设计基础 / 面向对象核心概念 / 程序员如何表达清楚", "milestone": "建立第一个‘专业词翻译表’。", "week": 4}, {"stage": 2, "title": "古诗词入门：意象和情感", "goal": "知道诗词不是死背，而是理解意象。", "read": "认识常见意象：月、酒、柳、雁、秋、山水、长安。读《静夜思》《黄鹤楼送孟浩然之广陵》《枫桥夜泊》等。", "keywords": ["意象", "离别", "思乡", "山水"], "output": "挑 3 句诗，解释它表达的情感和画面。", "resource": "可搜索：古诗词意象入门 / 唐诗鉴赏基础", "milestone": "能说出 6 个常见诗词意象。", "week": 5}, {"stage": 2, "title": "唐诗名篇 1：盛唐气象", "goal": "理解唐诗为什么常被引用。", "read": "读李白、杜甫、王维、高适的代表作各 1 到 2 首。", "keywords": ["李白", "杜甫", "王维", "边塞诗"], "output": "用自己的话解释‘天生我材必有用’‘会当凌绝顶’‘大漠孤烟直’。", "resource": "可搜索：李白 杜甫 王维 代表作 / 盛唐气象", "milestone": "积累 6 句高频唐诗名句。", "week": 6}, {"stage": 2, "title": "宋词名篇：婉约与豪放", "goal": "听到别人提到苏轼、辛弃疾、李清照时不再陌生。", "read": "读《念奴娇·赤壁怀古》《水调歌头》《声声慢》《青玉案·元夕》等。", "keywords": ["苏轼", "辛弃疾", "李清照", "豪放派"], "output": "比较一首豪放词和一首婉约词的气质差异。", "resource": "可搜索：宋词入门 / 苏轼 辛弃疾 李清照", "milestone": "会举例说明‘豪放’与‘婉约’。", "week": 7}, {"stage": 2, "title": "名句场景化表达", "goal": "让诗句真正能在生活中使用。", "read": "整理 12 句适合聊天、鼓励、感慨、离别、坚持时用的名句。", "keywords": ["名句活用", "场景表达", "引用能力", "表达升级"], "output": "为 6 个生活场景各配一句合适的诗句。", "resource": "可搜索：高频诗词名句 / 诗句如何用于日常表达", "milestone": "建立你的第一份‘名句场景卡片’。", "week": 8}, {"stage": 3, "title": "中国历史骨架 1：先秦到秦汉", "goal": "先抓主线，不陷入细节。", "read": "理清夏商周、春秋战国、秦统一、楚汉之争、汉武帝几个节点。", "keywords": ["分封制", "百家争鸣", "秦始皇", "汉武帝"], "output": "用 5 分钟讲清‘为什么秦很短但很重要’。", "resource": "可搜索：中国历史朝代顺序 / 先秦到汉代梳理", "milestone": "背出朝代大致顺序和关键转折。", "week": 9}, {"stage": 3, "title": "中国历史骨架 2：魏晋南北朝到隋唐", "goal": "理解乱世与盛世如何转换。", "read": "了解三国、两晋、南北朝、隋统一、唐朝盛世与安史之乱。", "keywords": ["三国", "门阀", "隋炀帝", "安史之乱"], "output": "解释‘为什么很多典故都出自三国与唐朝’。", "resource": "可搜索：魏晋风度 / 隋唐历史入门", "milestone": "能概括三国到唐朝的主线。", "week": 10}, {"stage": 3, "title": "中国历史骨架 3：宋元明清", "goal": "补齐现代人最容易混淆的几个朝代。", "read": "了解宋的文治、元的版图、明的制度、清的入关与晚清。", "keywords": ["科举", "行省", "内阁", "闭关"], "output": "做一张‘宋元明清对比表’。", "resource": "可搜索：宋元明清简史 / 朝代对比", "milestone": "知道每个朝代最鲜明的标签。", "week": 11}, {"stage": 3, "title": "近现代史常识", "goal": "建立近现代时间感，减少常识断层。", "read": "梳理鸦片战争、洋务运动、辛亥革命、抗战、新中国成立、改革开放。", "keywords": ["近代化", "辛亥革命", "抗战", "改革开放"], "output": "用时间线写出 8 个关键节点和各自意义。", "resource": "可搜索：中国近现代史时间线 / 近代史入门", "milestone": "形成近现代史的基本地图。", "week": 12}, {"stage": 4, "title": "中国地理骨架：版图与地形", "goal": "先有地图感，再记细节。", "read": "了解中国四大地理区域、三级阶梯、主要山脉河流与气候差异。", "keywords": ["秦岭淮河", "三级阶梯", "长江黄河", "季风"], "output": "口头讲一遍‘中国南北差异为什么这么大’。", "resource": "可搜索：中国地理基础 / 中国地形图入门", "milestone": "建立中国地图的空间感。", "week": 13}, {"stage": 4, "title": "省份简称与区域文化", "goal": "不再把简称、位置、文化标签混淆。", "read": "记住 34 个省级单位的大致位置、简称和代表文化。", "keywords": ["简称", "华北华东华南", "巴蜀", "江浙沪"], "output": "做一张‘省份简称 + 代表城市 + 一个文化标签’表。", "resource": "可搜索：中国省份简称记忆 / 区域文化差异", "milestone": "掌握常见省份简称和区域标签。", "week": 14}, {"stage": 4, "title": "核心城市与名胜", "goal": "别人聊城市和景点时能接得上。", "read": "了解北京、西安、南京、杭州、成都、广州、上海、武汉、洛阳等城市的历史标签与代表景点。", "keywords": ["古都", "江南", "天府之国", "海派"], "output": "每个城市用 3 句话总结‘历史 + 文化 + 今天的气质’。", "resource": "可搜索：中国核心城市文化名片", "milestone": "会讲 8 个城市的文化标签。", "week": 15}, {"stage": 4, "title": "饮食、方言与风俗", "goal": "理解中国文化为什么丰富多样。", "read": "了解八大菜系、典型方言区、春节、清明、端午、中秋等节日风俗。", "keywords": ["八大菜系", "方言区", "民俗", "节日"], "output": "解释‘为什么南北饮食差异明显’。", "resource": "可搜索：中国饮食文化 / 中国节日由来", "milestone": "建立对日常文化差异的理解。", "week": 16}, {"stage": 5, "title": "《西游记》：人物与隐喻", "goal": "知道它不只是‘打妖怪’。", "read": "了解唐僧、孙悟空、猪八戒、沙僧的象征与经典故事。", "keywords": ["大闹天宫", "取经", "九九八十一难", "修行"], "output": "讲 3 个最经典桥段，并说说它们映射了什么人性。", "resource": "可搜索：西游记故事梳理 / 西游记人物分析", "milestone": "能讲清《西游记》为什么经典。", "week": 17}, {"stage": 5, "title": "《三国演义》：人物、权谋与格局", "goal": "别人提曹操、诸葛亮、关羽时能听懂。", "read": "了解桃园结义、官渡之战、赤壁之战、三顾茅庐、空城计等。", "keywords": ["曹操", "刘备", "诸葛亮", "赤壁"], "output": "比较曹操与刘备两种领导风格。", "resource": "可搜索：三国演义入门 / 三国重要战役", "milestone": "形成三国人物与阵营地图。", "week": 18}, {"stage": 5, "title": "《水浒传》：好汉、秩序与反抗", "goal": "理解水浒不只是‘打打杀杀’。", "read": "了解宋江、武松、林冲、鲁智深、李逵等人物命运。", "keywords": ["逼上梁山", "忠义", "草莽", "官逼民反"], "output": "挑 2 个角色，分析他们为何走上梁山。", "resource": "可搜索：水浒传人物分析 / 经典故事", "milestone": "知道《水浒传》的核心冲突。", "week": 19}, {"stage": 5, "title": "《红楼梦》：人物关系与审美", "goal": "跨过‘看不懂’这道坎。", "read": "了解贾宝玉、林黛玉、薛宝钗、王熙凤以及贾府兴衰。", "keywords": ["金陵十二钗", "贾府", "悲剧", "世情"], "output": "用通俗语言解释‘为什么很多人说《红楼梦》伟大’。", "resource": "可搜索：红楼梦人物关系 / 红楼梦入门", "milestone": "能说出《红楼梦》的基本人物格局。", "week": 20}, {"stage": 6, "title": "希腊罗马神话与西方典故", "goal": "补上西方文化中的高频隐喻。", "read": "了解宙斯、雅典娜、普罗米修斯、阿喀琉斯、奥德修斯等故事。", "keywords": ["普罗米修斯", "阿喀琉斯之踵", "奥德赛", "缪斯"], "output": "解释 5 个常见西方典故今天怎么用。", "resource": "可搜索：希腊神话入门 / 西方典故常识", "milestone": "掌握常见西方文化梗。", "week": 21}, {"stage": 6, "title": "圣经故事与西方文化常识", "goal": "不信仰也能了解重要文化母题。", "read": "了解创世、伊甸园、诺亚方舟、巴别塔、最后的晚餐等故事。", "keywords": ["伊甸园", "诺亚方舟", "巴别塔", "最后的晚餐"], "output": "挑 3 个故事，说明它们为什么在文学影视中常出现。", "resource": "可搜索：圣经故事文化常识 / 西方文学母题", "milestone": "建立西方文学典故识别能力。", "week": 22}, {"stage": 6, "title": "世界历史骨架：古代到近代", "goal": "建立世界文明演化的时间感。", "read": "梳理古埃及、两河、希腊罗马、中世纪、文艺复兴、大航海、工业革命。", "keywords": ["城邦", "文艺复兴", "启蒙运动", "工业革命"], "output": "画一条简单时间线并说出每段最重要的变化。", "resource": "可搜索：世界史入门 / 文明简史", "milestone": "能讲出世界史的几个大台阶。", "week": 23}, {"stage": 6, "title": "现代世界格局与国家常识", "goal": "增强国际新闻理解力。", "read": "了解联合国、欧盟、美国、中国、俄罗斯、日本、中东等基础常识。", "keywords": ["联合国", "欧盟", "冷战", "全球化"], "output": "用非专业语言解释‘为什么国际关系总在变化’。", "resource": "可搜索：国际关系基础 / 世界主要国家概览", "milestone": "具备看国际新闻的最低背景。", "week": 24}, {"stage": 7, "title": "儒家：修身齐家与做人逻辑", "goal": "明白很多中文表达背后的价值观来源。", "read": "认识孔子、孟子，了解仁、义、礼、智、信、中庸等概念。", "keywords": ["仁义礼智信", "中庸", "修身齐家", "孟子"], "output": "用今天的话解释‘仁’‘礼’‘中庸’。", "resource": "可搜索：论语入门 / 孟子核心思想", "milestone": "初步理解儒家如何影响中国人。", "week": 25}, {"stage": 7, "title": "道家、法家、墨家", "goal": "建立中国思想的多样性视角。", "read": "了解老子、庄子、韩非子、墨子的核心主张。", "keywords": ["无为", "逍遥", "法治", "兼爱"], "output": "比较儒家与道家的差异：一个更重什么，一个更重什么。", "resource": "可搜索：诸子百家入门 / 老庄韩非墨子", "milestone": "能区分几家思想的基本气质。", "week": 26}, {"stage": 7, "title": "西方哲学入门", "goal": "听到‘苏格拉底、柏拉图、尼采’不再发怵。", "read": "认识苏格拉底、柏拉图、亚里士多德、笛卡尔、康德、尼采的最核心标签。", "keywords": ["理性", "理念论", "怀疑", "意志"], "output": "每位哲学家用一句‘最容易懂的话’概括。", "resource": "可搜索：西方哲学史入门 / 哲学家一句话理解", "milestone": "建立哲学人物与关键词映射。", "week": 27}, {"stage": 7, "title": "宗教与文明地图", "goal": "理解宗教在历史与文化中的作用。", "read": "了解佛教、基督教、伊斯兰教的基本起源、传播区域与代表节日。", "keywords": ["佛教", "基督教", "伊斯兰教", "文明圈"], "output": "做一张‘宗教 - 地区 - 影响’的简单表格。", "resource": "可搜索：世界宗教常识 / 宗教与文明", "milestone": "对世界文明版图有更清楚的感觉。", "week": 28}, {"stage": 8, "title": "绘画与雕塑常识", "goal": "建立最基础的艺术识别力。", "read": "了解达芬奇、米开朗琪罗、梵高、莫奈、毕加索及其风格标签。", "keywords": ["文艺复兴", "印象派", "后印象派", "立体主义"], "output": "看 5 幅名画，各用一句话说出你的直观感受。", "resource": "可搜索：西方美术史入门 / 名画赏析", "milestone": "能认出几类常见艺术风格。", "week": 29}, {"stage": 8, "title": "建筑风格与名作", "goal": "旅行或聊天时能识别基本建筑风格。", "read": "了解哥特式、巴洛克、古典主义、现代主义，以及故宫、帕特农神庙、巴黎圣母院等。", "keywords": ["哥特式", "穹顶", "柱式", "现代主义"], "output": "比较一座中国古建和一座欧洲建筑的风格差异。", "resource": "可搜索：建筑风格入门 / 世界经典建筑", "milestone": "形成建筑审美的最小框架。", "week": 30}, {"stage": 8, "title": "音乐、戏剧、电影常识", "goal": "补一点文艺谈资，不求专业但求不陌生。", "read": "了解交响乐、歌剧、京剧、电影类型片、奥斯卡、戛纳等基本概念。", "keywords": ["交响乐", "歌剧", "京剧", "类型片"], "output": "挑 3 个概念，用通俗语言解释给朋友听。", "resource": "可搜索：艺术门类常识 / 电影基础概念", "milestone": "建立艺术门类的全局感。", "week": 31}, {"stage": 8, "title": "设计审美：配色、字体与界面", "goal": "把审美和你的技术工作连接起来。", "read": "了解基础配色、对齐、留白、层级、字体搭配与信息密度。", "keywords": ["留白", "层级", "对齐", "可读性"], "output": "找 2 个常用 App，分析它们为什么‘看起来舒服 / 不舒服’。", "resource": "可搜索：设计基础四原则 / UI 审美入门", "milestone": "获得最基础的设计判断力。", "week": 32}, {"stage": 9, "title": "经济学入门", "goal": "听懂一些社会话题背后的基本逻辑。", "read": "理解供需、成本、边际、通胀、利率、市场、周期这些基本词。", "keywords": ["供需", "边际", "通胀", "利率"], "output": "用生活中的例子解释‘供需’和‘边际’。", "resource": "可搜索：经济学原理入门 / 十个经济学名词", "milestone": "建立经济学最小词汇表。", "week": 33}, {"stage": 9, "title": "法律与社会规则常识", "goal": "提高规则意识和现实判断力。", "read": "了解合同、劳动法、著作权、隐私权、侵权、举证等基础概念。", "keywords": ["合同", "著作权", "劳动法", "隐私权"], "output": "列出与你工作最相关的 5 条法律常识。", "resource": "可搜索：程序员法律常识 / 劳动法基础 / 著作权入门", "milestone": "补齐生活与工作中的规则短板。", "week": 34}, {"stage": 9, "title": "心理学与沟通", "goal": "提升对自己和别人的理解。", "read": "了解认知偏差、情绪、投射、刻板印象、同理心、非暴力沟通。", "keywords": ["认知偏差", "情绪", "同理心", "非暴力沟通"], "output": "复盘一次误会：从心理学角度重新解释它。", "resource": "可搜索：心理学入门 / 非暴力沟通 / 常见认知偏差", "milestone": "改善表达与关系感知。", "week": 35}, {"stage": 9, "title": "新闻阅读与信息判断", "goal": "减少被标题党和情绪牵着走。", "read": "学习区分事实、观点、数据、立场；了解信息源、偏见、断章取义。", "keywords": ["事实与观点", "信息源", "偏见", "媒体素养"], "output": "找 2 条新闻，拆分其中的事实和观点。", "resource": "可搜索：媒体素养入门 / 如何读新闻", "milestone": "建立基本的信息辨别能力。", "week": 36}, {"stage": 10, "title": "互联网、AI、产品、商业术语", "goal": "把‘听起来厉害’的词变成‘我能解释’的词。", "read": "整理并理解：SaaS、B 端、C 端、增长、闭环、A/B 测试、ROI、Agent、RAG、向量数据库等。", "keywords": ["SaaS", "增长", "ROI", "Agent"], "output": "做一份‘我常见术语白话翻译表 2.0’。", "resource": "可搜索：互联网黑话翻译 / AI 基础术语", "milestone": "大幅降低术语焦虑。", "week": 37}, {"stage": 10, "title": "科学史与关键发明", "goal": "知道现代世界是怎么一步步变成今天的。", "read": "了解印刷术、蒸汽机、电力、相对论、计算机、互联网、DNA、人工智能几个节点。", "keywords": ["科学革命", "工业革命", "计算机", "互联网"], "output": "画一条‘改变世界的 8 项发明’时间线。", "resource": "可搜索：科学史入门 / 改变世界的发明", "milestone": "建立科技与文明的连接视角。", "week": 38}, {"stage": 10, "title": "程序员的表达训练", "goal": "把你脑子里的东西讲得更清楚。", "read": "学习金字塔结构、先结论后原因、对比、举例、类比等表达方法。", "keywords": ["金字塔结构", "结论先行", "类比", "案例"], "output": "把一个 PHP 技术点讲给外行听，录音 3 分钟。", "resource": "可搜索：结构化表达 / 金字塔原理入门", "milestone": "表达开始变得更有层次。", "week": 39}, {"stage": 10, "title": "英文缩写与国际高频词", "goal": "减少看资料时的陌生感。", "read": "认识 GDP、CPI、API、SDK、OKR、KPI、HTTP、OAuth、CPU、GPU、NLP 等。", "keywords": ["缩写", "行业术语", "英文阅读", "国际化"], "output": "选 15 个缩写，各写中文解释和使用场景。", "resource": "可搜索：高频英文缩写大全 / 技术与商业缩写", "milestone": "建立常见缩写感知力。", "week": 40}, {"stage": 11, "title": "非虚构阅读：历史、人物、社会", "goal": "开始读稍微厚一点但有收获的书。", "read": "选一本非虚构书，如《万历十五年》《人类简史》《乡土中国》，先读一本到两章。", "keywords": ["非虚构", "历史视角", "社会观察", "人物"], "output": "写 200 字读书摘要：作者到底想说什么。", "resource": "可搜索：非虚构阅读入门 / 适合新手的人文书单", "milestone": "迈过‘我读不进书’这道坎。", "week": 41}, {"stage": 11, "title": "现代文学短篇", "goal": "通过短篇进入文学世界。", "read": "选读鲁迅、汪曾祺、余华、史铁生等作家的短篇或散文。", "keywords": ["鲁迅", "汪曾祺", "余华", "史铁生"], "output": "挑一篇你最有感触的文章，说说它打动你的地方。", "resource": "可搜索：现代文学短篇推荐 / 鲁迅入门 / 余华散文", "milestone": "建立对现代中文写作的感受力。", "week": 42}, {"stage": 11, "title": "书评、影评、人物评", "goal": "从‘我觉得不错’升级到‘我能说出为什么’。", "read": "学习基本评价框架：主题、结构、人物、语言、观点、局限。", "keywords": ["主题", "结构", "人物", "观点"], "output": "写一篇 300 字短评：一本书、一部电影或一个历史人物。", "resource": "可搜索：如何写书评 / 影评基础 / 人物评论方法", "milestone": "形成可迁移的评价能力。", "week": 43}, {"stage": 11, "title": "演讲与口头表达", "goal": "让你在聊天和工作中更从容。", "read": "练习 1 分钟、3 分钟、5 分钟表达；学习开头、转折、结尾的结构。", "keywords": ["演讲结构", "开头", "转折", "结尾"], "output": "录一段 3 分钟分享：‘我这一年最有收获的 3 件事’。", "resource": "可搜索：演讲表达训练 / 即兴表达技巧", "milestone": "建立公开表达的基本自信。", "week": 44}, {"stage": 12, "title": "建立知识卡片库", "goal": "把一年的学习沉淀为长期资产。", "read": "整理你的成语卡、诗句卡、历史卡、名著卡、术语卡、人物卡。", "keywords": ["知识管理", "卡片笔记", "复习", "沉淀"], "output": "做一个属于你的‘文化知识索引页’。", "resource": "可搜索：卡片笔记法 / Zettelkasten 入门", "milestone": "拥有可反复复习的资料库。", "week": 45}, {"stage": 12, "title": "讲一段历史给别人听", "goal": "把输入变成真正的表达能力。", "read": "从中国史或世界史中选一段你最有兴趣的主题，重新梳理。", "keywords": ["时间线", "因果", "人物", "转折"], "output": "讲 5 分钟历史小故事，要求让外行也能听懂。", "resource": "可搜索：历史讲述技巧 / 讲故事的方法", "milestone": "第一次把历史讲成故事。", "week": 46}, {"stage": 12, "title": "讲一本书或一首诗", "goal": "让文化知识真正进入你的语言系统。", "read": "从四大名著、非虚构、诗词中各选一个最喜欢的内容做分享。", "keywords": ["主题提炼", "金句", "分享", "表达"], "output": "写一篇 500 字分享稿，或者录 5 分钟语音。", "resource": "可搜索：如何做读书分享 / 诗词分享技巧", "milestone": "形成一次完整的文化输出。", "week": 47}, {"stage": 12, "title": "写你的成长总结", "goal": "看见变化，巩固自信。", "read": "回顾第一周写下的‘一年后我想成为什么样的人’。", "keywords": ["复盘", "成长", "自我叙事", "自信"], "output": "写一篇‘这一年我不再自卑的 10 个证据’。", "resource": "可搜索：年度复盘模板 / 成长记录方法", "milestone": "把变化看得见、说得出。", "week": 48}, {"stage": 12, "title": "总复习 1：诗词与成语", "goal": "集中复盘最常用的中文文化知识。", "read": "回顾所有成语典故、诗词名句与场景应用卡片。", "keywords": ["成语", "名句", "复习", "应用"], "output": "随机抽 10 张卡片，自测并复述。", "resource": "复习你的卡片库和笔记", "milestone": "把高频内容真正记住。", "week": 49}, {"stage": 12, "title": "总复习 2：历史与地理", "goal": "把时间感和地图感再巩固一次。", "read": "复盘中国史、世界史、中国地理、中国城市文化。", "keywords": ["时间线", "地图感", "文明", "城市"], "output": "不看资料，画出一条朝代线和一张中国区域图。", "resource": "复习你的时间线和地图笔记", "milestone": "历史地理框架更加牢固。", "week": 50}, {"stage": 12, "title": "总复习 3：名著、哲学、艺术", "goal": "把比较抽象的人文内容串起来。", "read": "回顾四大名著、诸子百家、西方哲学、艺术风格与经典作品。", "keywords": ["名著", "哲学", "艺术", "人文"], "output": "回答 3 个问题：我最喜欢哪本书、哪个人物、哪种思想？为什么？", "resource": "复习你的阅读摘要和短评", "milestone": "形成个人的人文偏好。", "week": 51}, {"stage": 12, "title": "毕业展示与下一年计划", "goal": "从‘补文化’进入‘持续成长’。", "read": "回顾一年全部打卡记录、笔记、输出内容。", "keywords": ["毕业展示", "持续成长", "下一年", "长期主义"], "output": "做一个 10 分钟的‘我的一年成长演讲’提纲，并规划下一年的新主题。", "resource": "复用你一年的全部素材", "milestone": "完成这一年的闭环，准备下一阶段。", "week": 52}]</script>
+  <script id="plan-data" type="application/json">[{"stage": 1, "title": "重建自信与学习系统", "goal": "先把‘我不行’改成‘我还没系统学过’，建立一年学习节奏。", "read": "列出你最怕听不懂的 20 个词：专业名词、诗句、历史梗、地理概念各 5 个。再了解‘费曼学习法’和‘刻意练习’的核心思想。", "keywords": ["费曼学习法", "刻意练习", "输出倒逼输入", "长期主义"], "output": "写一段 150 字的自我宣言：一年后你想成为什么样的人。", "resource": "可搜索：认知觉醒 / 费曼学习法 / 如何高效做笔记", "milestone": "完成学习启动，建立自己的成长理由。", "week": 1, "overview": "这一周先不急着背典故，而是先把学习系统搭起来。你真正缺的不是天赋，而是稳定获取、整理、复述知识的方法。", "cards": [{"title": "成长型思维", "body": "听不懂不等于笨，只是接触少；把‘我不行’改成‘我还不会’。例：别人提典故时先记下来，而不是先自我否定。"}, {"title": "费曼学习法", "body": "学完后马上用自己的话讲给初中生听；讲不清的地方，就是还没真正理解的地方。"}, {"title": "刻意练习", "body": "练习要略高于当前水平并且有反馈；比如今天只啃透 1 个成语、1 句诗、1 个历史人物。"}, {"title": "卡片笔记法", "body": "一张卡只记录一个概念、人物、名句或故事；以后复习时会比整页长笔记更好用。"}, {"title": "输出倒逼输入", "body": "真正会了的标准不是‘看过’，而是‘能讲出来、能造句、能举例’。"}], "quiz": [{"q": "用自己的话解释“成长型思维”。", "a": "听不懂不等于笨，只是接触少；把‘我不行’改成‘我还不会’。"}, {"q": "“成长型思维”和“费曼学习法”分别在提醒你什么？", "a": "成长型思维强调听不懂不等于笨，只是接触少；把‘我不行’改成‘我还不会’；费曼学习法强调学完后马上用自己的话讲给初中生听；讲不清的地方，就是还没真正理解的地方。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "写一段 150 字的自我宣言：一年后你想成为什么样的人。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 1, "title": "高频成语典故 1：历史战场", "goal": "补上聊天中最常见的一批历史成语。", "read": "了解‘破釜沉舟、背水一战、四面楚歌、纸上谈兵、指鹿为马’的故事出处。", "keywords": ["项羽", "韩信", "赵括", "秦二世", "楚汉争霸"], "output": "每个成语各写一个现代工作场景造句。", "resource": "可搜索：成语故事 楚汉争霸 / 战国典故", "milestone": "能把 5 个成语讲给别人听。", "week": 2, "overview": "这一周补最常被引用的历史成语。重点不是死背释义，而是知道人物、情境和现代用法。", "cards": [{"title": "破釜沉舟", "body": "出自项羽；主动砸锅沉船，表示不给自己留后路、必须一战。例：决定关掉分心项目，集中一个月冲核心目标。"}, {"title": "背水一战", "body": "出自韩信；把军队摆在背靠河水的位置，让所有人知道只能拼命。它强调把自己放进必须赢的局面。"}, {"title": "四面楚歌", "body": "出自项羽垓下被围；夜里听见四面都是楚歌，以为故地尽失。现在多形容孤立无援、处处受压。"}, {"title": "纸上谈兵", "body": "出自赵括；兵书讲得头头是道，真正打仗却不行。今天常批评只会讲理论、没有实操能力。"}, {"title": "指鹿为马", "body": "出自赵高；故意把鹿说成马，测试谁敢反对。今天表示故意颠倒黑白、混淆是非。"}], "quiz": [{"q": "用自己的话解释“破釜沉舟”。", "a": "出自项羽；主动砸锅沉船，表示不给自己留后路、必须一战。"}, {"q": "“破釜沉舟”和“背水一战”分别在提醒你什么？", "a": "破釜沉舟强调出自项羽；主动砸锅沉船，表示不给自己留后路、必须一战；背水一战强调出自韩信；把军队摆在背靠河水的位置，让所有人知道只能拼命。它强调把自己放进必须赢的局面。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "每个成语各写一个现代工作场景造句。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 1, "title": "高频成语典故 2：处世与判断", "goal": "把常被引用的处世类成语真正理解。", "read": "了解‘卧薪尝胆、讳疾忌医、唇亡齿寒、一鼓作气、滥竽充数’的故事。", "keywords": ["勾践", "扁鹊", "齐宣王", "春秋", "战国"], "output": "挑 3 个成语，分别解释‘字面意思 + 典故 + 今天怎么用’。", "resource": "可搜索：春秋战国成语故事 / 成语在职场中的使用", "milestone": "再掌握 5 个高频成语。", "week": 3, "overview": "这一周学的是处世与判断类成语。它们比战场类成语更常出现在日常聊天、工作评价和自我反思里。", "cards": [{"title": "卧薪尝胆", "body": "勾践睡柴草、尝苦胆提醒自己雪耻；今天表示忍辱负重、长期准备。关键不在苦，而在持续提醒目标。"}, {"title": "讳疾忌医", "body": "蔡桓公不肯承认有病，最终无药可救；今天常说一个人明明有问题却拒绝面对。"}, {"title": "唇亡齿寒", "body": "嘴唇没了牙齿就会觉得冷；比喻利益相关的双方一损俱损。例：测试和开发不是对立，而是唇亡齿寒。"}, {"title": "一鼓作气", "body": "曹刿论战里提出，第一通鼓士气最足；表示趁着状态最好时迅速完成关键动作。"}, {"title": "滥竽充数", "body": "南郭先生不会吹竽，却混在乐队里凑数；今天指没真本事却混在其中装会。"}], "quiz": [{"q": "用自己的话解释“卧薪尝胆”。", "a": "勾践睡柴草、尝苦胆提醒自己雪耻；今天表示忍辱负重、长期准备。关键不在苦，而在持续提醒目标。"}, {"q": "“卧薪尝胆”和“讳疾忌医”分别在提醒你什么？", "a": "卧薪尝胆强调勾践睡柴草、尝苦胆提醒自己雪耻；今天表示忍辱负重、长期准备。关键不在苦，而在持续提醒目标；讳疾忌医强调蔡桓公不肯承认有病，最终无药可救；今天常说一个人明明有问题却拒绝面对。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "挑 3 个成语，分别解释‘字面意思 + 典故 + 今天怎么用’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 1, "title": "专业表达与术语拆解", "goal": "降低别人说专业词时的压迫感。", "read": "整理你工作中常见但不够熟的词：架构、耦合、抽象、范式、SLA、性能瓶颈、容错、可扩展性。", "keywords": ["架构", "耦合", "抽象", "SLA"], "output": "用‘像给初中生解释’的方式解释 8 个术语。", "resource": "可搜索：系统设计基础 / 面向对象核心概念 / 程序员如何表达清楚", "milestone": "建立第一个‘专业词翻译表’。", "week": 4, "overview": "这一周把程序员常见的术语翻成白话。你要学会的是：别人一说黑话，你能迅速还原成普通人也听得懂的话。", "cards": [{"title": "架构", "body": "架构就是系统怎么搭、模块怎么分、数据怎么流。它像房子的结构图，不是具体一块砖。"}, {"title": "耦合", "body": "耦合是模块之间绑得有多死；高耦合意味着改 A 会连带改 B、C，维护会非常痛苦。"}, {"title": "抽象", "body": "抽象是从多个具体事物里提炼共同规则。例：微信支付、支付宝支付可以抽象成‘支付方式’接口。"}, {"title": "SLA", "body": "SLA 是服务级别承诺，比如可用性 99.9%、故障 30 分钟响应；本质是提前说清服务边界。"}, {"title": "性能瓶颈", "body": "性能瓶颈是系统里最慢、最卡的那一段。优化不是到处乱改，而是先找到真正拖后腿的点。"}], "quiz": [{"q": "用自己的话解释“架构”。", "a": "架构就是系统怎么搭、模块怎么分、数据怎么流。它像房子的结构图，不是具体一块砖。"}, {"q": "“架构”和“耦合”分别在提醒你什么？", "a": "架构强调架构就是系统怎么搭、模块怎么分、数据怎么流。它像房子的结构图，不是具体一块砖；耦合强调耦合是模块之间绑得有多死；高耦合意味着改 A 会连带改 B、C，维护会非常痛苦。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用‘像给初中生解释’的方式解释 8 个术语。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 2, "title": "古诗词入门：意象和情感", "goal": "知道诗词不是死背，而是理解意象。", "read": "认识常见意象：月、酒、柳、雁、秋、山水、长安。读《静夜思》《黄鹤楼送孟浩然之广陵》《枫桥夜泊》等。", "keywords": ["意象", "离别", "思乡", "山水"], "output": "挑 3 句诗，解释它表达的情感和画面。", "resource": "可搜索：古诗词意象入门 / 唐诗鉴赏基础", "milestone": "能说出 6 个常见诗词意象。", "week": 5, "overview": "古诗词先学意象，不先学朝代考点。意象就是诗人反复借来表达情绪的画面符号。", "cards": [{"title": "月", "body": "月常和思乡、怀人、孤独联系在一起，如‘举头望明月’。看到月，不只看天体，要想情感。"}, {"title": "柳", "body": "柳和‘留’谐音，所以送别诗里常见折柳。它往往代表离别、挽留与不舍。"}, {"title": "雁", "body": "雁常与书信、远行、边塞、思归有关；古人把雁当作消息与迁徙的象征。"}, {"title": "酒", "body": "酒既可以是豪放，也可以是愁绪。要结合语境判断：是壮志未酬，还是借酒消愁。"}, {"title": "秋", "body": "秋在诗里常和萧瑟、成熟、时光流逝联系在一起；并不是单纯写季节。"}], "quiz": [{"q": "用自己的话解释“月”。", "a": "月常和思乡、怀人、孤独联系在一起，如‘举头望明月’。看到月，不只看天体，要想情感。"}, {"q": "“月”和“柳”分别在提醒你什么？", "a": "月强调月常和思乡、怀人、孤独联系在一起，如‘举头望明月’。看到月，不只看天体，要想情感；柳强调柳和‘留’谐音，所以送别诗里常见折柳。它往往代表离别、挽留与不舍。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "挑 3 句诗，解释它表达的情感和画面。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 2, "title": "唐诗名篇 1：盛唐气象", "goal": "理解唐诗为什么常被引用。", "read": "读李白、杜甫、王维、高适的代表作各 1 到 2 首。", "keywords": ["李白", "杜甫", "王维", "边塞诗"], "output": "用自己的话解释‘天生我材必有用’‘会当凌绝顶’‘大漠孤烟直’。", "resource": "可搜索：李白 杜甫 王维 代表作 / 盛唐气象", "milestone": "积累 6 句高频唐诗名句。", "week": 6, "overview": "这一周不要求你背大量唐诗，而是抓住几位代表诗人的风格。以后别人提到名句时，你能大概知道是谁的气质。", "cards": [{"title": "李白", "body": "李白的关键词是浪漫、夸张、想象力和自由感。读李白要感受气势，不必先纠结逐字注释。"}, {"title": "杜甫", "body": "杜甫更关注现实、百姓、国家与人生困顿，所以被称为‘诗史’。他的力量在沉郁与厚重。"}, {"title": "王维", "body": "王维擅长山水与空灵意境，常被说成‘诗中有画’。读他时要先看画面，再看情绪。"}, {"title": "边塞诗", "body": "高适、岑参等边塞诗人常写大漠、军旅、送别与建功立业，语言开阔、雄浑、带风沙感。"}, {"title": "高频名句", "body": "像‘天生我材必有用’‘会当凌绝顶’‘大漠孤烟直’，要会用白话解释它们表达的精神。"}], "quiz": [{"q": "用自己的话解释“李白”。", "a": "李白的关键词是浪漫、夸张、想象力和自由感。读李白要感受气势，不必先纠结逐字注释。"}, {"q": "“李白”和“杜甫”分别在提醒你什么？", "a": "李白强调李白的关键词是浪漫、夸张、想象力和自由感。读李白要感受气势，不必先纠结逐字注释；杜甫强调杜甫更关注现实、百姓、国家与人生困顿，所以被称为‘诗史’。他的力量在沉郁与厚重。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用自己的话解释‘天生我材必有用’‘会当凌绝顶’‘大漠孤烟直’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 2, "title": "宋词名篇：婉约与豪放", "goal": "听到别人提到苏轼、辛弃疾、李清照时不再陌生。", "read": "读《念奴娇·赤壁怀古》《水调歌头》《声声慢》《青玉案·元夕》等。", "keywords": ["苏轼", "辛弃疾", "李清照", "豪放派"], "output": "比较一首豪放词和一首婉约词的气质差异。", "resource": "可搜索：宋词入门 / 苏轼 辛弃疾 李清照", "milestone": "会举例说明‘豪放’与‘婉约’。", "week": 7, "overview": "这一周抓宋词的两大气质：豪放与婉约。重点是能听懂苏轼、辛弃疾、李清照分别在表达什么样的生命感。", "cards": [{"title": "苏轼", "body": "苏轼兼具豪放与旷达；他的词常把挫折写出开阔感，如‘但愿人长久’里有超越眼前困境的力量。"}, {"title": "辛弃疾", "body": "辛弃疾的词里常有报国壮志、英雄失路和强烈情绪，读他要抓‘壮志难酬’。"}, {"title": "李清照", "body": "李清照代表婉约词的细腻、含蓄与情感层次。她不是‘柔弱’，而是极擅长把复杂心绪写得精准。"}, {"title": "豪放与婉约", "body": "豪放强调气势、视野、胸襟；婉约强调情感、细节、回环。它们不是高低之分，而是风格不同。"}, {"title": "词比诗更口语", "body": "词原本和音乐关系更近，节奏感更强。读词时不要只当古文，要感受它像唱出来的话。"}], "quiz": [{"q": "用自己的话解释“苏轼”。", "a": "苏轼兼具豪放与旷达；他的词常把挫折写出开阔感，如‘但愿人长久’里有超越眼前困境的力量。"}, {"q": "“苏轼”和“辛弃疾”分别在提醒你什么？", "a": "苏轼强调苏轼兼具豪放与旷达；他的词常把挫折写出开阔感，如‘但愿人长久’里有超越眼前困境的力量；辛弃疾强调辛弃疾的词里常有报国壮志、英雄失路和强烈情绪，读他要抓‘壮志难酬’。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "比较一首豪放词和一首婉约词的气质差异。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 2, "title": "名句场景化表达", "goal": "让诗句真正能在生活中使用。", "read": "整理 12 句适合聊天、鼓励、感慨、离别、坚持时用的名句。", "keywords": ["名句活用", "场景表达", "引用能力", "表达升级"], "output": "为 6 个生活场景各配一句合适的诗句。", "resource": "可搜索：高频诗词名句 / 诗句如何用于日常表达", "milestone": "建立你的第一份‘名句场景卡片’。", "week": 8, "overview": "这一周练的是‘会用诗句’，不是只会背。你要学会在鼓励、离别、思乡、坚持等场景里自然引用。", "cards": [{"title": "鼓励场景", "body": "如‘长风破浪会有时’适合鼓劲；引用时先说白话，再接诗句，会更自然。"}, {"title": "离别场景", "body": "如‘海内存知己，天涯若比邻’适合送别；重点不是文艺，而是传达情义和祝福。"}, {"title": "思乡场景", "body": "如‘举头望明月，低头思故乡’之所以常用，是因为情绪直接、人人都懂。"}, {"title": "坚持场景", "body": "如‘千磨万击还坚劲’适合形容扛压、坚持和不轻易弯折。"}, {"title": "感慨场景", "body": "如‘人生代代无穷已，江月年年望相似’适合表达时间流逝与人生感。"}], "quiz": [{"q": "用自己的话解释“鼓励场景”。", "a": "如‘长风破浪会有时’适合鼓劲；引用时先说白话，再接诗句，会更自然。"}, {"q": "“鼓励场景”和“离别场景”分别在提醒你什么？", "a": "鼓励场景强调如‘长风破浪会有时’适合鼓劲；引用时先说白话，再接诗句，会更自然；离别场景强调如‘海内存知己，天涯若比邻’适合送别；重点不是文艺，而是传达情义和祝福。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "为 6 个生活场景各配一句合适的诗句。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 3, "title": "中国历史骨架 1：先秦到秦汉", "goal": "先抓主线，不陷入细节。", "read": "理清夏商周、春秋战国、秦统一、楚汉之争、汉武帝几个节点。", "keywords": ["分封制", "百家争鸣", "秦始皇", "汉武帝"], "output": "用 5 分钟讲清‘为什么秦很短但很重要’。", "resource": "可搜索：中国历史朝代顺序 / 先秦到汉代梳理", "milestone": "背出朝代大致顺序和关键转折。", "week": 9, "overview": "中国历史先抓骨架，再填细节。你要先知道大方向：从分封到争霸，从统一到帝国稳定。", "cards": [{"title": "夏商周", "body": "夏商周是早期王朝阶段，周的重要性在于分封制和礼乐秩序，为后面诸侯格局打下基础。"}, {"title": "春秋战国", "body": "这一时期的关键词是争霸、兼并和思想爆发。百家争鸣不是考试点，而是中国思想的源头。"}, {"title": "秦统一", "body": "秦朝虽然短，却完成文字、度量衡、道路等统一，第一次把‘大一统国家’真正做出来。"}, {"title": "楚汉之争", "body": "秦亡后不是直接到汉，而是经历刘邦与项羽的争夺。很多成语和人物故事都集中出在这一段。"}, {"title": "汉武帝", "body": "汉武帝时期把中央集权、疆域扩展和国家气势推向高点，所以汉朝成了中国人身份认同的重要来源。"}], "quiz": [{"q": "用自己的话解释“夏商周”。", "a": "夏商周是早期王朝阶段，周的重要性在于分封制和礼乐秩序，为后面诸侯格局打下基础。"}, {"q": "“夏商周”和“春秋战国”分别在提醒你什么？", "a": "夏商周强调夏商周是早期王朝阶段，周的重要性在于分封制和礼乐秩序，为后面诸侯格局打下基础；春秋战国强调这一时期的关键词是争霸、兼并和思想爆发。百家争鸣不是考试点，而是中国思想的源头。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用 5 分钟讲清‘为什么秦很短但很重要’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 3, "title": "中国历史骨架 2：魏晋南北朝到隋唐", "goal": "理解乱世与盛世如何转换。", "read": "了解三国、两晋、南北朝、隋统一、唐朝盛世与安史之乱。", "keywords": ["三国", "门阀", "隋炀帝", "安史之乱"], "output": "解释‘为什么很多典故都出自三国与唐朝’。", "resource": "可搜索：魏晋风度 / 隋唐历史入门", "milestone": "能概括三国到唐朝的主线。", "week": 10, "overview": "这一周学的是从三国到隋唐的主线。重点不是记每个政权，而是理解乱世、重组、再统一、再繁荣的过程。", "cards": [{"title": "三国", "body": "三国吸引人的不只是打仗，而是人物选择：曹操重效率，刘备重名义，孙权重平衡。"}, {"title": "魏晋风度", "body": "魏晋时期政治动荡，但思想和人物风格非常鲜明，‘清谈’‘门阀’‘名士’都是这一时期关键词。"}, {"title": "南北朝", "body": "长期分裂并不只是混乱，也带来民族融合、制度调整和文化交汇，为后来的统一做准备。"}, {"title": "隋统一", "body": "隋朝短而重要，像秦朝一样，关键在重新统一中国并修建大运河，打通南北。"}, {"title": "唐盛世与安史之乱", "body": "唐前期代表开放、繁荣和制度成熟；安史之乱则是盛世转折点，之后国力和社会心态都变了。"}], "quiz": [{"q": "用自己的话解释“三国”。", "a": "三国吸引人的不只是打仗，而是人物选择：曹操重效率，刘备重名义，孙权重平衡。"}, {"q": "“三国”和“魏晋风度”分别在提醒你什么？", "a": "三国强调三国吸引人的不只是打仗，而是人物选择：曹操重效率，刘备重名义，孙权重平衡；魏晋风度强调魏晋时期政治动荡，但思想和人物风格非常鲜明，‘清谈’‘门阀’‘名士’都是这一时期关键词。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "解释‘为什么很多典故都出自三国与唐朝’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 3, "title": "中国历史骨架 3：宋元明清", "goal": "补齐现代人最容易混淆的几个朝代。", "read": "了解宋的文治、元的版图、明的制度、清的入关与晚清。", "keywords": ["科举", "行省", "内阁", "闭关"], "output": "做一张‘宋元明清对比表’。", "resource": "可搜索：宋元明清简史 / 朝代对比", "milestone": "知道每个朝代最鲜明的标签。", "week": 11, "overview": "这一周补宋元明清。你不需要一上来背所有皇帝，只要先抓每个朝代最鲜明的标签。", "cards": [{"title": "宋", "body": "宋朝强在文治、商业、城市生活和士大夫文化；弱项是军事压力大。它很‘精致’，也很‘克制’。"}, {"title": "元", "body": "元朝的突出特点是版图大、民族成分复杂，并把行省制度推开，对后世地方管理影响很深。"}, {"title": "明", "body": "明朝制度感很强，如内阁、厂卫、皇权集中；同时也有海上交流、商业活跃的一面。"}, {"title": "清前期", "body": "清朝前期完成大一统扩张，康乾盛世代表国家规模与稳定达到高峰。"}, {"title": "晚清变局", "body": "晚清最关键的不是简单‘衰败’，而是被迫面对西方冲击、制度危机和现代化问题。"}], "quiz": [{"q": "用自己的话解释“宋”。", "a": "宋朝强在文治、商业、城市生活和士大夫文化；弱项是军事压力大。它很‘精致’，也很‘克制’。"}, {"q": "“宋”和“元”分别在提醒你什么？", "a": "宋强调宋朝强在文治、商业、城市生活和士大夫文化；弱项是军事压力大。它很‘精致’，也很‘克制’；元强调元朝的突出特点是版图大、民族成分复杂，并把行省制度推开，对后世地方管理影响很深。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "做一张‘宋元明清对比表’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 3, "title": "近现代史常识", "goal": "建立近现代时间感，减少常识断层。", "read": "梳理鸦片战争、洋务运动、辛亥革命、抗战、新中国成立、改革开放。", "keywords": ["近代化", "辛亥革命", "抗战", "改革开放"], "output": "用时间线写出 8 个关键节点和各自意义。", "resource": "可搜索：中国近现代史时间线 / 近代史入门", "milestone": "形成近现代史的基本地图。", "week": 12, "overview": "近现代史要有时间线，不然事件会乱成一团。你要知道中国是怎样一步步被外力冲击、再寻求自我更新的。", "cards": [{"title": "鸦片战争", "body": "鸦片战争打开了近代中国被动卷入世界体系的起点，所以它常被视为近代史开端。"}, {"title": "洋务运动", "body": "洋务运动的核心是‘师夷长技’，先学器物与技术，但没有彻底解决制度问题。"}, {"title": "辛亥革命", "body": "辛亥革命结束了帝制，是政治形式的大变化，但并没有立刻带来稳定国家秩序。"}, {"title": "抗日战争", "body": "抗战不仅是民族生死战，也是现代中国共同记忆和国家认同的重要来源。"}, {"title": "新中国与改革开放", "body": "1949 年建立新中国解决国家统一问题；改革开放则把重心转到发展、市场与现代化建设。"}], "quiz": [{"q": "用自己的话解释“鸦片战争”。", "a": "鸦片战争打开了近代中国被动卷入世界体系的起点，所以它常被视为近代史开端。"}, {"q": "“鸦片战争”和“洋务运动”分别在提醒你什么？", "a": "鸦片战争强调鸦片战争打开了近代中国被动卷入世界体系的起点，所以它常被视为近代史开端；洋务运动强调洋务运动的核心是‘师夷长技’，先学器物与技术，但没有彻底解决制度问题。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用时间线写出 8 个关键节点和各自意义。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 4, "title": "中国地理骨架：版图与地形", "goal": "先有地图感，再记细节。", "read": "了解中国四大地理区域、三级阶梯、主要山脉河流与气候差异。", "keywords": ["秦岭淮河", "三级阶梯", "长江黄河", "季风"], "output": "口头讲一遍‘中国南北差异为什么这么大’。", "resource": "可搜索：中国地理基础 / 中国地形图入门", "milestone": "建立中国地图的空间感。", "week": 13, "overview": "地理先建立空间感。你脑子里要有一张简图：地势如何高低分层，南北如何分界，河流如何塑造生活。", "cards": [{"title": "三级阶梯", "body": "中国地势总体西高东低，可概括为三级阶梯。理解它，很多河流流向、人口分布和交通格局就通了。"}, {"title": "秦岭—淮河", "body": "这条线常被当成中国南北分界的重要参考，涉及气候、取暖、主食和农业方式差异。"}, {"title": "长江与黄河", "body": "黄河更像华夏文明发源河，长江更像经济与人口大动脉；两条河都不只是地理名词。"}, {"title": "季风与气候", "body": "东部受季风影响大，所以降水和农业分布很受海洋和季节风控制。"}, {"title": "南北差异", "body": "中国南北差异不是简单口味不同，而是气候、作物、交通、历史重心共同塑造的结果。"}], "quiz": [{"q": "用自己的话解释“三级阶梯”。", "a": "中国地势总体西高东低，可概括为三级阶梯。理解它，很多河流流向、人口分布和交通格局就通了。"}, {"q": "“三级阶梯”和“秦岭—淮河”分别在提醒你什么？", "a": "三级阶梯强调中国地势总体西高东低，可概括为三级阶梯。理解它，很多河流流向、人口分布和交通格局就通了；秦岭—淮河强调这条线常被当成中国南北分界的重要参考，涉及气候、取暖、主食和农业方式差异。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "口头讲一遍‘中国南北差异为什么这么大’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 4, "title": "省份简称与区域文化", "goal": "不再把简称、位置、文化标签混淆。", "read": "记住 34 个省级单位的大致位置、简称和代表文化。", "keywords": ["简称", "华北华东华南", "巴蜀", "江浙沪"], "output": "做一张‘省份简称 + 代表城市 + 一个文化标签’表。", "resource": "可搜索：中国省份简称记忆 / 区域文化差异", "milestone": "掌握常见省份简称和区域标签。", "week": 14, "overview": "省份简称不要孤零零硬背，最好按大区记。先记区域，再记简称和文化标签。", "cards": [{"title": "华北与东北", "body": "京津冀、晋、鲁、豫以及辽吉黑构成北方高频区域。北方文化常给人厚重、直爽、平原农业感。"}, {"title": "华东", "body": "江浙沪皖赣闽一带经济活跃、城市密集，文化上既有江南细腻，也有海洋开放性。"}, {"title": "华中与华南", "body": "两湖两广加海南，水网、丘陵、稻作和方言多样性明显。简称最好结合地图一起记。"}, {"title": "西南", "body": "川渝云贵桂地形复杂、民族多样，饮食、气候和生活节奏都很有辨识度。"}, {"title": "西北", "body": "陕甘宁青新地广人稀、干旱显著，丝绸之路、边塞与民族交流是重要文化线索。"}], "quiz": [{"q": "用自己的话解释“华北与东北”。", "a": "京津冀、晋、鲁、豫以及辽吉黑构成北方高频区域。北方文化常给人厚重、直爽、平原农业感。"}, {"q": "“华北与东北”和“华东”分别在提醒你什么？", "a": "华北与东北强调京津冀、晋、鲁、豫以及辽吉黑构成北方高频区域。北方文化常给人厚重、直爽、平原农业感；华东强调江浙沪皖赣闽一带经济活跃、城市密集，文化上既有江南细腻，也有海洋开放性。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "做一张‘省份简称 + 代表城市 + 一个文化标签’表。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 4, "title": "核心城市与名胜", "goal": "别人聊城市和景点时能接得上。", "read": "了解北京、西安、南京、杭州、成都、广州、上海、武汉、洛阳等城市的历史标签与代表景点。", "keywords": ["古都", "江南", "天府之国", "海派"], "output": "每个城市用 3 句话总结‘历史 + 文化 + 今天的气质’。", "resource": "可搜索：中国核心城市文化名片", "milestone": "会讲 8 个城市的文化标签。", "week": 15, "overview": "别人聊城市和名胜时，你不必全懂，但至少要能把城市和它的历史气质、代表景观对上号。", "cards": [{"title": "北京", "body": "北京的关键词是都城、政治中枢、轴线、故宫、长城。它代表的是国家叙事和皇家格局。"}, {"title": "西安与洛阳", "body": "西安、洛阳常和古都、汉唐、丝路、石窟联系在一起，是理解古代中国的重要入口。"}, {"title": "南京与杭州", "body": "南京常带六朝古都和近代转折感；杭州常和江南、宋韵、西湖联系在一起。"}, {"title": "成都与重庆", "body": "成都偏安逸、巴蜀文化浓；重庆更立体、山城感强。它们都和西南地理密切相关。"}, {"title": "广州与深圳", "body": "广州连接岭南传统与商贸，深圳代表改革开放后的速度、年轻和创新。"}], "quiz": [{"q": "用自己的话解释“北京”。", "a": "北京的关键词是都城、政治中枢、轴线、故宫、长城。它代表的是国家叙事和皇家格局。"}, {"q": "“北京”和“西安与洛阳”分别在提醒你什么？", "a": "北京强调北京的关键词是都城、政治中枢、轴线、故宫、长城。它代表的是国家叙事和皇家格局；西安与洛阳强调西安、洛阳常和古都、汉唐、丝路、石窟联系在一起，是理解古代中国的重要入口。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "每个城市用 3 句话总结‘历史 + 文化 + 今天的气质’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 4, "title": "饮食、方言与风俗", "goal": "理解中国文化为什么丰富多样。", "read": "了解八大菜系、典型方言区、春节、清明、端午、中秋等节日风俗。", "keywords": ["八大菜系", "方言区", "民俗", "节日"], "output": "解释‘为什么南北饮食差异明显’。", "resource": "可搜索：中国饮食文化 / 中国节日由来", "milestone": "建立对日常文化差异的理解。", "week": 16, "overview": "风俗不是冷知识堆砌，而是地理、历史、气候和人群长期互动的结果。你要学会从‘为什么会这样’去理解。", "cards": [{"title": "南米北面", "body": "南方更适合水稻，北方更适合小麦，所以主食差异背后是农业条件差异。"}, {"title": "八大菜系", "body": "菜系不是死背名单，重点是知道川菜重麻辣、粤菜重鲜、鲁菜厚重、淮扬讲究细腻等基本印象。"}, {"title": "方言分布", "body": "方言不是普通话说歪了，而是历史迁徙和地域隔离留下来的语言系统。"}, {"title": "节日风俗", "body": "同一个节日各地吃法和习俗不同，说明中国文化是统一中带差异。"}, {"title": "避免刻板印象", "body": "地域标签只能帮助你建立第一印象，不能替代对具体人的了解。"}], "quiz": [{"q": "用自己的话解释“南米北面”。", "a": "南方更适合水稻，北方更适合小麦，所以主食差异背后是农业条件差异。"}, {"q": "“南米北面”和“八大菜系”分别在提醒你什么？", "a": "南米北面强调南方更适合水稻，北方更适合小麦，所以主食差异背后是农业条件差异；八大菜系强调菜系不是死背名单，重点是知道川菜重麻辣、粤菜重鲜、鲁菜厚重、淮扬讲究细腻等基本印象。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "解释‘为什么南北饮食差异明显’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 5, "title": "《西游记》：人物与隐喻", "goal": "知道它不只是‘打妖怪’。", "read": "了解唐僧、孙悟空、猪八戒、沙僧的象征与经典故事。", "keywords": ["大闹天宫", "取经", "九九八十一难", "修行"], "output": "讲 3 个最经典桥段，并说说它们映射了什么人性。", "resource": "可搜索：西游记故事梳理 / 西游记人物分析", "milestone": "能讲清《西游记》为什么经典。", "week": 17, "overview": "《西游记》不是单纯‘打妖怪’，它更像一部修行故事：人性、欲望、纪律和成长都在里面。", "cards": [{"title": "孙悟空", "body": "孙悟空代表才华、反叛、生命力，也代表不受约束时的危险。厉害不等于成熟。"}, {"title": "唐僧", "body": "唐僧并不强打，但他代表目标、信念和秩序。团队里不只有能打的人重要。"}, {"title": "猪八戒与沙僧", "body": "猪八戒代表欲望与人性弱点，沙僧代表稳定与执行；团队能走远靠的不是一个英雄。"}, {"title": "八十一难", "body": "一路取经不断遇阻，说明成长不是一次升级，而是反复经历考验与修正。"}, {"title": "妖怪隐喻", "body": "很多妖怪其实像现实里的贪、色、权、骗。读《西游记》要看到表面冒险背后的寓意。"}], "quiz": [{"q": "用自己的话解释“孙悟空”。", "a": "孙悟空代表才华、反叛、生命力，也代表不受约束时的危险。厉害不等于成熟。"}, {"q": "“孙悟空”和“唐僧”分别在提醒你什么？", "a": "孙悟空强调孙悟空代表才华、反叛、生命力，也代表不受约束时的危险。厉害不等于成熟；唐僧强调唐僧并不强打，但他代表目标、信念和秩序。团队里不只有能打的人重要。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "讲 3 个最经典桥段，并说说它们映射了什么人性。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 5, "title": "《三国演义》：人物、权谋与格局", "goal": "别人提曹操、诸葛亮、关羽时能听懂。", "read": "了解桃园结义、官渡之战、赤壁之战、三顾茅庐、空城计等。", "keywords": ["曹操", "刘备", "诸葛亮", "赤壁"], "output": "比较曹操与刘备两种领导风格。", "resource": "可搜索：三国演义入门 / 三国重要战役", "milestone": "形成三国人物与阵营地图。", "week": 18, "overview": "《三国演义》最值得学的，不只是人名和战役，而是人物选择、格局判断和权谋背后的逻辑。", "cards": [{"title": "曹操", "body": "曹操最大的特点是现实主义：重效率、重人才、敢担当，也因此常显得复杂甚至争议。"}, {"title": "刘备", "body": "刘备擅长用‘仁义’聚人心，他的力量在价值名义和组织凝聚，而不只是个人武力。"}, {"title": "诸葛亮", "body": "诸葛亮代表谋略、制度、责任感与长期规划；他常被拿来象征‘鞠躬尽瘁’。"}, {"title": "关羽", "body": "关羽被广泛神化，是因为忠义形象太鲜明。中国文化里‘义’不只是情感，也是一种道德期待。"}, {"title": "三国启示", "body": "三国里最常见的主题不是谁最强，而是名义、能力、时势和组织如何互相牵制。"}], "quiz": [{"q": "用自己的话解释“曹操”。", "a": "曹操最大的特点是现实主义：重效率、重人才、敢担当，也因此常显得复杂甚至争议。"}, {"q": "“曹操”和“刘备”分别在提醒你什么？", "a": "曹操强调曹操最大的特点是现实主义：重效率、重人才、敢担当，也因此常显得复杂甚至争议；刘备强调刘备擅长用‘仁义’聚人心，他的力量在价值名义和组织凝聚，而不只是个人武力。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "比较曹操与刘备两种领导风格。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 5, "title": "《水浒传》：好汉、秩序与反抗", "goal": "理解水浒不只是‘打打杀杀’。", "read": "了解宋江、武松、林冲、鲁智深、李逵等人物命运。", "keywords": ["逼上梁山", "忠义", "草莽", "官逼民反"], "output": "挑 2 个角色，分析他们为何走上梁山。", "resource": "可搜索：水浒传人物分析 / 经典故事", "milestone": "知道《水浒传》的核心冲突。", "week": 19, "overview": "《水浒传》要看的是‘好汉为什么会被逼上梁山’，以及反抗与秩序之间的张力。", "cards": [{"title": "逼上梁山", "body": "很多人物并不是天生反叛，而是在制度不公、权力压迫下走到绝路。"}, {"title": "宋江", "body": "宋江复杂之处在于他既讲义气，又深受正统秩序影响，所以后来选择招安。"}, {"title": "林冲", "body": "林冲的故事最能体现‘被逼反’，他原本想守规矩，却被权力玩弄到无路可退。"}, {"title": "武松", "body": "武松之所以深入人心，是因为他身上有快意恩仇、个人英雄与民间正义感。"}, {"title": "水浒的矛盾", "body": "《水浒传》既赞美兄弟义气，也暴露群体暴力、失序和理想破灭。"}], "quiz": [{"q": "用自己的话解释“逼上梁山”。", "a": "很多人物并不是天生反叛，而是在制度不公、权力压迫下走到绝路。"}, {"q": "“逼上梁山”和“宋江”分别在提醒你什么？", "a": "逼上梁山强调很多人物并不是天生反叛，而是在制度不公、权力压迫下走到绝路；宋江强调宋江复杂之处在于他既讲义气，又深受正统秩序影响，所以后来选择招安。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "挑 2 个角色，分析他们为何走上梁山。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 5, "title": "《红楼梦》：人物关系与审美", "goal": "跨过‘看不懂’这道坎。", "read": "了解贾宝玉、林黛玉、薛宝钗、王熙凤以及贾府兴衰。", "keywords": ["金陵十二钗", "贾府", "悲剧", "世情"], "output": "用通俗语言解释‘为什么很多人说《红楼梦》伟大’。", "resource": "可搜索：红楼梦人物关系 / 红楼梦入门", "milestone": "能说出《红楼梦》的基本人物格局。", "week": 20, "overview": "《红楼梦》难，不是因为词藻多，而是人物关系细、情绪层次深、盛衰转换慢。先抓人物和气质。", "cards": [{"title": "贾宝玉", "body": "贾宝玉讨厌僵硬功名秩序，偏爱真情与美感，所以他常被看作反叛礼教的核心人物。"}, {"title": "林黛玉", "body": "林黛玉不是简单‘爱哭’，而是敏感、聪明、自尊极强，能看见他人看不见的细微情绪。"}, {"title": "薛宝钗", "body": "薛宝钗稳重、得体、讲分寸，代表另一种成熟秩序感。她和黛玉不是脸谱化对立。"}, {"title": "大观园与四大家族", "body": "《红楼梦》写的不只是爱情，而是一个大家族从繁华走向衰败的全过程。"}, {"title": "红楼的审美", "body": "服饰、饮食、诗社、器物、节令都被写得很细；它让你看到中国传统生活的审美密度。"}], "quiz": [{"q": "用自己的话解释“贾宝玉”。", "a": "贾宝玉讨厌僵硬功名秩序，偏爱真情与美感，所以他常被看作反叛礼教的核心人物。"}, {"q": "“贾宝玉”和“林黛玉”分别在提醒你什么？", "a": "贾宝玉强调贾宝玉讨厌僵硬功名秩序，偏爱真情与美感，所以他常被看作反叛礼教的核心人物；林黛玉强调林黛玉不是简单‘爱哭’，而是敏感、聪明、自尊极强，能看见他人看不见的细微情绪。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用通俗语言解释‘为什么很多人说《红楼梦》伟大’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 6, "title": "希腊罗马神话与西方典故", "goal": "补上西方文化中的高频隐喻。", "read": "了解宙斯、雅典娜、普罗米修斯、阿喀琉斯、奥德修斯等故事。", "keywords": ["普罗米修斯", "阿喀琉斯之踵", "奥德赛", "缪斯"], "output": "解释 5 个常见西方典故今天怎么用。", "resource": "可搜索：希腊神话入门 / 西方典故常识", "milestone": "掌握常见西方文化梗。", "week": 21, "overview": "西方典故里，很多词汇和隐喻都来自希腊罗马神话。先认识高频人物和母题就够用了。", "cards": [{"title": "宙斯与雅典娜", "body": "宙斯代表最高权力，雅典娜常象征智慧与理性。西方艺术里这类形象很常见。"}, {"title": "普罗米修斯", "body": "普罗米修斯盗火给人类，常被用来象征反抗、启蒙、为人类承担代价的精神。"}, {"title": "那喀索斯", "body": "那喀索斯只爱自己水中的倒影，今天 ‘narcissism’ 自恋 就和这个故事有关。"}, {"title": "阿喀琉斯之踵", "body": "阿喀琉斯全身强大却有致命弱点，所以 Achilles’ heel 指看似强者最脆弱的一点。"}, {"title": "木马计", "body": "特洛伊木马的故事后来被广泛用来形容伪装进入、内部突破，网络安全里也常借用。"}], "quiz": [{"q": "用自己的话解释“宙斯与雅典娜”。", "a": "宙斯代表最高权力，雅典娜常象征智慧与理性。西方艺术里这类形象很常见。"}, {"q": "“宙斯与雅典娜”和“普罗米修斯”分别在提醒你什么？", "a": "宙斯与雅典娜强调宙斯代表最高权力，雅典娜常象征智慧与理性。西方艺术里这类形象很常见；普罗米修斯强调普罗米修斯盗火给人类，常被用来象征反抗、启蒙、为人类承担代价的精神。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "解释 5 个常见西方典故今天怎么用。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 6, "title": "圣经故事与西方文化常识", "goal": "不信仰也能了解重要文化母题。", "read": "了解创世、伊甸园、诺亚方舟、巴别塔、最后的晚餐等故事。", "keywords": ["伊甸园", "诺亚方舟", "巴别塔", "最后的晚餐"], "output": "挑 3 个故事，说明它们为什么在文学影视中常出现。", "resource": "可搜索：圣经故事文化常识 / 西方文学母题", "milestone": "建立西方文学典故识别能力。", "week": 22, "overview": "不必从信仰角度读《圣经》，先把它当作西方文化高频母题的来源：原罪、背叛、救赎、怜悯、回归。", "cards": [{"title": "伊甸园", "body": "亚当夏娃的故事常被用来谈诱惑、原罪、禁令与失去纯真。"}, {"title": "诺亚方舟", "body": "方舟象征灾难中的保全、信念和重建，也是‘末日后重启’叙事的原型。"}, {"title": "犹大之吻", "body": "犹大以亲吻出卖耶稣，所以 Judas kiss 常表示披着亲近外表的背叛。"}, {"title": "好撒玛利亚人", "body": "这个故事强调帮助陌生人的善意，因此 good Samaritan 常指善良施助的人。"}, {"title": "浪子回头", "body": "浪子回头故事强调偏离、醒悟、回归和接纳，所以 prodigal son 常带‘失而复返’意味。"}], "quiz": [{"q": "用自己的话解释“伊甸园”。", "a": "亚当夏娃的故事常被用来谈诱惑、原罪、禁令与失去纯真。"}, {"q": "“伊甸园”和“诺亚方舟”分别在提醒你什么？", "a": "伊甸园强调亚当夏娃的故事常被用来谈诱惑、原罪、禁令与失去纯真；诺亚方舟强调方舟象征灾难中的保全、信念和重建，也是‘末日后重启’叙事的原型。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "挑 3 个故事，说明它们为什么在文学影视中常出现。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 6, "title": "世界历史骨架：古代到近代", "goal": "建立世界文明演化的时间感。", "read": "梳理古埃及、两河、希腊罗马、中世纪、文艺复兴、大航海、工业革命。", "keywords": ["城邦", "文艺复兴", "启蒙运动", "工业革命"], "output": "画一条简单时间线并说出每段最重要的变化。", "resource": "可搜索：世界史入门 / 文明简史", "milestone": "能讲出世界史的几个大台阶。", "week": 23, "overview": "世界历史也先抓骨架。你要知道文明是怎样从古代帝国、宗教秩序，走向近代国家、资本和工业的。", "cards": [{"title": "古代文明", "body": "两河、埃及、印度、中国等古代文明的共同点是农业、城市、文字、国家形成。"}, {"title": "希腊与罗马", "body": "希腊贡献哲学、城邦和审美理想，罗马贡献法律、帝国秩序和道路网络。"}, {"title": "中世纪", "body": "中世纪并不只是‘黑暗’，它也是封建关系、教会权威和大学萌芽形成的重要时期。"}, {"title": "文艺复兴与大航海", "body": "文艺复兴强调人和理性，大航海则把世界真正连到一起，也带来殖民扩张。"}, {"title": "工业革命", "body": "工业革命改变生产方式、城市生活和全球力量分布，是现代世界的转折器。"}], "quiz": [{"q": "用自己的话解释“古代文明”。", "a": "两河、埃及、印度、中国等古代文明的共同点是农业、城市、文字、国家形成。"}, {"q": "“古代文明”和“希腊与罗马”分别在提醒你什么？", "a": "古代文明强调两河、埃及、印度、中国等古代文明的共同点是农业、城市、文字、国家形成；希腊与罗马强调希腊贡献哲学、城邦和审美理想，罗马贡献法律、帝国秩序和道路网络。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "画一条简单时间线并说出每段最重要的变化。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 6, "title": "现代世界格局与国家常识", "goal": "增强国际新闻理解力。", "read": "了解联合国、欧盟、美国、中国、俄罗斯、日本、中东等基础常识。", "keywords": ["联合国", "欧盟", "冷战", "全球化"], "output": "用非专业语言解释‘为什么国际关系总在变化’。", "resource": "可搜索：国际关系基础 / 世界主要国家概览", "milestone": "具备看国际新闻的最低背景。", "week": 24, "overview": "现代世界格局的关键词，是战争、国家、联盟、冷战、全球化。学会这些词，新闻会好懂很多。", "cards": [{"title": "民族国家", "body": "近代以后，国家不再只是王室领地，而越来越和国民、主权、边界联系在一起。"}, {"title": "两次世界大战", "body": "两次大战重塑了国际力量格局，也让殖民体系、技术战争和国际组织深刻变化。"}, {"title": "联合国与大国", "body": "联合国代表战后国际协调框架，但真正影响格局的仍是大国实力与联盟关系。"}, {"title": "冷战", "body": "冷战不是直接全面大战，而是以意识形态、军备、代理冲突和阵营对抗展开。"}, {"title": "全球化", "body": "全球化让商品、资本、信息和人员流动更快，但也带来产业转移、竞争与不平衡。"}], "quiz": [{"q": "用自己的话解释“民族国家”。", "a": "近代以后，国家不再只是王室领地，而越来越和国民、主权、边界联系在一起。"}, {"q": "“民族国家”和“两次世界大战”分别在提醒你什么？", "a": "民族国家强调近代以后，国家不再只是王室领地，而越来越和国民、主权、边界联系在一起；两次世界大战强调两次大战重塑了国际力量格局，也让殖民体系、技术战争和国际组织深刻变化。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用非专业语言解释‘为什么国际关系总在变化’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 7, "title": "儒家：修身齐家与做人逻辑", "goal": "明白很多中文表达背后的价值观来源。", "read": "认识孔子、孟子，了解仁、义、礼、智、信、中庸等概念。", "keywords": ["仁义礼智信", "中庸", "修身齐家", "孟子"], "output": "用今天的话解释‘仁’‘礼’‘中庸’。", "resource": "可搜索：论语入门 / 孟子核心思想", "milestone": "初步理解儒家如何影响中国人。", "week": 25, "overview": "儒家不是古人说教大全，而是一套关于做人、处关系、修身和社会秩序的系统。很多汉语表达都从这里来。", "cards": [{"title": "仁", "body": "仁是儒家的核心，强调设身处地、爱人、体谅与人与人的正当关系。"}, {"title": "礼", "body": "礼不是繁琐形式，而是让人知道在不同关系中如何有分寸地相处。"}, {"title": "孝", "body": "孝在传统社会里不仅指服从父母，更指家庭责任、代际传承和伦理起点。"}, {"title": "修身齐家", "body": "儒家常从个人修养出发，再谈家庭、社会和政治，强调内在品行和外在秩序相通。"}, {"title": "中庸", "body": "中庸不是平庸，而是避免走极端，讲求恰当、合宜、不过不及。"}], "quiz": [{"q": "用自己的话解释“仁”。", "a": "仁是儒家的核心，强调设身处地、爱人、体谅与人与人的正当关系。"}, {"q": "“仁”和“礼”分别在提醒你什么？", "a": "仁强调仁是儒家的核心，强调设身处地、爱人、体谅与人与人的正当关系；礼强调礼不是繁琐形式，而是让人知道在不同关系中如何有分寸地相处。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用今天的话解释‘仁’‘礼’‘中庸’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 7, "title": "道家、法家、墨家", "goal": "建立中国思想的多样性视角。", "read": "了解老子、庄子、韩非子、墨子的核心主张。", "keywords": ["无为", "逍遥", "法治", "兼爱"], "output": "比较儒家与道家的差异：一个更重什么，一个更重什么。", "resource": "可搜索：诸子百家入门 / 老庄韩非墨子", "milestone": "能区分几家思想的基本气质。", "week": 26, "overview": "这一周看中国思想的多样性：儒家不是唯一答案，道家、法家、墨家各自回答了不同现实问题。", "cards": [{"title": "道家", "body": "道家强调顺其自然、减少强行控制，提醒人别过度被功利和欲望牵着走。"}, {"title": "法家", "body": "法家更看重制度、奖惩和执行，认为光靠道德劝说不足以治理复杂社会。"}, {"title": "墨家", "body": "墨家主张兼爱、非攻、尚贤，重实际功用，反对无意义的奢华和战争。"}, {"title": "三家差别", "body": "儒家偏伦理关系，道家偏生命智慧，法家偏治理技术，墨家偏功利与普遍关怀。"}, {"title": "现实应用", "body": "面对不同问题要切换视角：做人未必靠法家，做制度未必只靠儒家。"}], "quiz": [{"q": "用自己的话解释“道家”。", "a": "道家强调顺其自然、减少强行控制，提醒人别过度被功利和欲望牵着走。"}, {"q": "“道家”和“法家”分别在提醒你什么？", "a": "道家强调道家强调顺其自然、减少强行控制，提醒人别过度被功利和欲望牵着走；法家强调法家更看重制度、奖惩和执行，认为光靠道德劝说不足以治理复杂社会。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "比较儒家与道家的差异：一个更重什么，一个更重什么。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 7, "title": "西方哲学入门", "goal": "听到‘苏格拉底、柏拉图、尼采’不再发怵。", "read": "认识苏格拉底、柏拉图、亚里士多德、笛卡尔、康德、尼采的最核心标签。", "keywords": ["理性", "理念论", "怀疑", "意志"], "output": "每位哲学家用一句‘最容易懂的话’概括。", "resource": "可搜索：西方哲学史入门 / 哲学家一句话理解", "milestone": "建立哲学人物与关键词映射。", "week": 27, "overview": "西方哲学先认人和问题，不要一上来啃原著。记住每位哲学家主要在追问什么。", "cards": [{"title": "苏格拉底", "body": "苏格拉底的重要性不在写书，而在不断追问：你以为你懂的东西，真的懂吗？"}, {"title": "柏拉图", "body": "柏拉图重视理念世界，认为现实世界只是更高真理的不完美影子。"}, {"title": "亚里士多德", "body": "亚里士多德更像分类大师与经验观察者，他把逻辑、伦理、政治都系统化了。"}, {"title": "笛卡尔", "body": "笛卡尔用普遍怀疑寻找确定性，‘我思故我在’强调主体思考的重要性。"}, {"title": "尼采", "body": "尼采批判僵化道德与从众价值，提醒人警惕习惯性服从和虚假的正确。"}], "quiz": [{"q": "用自己的话解释“苏格拉底”。", "a": "苏格拉底的重要性不在写书，而在不断追问：你以为你懂的东西，真的懂吗？。"}, {"q": "“苏格拉底”和“柏拉图”分别在提醒你什么？", "a": "苏格拉底强调苏格拉底的重要性不在写书，而在不断追问：你以为你懂的东西，真的懂吗？；柏拉图强调柏拉图重视理念世界，认为现实世界只是更高真理的不完美影子。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "每位哲学家用一句‘最容易懂的话’概括。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 7, "title": "宗教与文明地图", "goal": "理解宗教在历史与文化中的作用。", "read": "了解佛教、基督教、伊斯兰教的基本起源、传播区域与代表节日。", "keywords": ["佛教", "基督教", "伊斯兰教", "文明圈"], "output": "做一张‘宗教 - 地区 - 影响’的简单表格。", "resource": "可搜索：世界宗教常识 / 宗教与文明", "milestone": "对世界文明版图有更清楚的感觉。", "week": 28, "overview": "宗教与文明地图不是叫你皈依，而是帮助你理解世界各地的价值观、节日、建筑和历史冲突。", "cards": [{"title": "佛教", "body": "佛教关心苦、无常、因果和修心，对东亚文化里的生死观、慈悲观影响很深。"}, {"title": "基督教", "body": "基督教对欧洲历史、艺术、节日和伦理观影响巨大，救赎、博爱、罪与宽恕是常见母题。"}, {"title": "伊斯兰教", "body": "伊斯兰文明曾在贸易、科学、城市生活上非常繁荣，今天仍深刻影响中东与全球政治。"}, {"title": "印度教", "body": "印度教体系复杂，与种姓、神话、轮回观和印度社会长期结合在一起。"}, {"title": "宗教与文明", "body": "宗教既是信仰，也是文化系统；理解它能帮助你读懂冲突、共识和生活方式。"}], "quiz": [{"q": "用自己的话解释“佛教”。", "a": "佛教关心苦、无常、因果和修心，对东亚文化里的生死观、慈悲观影响很深。"}, {"q": "“佛教”和“基督教”分别在提醒你什么？", "a": "佛教强调佛教关心苦、无常、因果和修心，对东亚文化里的生死观、慈悲观影响很深；基督教强调基督教对欧洲历史、艺术、节日和伦理观影响巨大，救赎、博爱、罪与宽恕是常见母题。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "做一张‘宗教 - 地区 - 影响’的简单表格。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 8, "title": "绘画与雕塑常识", "goal": "建立最基础的艺术识别力。", "read": "了解达芬奇、米开朗琪罗、梵高、莫奈、毕加索及其风格标签。", "keywords": ["文艺复兴", "印象派", "后印象派", "立体主义"], "output": "看 5 幅名画，各用一句话说出你的直观感受。", "resource": "可搜索：西方美术史入门 / 名画赏析", "milestone": "能认出几类常见艺术风格。", "week": 29, "overview": "艺术入门不是背作者年表，而是学会看：画面怎么组织、情绪怎么传达、材料和技法怎么影响感受。", "cards": [{"title": "写实与表现", "body": "有的作品重像真，有的重情绪和变形；别用‘像不像照片’作为唯一标准。"}, {"title": "构图与视线", "body": "画面中的主次、远近、留白和光影，会决定你第一眼看哪里、整体感觉是什么。"}, {"title": "中国画", "body": "中国画常重笔墨、气韵、留白和意境，不追求完全逼真，更追求神韵。"}, {"title": "雕塑", "body": "雕塑不是平面画，而是体积、材料、重心与空间关系的艺术。"}, {"title": "看画方法", "body": "先看整体主题，再看细节、颜色、构图和情绪，最后想作品想让你感到什么。"}], "quiz": [{"q": "用自己的话解释“写实与表现”。", "a": "有的作品重像真，有的重情绪和变形；别用‘像不像照片’作为唯一标准。"}, {"q": "“写实与表现”和“构图与视线”分别在提醒你什么？", "a": "写实与表现强调有的作品重像真，有的重情绪和变形；别用‘像不像照片’作为唯一标准；构图与视线强调画面中的主次、远近、留白和光影，会决定你第一眼看哪里、整体感觉是什么。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "看 5 幅名画，各用一句话说出你的直观感受。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 8, "title": "建筑风格与名作", "goal": "旅行或聊天时能识别基本建筑风格。", "read": "了解哥特式、巴洛克、古典主义、现代主义，以及故宫、帕特农神庙、巴黎圣母院等。", "keywords": ["哥特式", "穹顶", "柱式", "现代主义"], "output": "比较一座中国古建和一座欧洲建筑的风格差异。", "resource": "可搜索：建筑风格入门 / 世界经典建筑", "milestone": "形成建筑审美的最小框架。", "week": 30, "overview": "建筑是凝固的历史。你学会几个典型特征，就能在旅行或聊天时迅速判断风格和时代气质。", "cards": [{"title": "中国古代建筑", "body": "看轴线、院落、屋顶和木构；它强调秩序、礼制和空间层级。"}, {"title": "哥特式", "body": "哥特式建筑常见尖拱、彩色玻璃和高耸感，给人向上、神圣、穿透天空的感觉。"}, {"title": "文艺复兴建筑", "body": "文艺复兴强调比例、对称和圆顶，体现理性、秩序与人的尺度。"}, {"title": "现代主义", "body": "现代主义常强调功能优先、线条简洁、少装饰，口号是‘形式追随功能’。"}, {"title": "观察建筑", "body": "看建筑时先问：它服务什么用途？想让人感到庄严、亲近，还是高效？"}], "quiz": [{"q": "用自己的话解释“中国古代建筑”。", "a": "看轴线、院落、屋顶和木构；它强调秩序、礼制和空间层级。"}, {"q": "“中国古代建筑”和“哥特式”分别在提醒你什么？", "a": "中国古代建筑强调看轴线、院落、屋顶和木构；它强调秩序、礼制和空间层级；哥特式强调哥特式建筑常见尖拱、彩色玻璃和高耸感，给人向上、神圣、穿透天空的感觉。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "比较一座中国古建和一座欧洲建筑的风格差异。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 8, "title": "音乐、戏剧、电影常识", "goal": "补一点文艺谈资，不求专业但求不陌生。", "read": "了解交响乐、歌剧、京剧、电影类型片、奥斯卡、戛纳等基本概念。", "keywords": ["交响乐", "歌剧", "京剧", "类型片"], "output": "挑 3 个概念，用通俗语言解释给朋友听。", "resource": "可搜索：艺术门类常识 / 电影基础概念", "milestone": "建立艺术门类的全局感。", "week": 31, "overview": "这一周补音乐、戏剧、电影最基础的话题。你不需要变专家，只要能把‘好看/好听’说得更具体。", "cards": [{"title": "音乐", "body": "听音乐时可以先抓旋律、节奏、情绪和重复变化，而不是一开始就懂乐理。"}, {"title": "戏剧", "body": "戏剧的核心是冲突：人物想要什么，谁在阻碍他，结果怎么变化。"}, {"title": "电影镜头", "body": "近景、远景、长镜头、剪辑节奏都会影响情绪。电影不是剧情复述，而是视听语言。"}, {"title": "类型片", "body": "喜剧、悬疑、动作、文艺片各有期待；评价时先看它是否完成了自己类型该做的事。"}, {"title": "表达模板", "body": "聊电影时可以按‘讲什么—怎么讲—为什么打动我’三步表达。"}], "quiz": [{"q": "用自己的话解释“音乐”。", "a": "听音乐时可以先抓旋律、节奏、情绪和重复变化，而不是一开始就懂乐理。"}, {"q": "“音乐”和“戏剧”分别在提醒你什么？", "a": "音乐强调听音乐时可以先抓旋律、节奏、情绪和重复变化，而不是一开始就懂乐理；戏剧强调戏剧的核心是冲突：人物想要什么，谁在阻碍他，结果怎么变化。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "挑 3 个概念，用通俗语言解释给朋友听。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 8, "title": "设计审美：配色、字体与界面", "goal": "把审美和你的技术工作连接起来。", "read": "了解基础配色、对齐、留白、层级、字体搭配与信息密度。", "keywords": ["留白", "层级", "对齐", "可读性"], "output": "找 2 个常用 App，分析它们为什么‘看起来舒服 / 不舒服’。", "resource": "可搜索：设计基础四原则 / UI 审美入门", "milestone": "获得最基础的设计判断力。", "week": 32, "overview": "这一周把审美和你的技术工作连起来。设计不是玄学，它有大量可以训练的基本原则。", "cards": [{"title": "配色", "body": "先分主色、辅助色、强调色；好配色讲对比、统一和情绪，不是颜色越多越高级。"}, {"title": "字体层级", "body": "标题、正文、注释要有层级差异；字体不只是好不好看，更影响可读性。"}, {"title": "留白与对齐", "body": "页面高级感往往来自留白、间距和整齐对齐，而不是拼命堆元素。"}, {"title": "界面常见错误", "body": "按钮太多、信息优先级混乱、颜色乱用、间距不统一，都会让界面显得廉价。"}, {"title": "程序员视角", "body": "你不用变设计师，但至少要知道好的界面是在帮助用户更快理解与操作。"}], "quiz": [{"q": "用自己的话解释“配色”。", "a": "先分主色、辅助色、强调色；好配色讲对比、统一和情绪，不是颜色越多越高级。"}, {"q": "“配色”和“字体层级”分别在提醒你什么？", "a": "配色强调先分主色、辅助色、强调色；好配色讲对比、统一和情绪，不是颜色越多越高级；字体层级强调标题、正文、注释要有层级差异；字体不只是好不好看，更影响可读性。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "找 2 个常用 App，分析它们为什么‘看起来舒服 / 不舒服’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 9, "title": "经济学入门", "goal": "听懂一些社会话题背后的基本逻辑。", "read": "理解供需、成本、边际、通胀、利率、市场、周期这些基本词。", "keywords": ["供需", "边际", "通胀", "利率"], "output": "用生活中的例子解释‘供需’和‘边际’。", "resource": "可搜索：经济学原理入门 / 十个经济学名词", "milestone": "建立经济学最小词汇表。", "week": 33, "overview": "经济学入门不是炒股教程，而是学几个最基础的思考框架。它能帮你更冷静地看价格、成本和选择。", "cards": [{"title": "稀缺与选择", "body": "资源有限，所以任何选择都有放弃的代价。经济学首先研究的就是‘如何分配稀缺资源’。"}, {"title": "机会成本", "body": "你选了 A，就失去做 B 的时间和资源；真正成本不只看花出去多少钱。"}, {"title": "供需", "body": "价格变化往往和供给、需求的变化有关；供不应求容易涨价，供过于求容易降价。"}, {"title": "边际思维", "body": "做决定时要看再多做一点值不值，而不是只看总量。"}, {"title": "通胀与利率", "body": "通胀影响钱的购买力，利率影响借钱和存钱的意愿，两者会影响整个社会节奏。"}], "quiz": [{"q": "用自己的话解释“稀缺与选择”。", "a": "资源有限，所以任何选择都有放弃的代价。经济学首先研究的就是‘如何分配稀缺资源’。"}, {"q": "“稀缺与选择”和“机会成本”分别在提醒你什么？", "a": "稀缺与选择强调资源有限，所以任何选择都有放弃的代价。经济学首先研究的就是‘如何分配稀缺资源’；机会成本强调你选了 A，就失去做 B 的时间和资源；真正成本不只看花出去多少钱。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "用生活中的例子解释‘供需’和‘边际’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 9, "title": "法律与社会规则常识", "goal": "提高规则意识和现实判断力。", "read": "了解合同、劳动法、著作权、隐私权、侵权、举证等基础概念。", "keywords": ["合同", "著作权", "劳动法", "隐私权"], "output": "列出与你工作最相关的 5 条法律常识。", "resource": "可搜索：程序员法律常识 / 劳动法基础 / 著作权入门", "milestone": "补齐生活与工作中的规则短板。", "week": 34, "overview": "法律常识不是背法条，而是先知道规则怎么保护你、约束你，以及出现问题时要保留什么。", "cards": [{"title": "合同意识", "body": "合同的核心是权利义务说清楚；聊天记录、付款记录、邮件都可能是证据。"}, {"title": "民事与刑事", "body": "民事多解决纠纷和赔偿，刑事处理的是更严重、危害公共秩序的行为。"}, {"title": "劳动规则", "body": "加班、工资、社保、解除劳动关系等问题，别只靠印象判断，要有基本规则意识。"}, {"title": "证据意识", "body": "很多人不是没有道理，而是没有证据。遇事先留痕，比事后争辩更重要。"}, {"title": "边界感", "body": "法律并不保证你样样舒服，但它至少提供了一个处理冲突的公共边界。"}], "quiz": [{"q": "用自己的话解释“合同意识”。", "a": "合同的核心是权利义务说清楚；聊天记录、付款记录、邮件都可能是证据。"}, {"q": "“合同意识”和“民事与刑事”分别在提醒你什么？", "a": "合同意识强调合同的核心是权利义务说清楚；聊天记录、付款记录、邮件都可能是证据；民事与刑事强调民事多解决纠纷和赔偿，刑事处理的是更严重、危害公共秩序的行为。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "列出与你工作最相关的 5 条法律常识。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 9, "title": "心理学与沟通", "goal": "提升对自己和别人的理解。", "read": "了解认知偏差、情绪、投射、刻板印象、同理心、非暴力沟通。", "keywords": ["认知偏差", "情绪", "同理心", "非暴力沟通"], "output": "复盘一次误会：从心理学角度重新解释它。", "resource": "可搜索：心理学入门 / 非暴力沟通 / 常见认知偏差", "milestone": "改善表达与关系感知。", "week": 35, "overview": "心理学入门最重要的价值，不是给别人贴标签，而是帮助你理解自己为什么会这样想、这样反应。", "cards": [{"title": "认知偏差", "body": "人会天然带偏见，比如只看支持自己观点的信息。认识偏差，是防止自己被情绪带跑。"}, {"title": "情绪命名", "body": "先能说清自己是烦躁、委屈、嫉妒还是焦虑，情绪才更容易被处理。"}, {"title": "共情", "body": "共情不是无条件认同，而是先理解对方当下为什么会那样感受。"}, {"title": "非暴力沟通", "body": "先描述事实，再说感受、需求和请求；比上来指责更容易沟通。"}, {"title": "习惯形成", "body": "很多改变靠的不是一时热血，而是降低启动门槛，让行为重复得起来。"}], "quiz": [{"q": "用自己的话解释“认知偏差”。", "a": "人会天然带偏见，比如只看支持自己观点的信息。认识偏差，是防止自己被情绪带跑。"}, {"q": "“认知偏差”和“情绪命名”分别在提醒你什么？", "a": "认知偏差强调人会天然带偏见，比如只看支持自己观点的信息。认识偏差，是防止自己被情绪带跑；情绪命名强调先能说清自己是烦躁、委屈、嫉妒还是焦虑，情绪才更容易被处理。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "复盘一次误会：从心理学角度重新解释它。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 9, "title": "新闻阅读与信息判断", "goal": "减少被标题党和情绪牵着走。", "read": "学习区分事实、观点、数据、立场；了解信息源、偏见、断章取义。", "keywords": ["事实与观点", "信息源", "偏见", "媒体素养"], "output": "找 2 条新闻，拆分其中的事实和观点。", "resource": "可搜索：媒体素养入门 / 如何读新闻", "milestone": "建立基本的信息辨别能力。", "week": 36, "overview": "这一周学的是信息判断。现在最稀缺的不是信息，而是分辨真假、轻重和上下文的能力。", "cards": [{"title": "事实与观点", "body": "先分清一个表达是在陈述事实，还是在表达立场和评价。两者不能混着看。"}, {"title": "来源可信度", "body": "谁说的、基于什么数据、是否有利益相关，会直接影响信息可信度。"}, {"title": "标题党", "body": "耸动标题常抓情绪不抓事实；看内容时要警惕‘只截一段’‘只给结论’。"}, {"title": "数据上下文", "body": "单个数字不说明问题，要看时间范围、对比对象、样本来源和统计口径。"}, {"title": "延迟判断", "body": "遇到刺激性新闻先别急着站队，给自己一点查证和冷静的时间。"}], "quiz": [{"q": "用自己的话解释“事实与观点”。", "a": "先分清一个表达是在陈述事实，还是在表达立场和评价。两者不能混着看。"}, {"q": "“事实与观点”和“来源可信度”分别在提醒你什么？", "a": "事实与观点强调先分清一个表达是在陈述事实，还是在表达立场和评价。两者不能混着看；来源可信度强调谁说的、基于什么数据、是否有利益相关，会直接影响信息可信度。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "找 2 条新闻，拆分其中的事实和观点。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 10, "title": "互联网、AI、产品、商业术语", "goal": "把‘听起来厉害’的词变成‘我能解释’的词。", "read": "整理并理解：SaaS、B 端、C 端、增长、闭环、A/B 测试、ROI、Agent、RAG、向量数据库等。", "keywords": ["SaaS", "增长", "ROI", "Agent"], "output": "做一份‘我常见术语白话翻译表 2.0’。", "resource": "可搜索：互联网黑话翻译 / AI 基础术语", "milestone": "大幅降低术语焦虑。", "week": 37, "overview": "这一周专门解决技术人常见的‘黑话焦虑’。把词拆开，你会发现很多术语本质上并不神秘。", "cards": [{"title": "产品与运营", "body": "产品关注做什么、为谁做、为什么做；运营关注做出来后如何增长、留存、转化。"}, {"title": "AI 术语", "body": "模型是学习后的能力体，token 是文本处理单位，agent 可以理解成会调用工具完成任务的智能体。"}, {"title": "商业指标", "body": "KPI 是考核指标，ROI 是投入产出比，GMV 是成交总额；先分清它们关注的层面。"}, {"title": "MVP 与 PMF", "body": "MVP 是最小可行产品，先验证需求；PMF 是产品和市场真正匹配，用户愿意持续买单。"}, {"title": "SaaS 与 B2B/B2C", "body": "SaaS 是软件服务化交付；B2B 面向企业，B2C 面向普通消费者。"}], "quiz": [{"q": "用自己的话解释“产品与运营”。", "a": "产品关注做什么、为谁做、为什么做；运营关注做出来后如何增长、留存、转化。"}, {"q": "“产品与运营”和“AI 术语”分别在提醒你什么？", "a": "产品与运营强调产品关注做什么、为谁做、为什么做；运营关注做出来后如何增长、留存、转化；AI 术语强调模型是学习后的能力体，token 是文本处理单位，agent 可以理解成会调用工具完成任务的智能体。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "做一份‘我常见术语白话翻译表 2.0’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 10, "title": "科学史与关键发明", "goal": "知道现代世界是怎么一步步变成今天的。", "read": "了解印刷术、蒸汽机、电力、相对论、计算机、互联网、DNA、人工智能几个节点。", "keywords": ["科学革命", "工业革命", "计算机", "互联网"], "output": "画一条‘改变世界的 8 项发明’时间线。", "resource": "可搜索：科学史入门 / 改变世界的发明", "milestone": "建立科技与文明的连接视角。", "week": 38, "overview": "科学史不是发明名单，而是看人类怎么一点点改变对宇宙、生命、能源和计算的理解。", "cards": [{"title": "哥白尼到牛顿", "body": "从地心说被动摇，到经典力学建立，现代科学开始拥有更稳定的解释框架。"}, {"title": "达尔文", "body": "达尔文用演化视角重新理解生命，改变了人类看待自身位置的方式。"}, {"title": "电与工业", "body": "电力系统的普及改变了工厂、城市和日常生活，是第二次工业革命核心动力之一。"}, {"title": "医学进步", "body": "疫苗、消毒、抗生素等并不浪漫，却实实在在改变了人类寿命和城市文明。"}, {"title": "计算机与互联网", "body": "计算机和互联网把信息处理与传播成本降得极低，彻底改写了现代社会结构。"}], "quiz": [{"q": "用自己的话解释“哥白尼到牛顿”。", "a": "从地心说被动摇，到经典力学建立，现代科学开始拥有更稳定的解释框架。"}, {"q": "“哥白尼到牛顿”和“达尔文”分别在提醒你什么？", "a": "哥白尼到牛顿强调从地心说被动摇，到经典力学建立，现代科学开始拥有更稳定的解释框架；达尔文强调达尔文用演化视角重新理解生命，改变了人类看待自身位置的方式。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "画一条‘改变世界的 8 项发明’时间线。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 10, "title": "程序员的表达训练", "goal": "把你脑子里的东西讲得更清楚。", "read": "学习金字塔结构、先结论后原因、对比、举例、类比等表达方法。", "keywords": ["金字塔结构", "结论先行", "类比", "案例"], "output": "把一个 PHP 技术点讲给外行听，录音 3 分钟。", "resource": "可搜索：结构化表达 / 金字塔原理入门", "milestone": "表达开始变得更有层次。", "week": 39, "overview": "程序员表达训练的目标，不是说得花，而是说得清。别人能迅速理解你，才叫表达有效。", "cards": [{"title": "结论先行", "body": "先说结论，再说原因和细节。技术沟通里，别人通常先想知道‘所以呢’。"}, {"title": "金字塔结构", "body": "表达时按结论—分点—证据展开，会比想到哪说到哪更清楚。"}, {"title": "面向对象说话", "body": "同一件事，对老板、产品、同事、用户的讲法应该不同，因为他们关心点不同。"}, {"title": "类比能力", "body": "把抽象概念类比成熟悉事物，是降低理解门槛的高效方法。"}, {"title": "避免行话堆砌", "body": "如果一个术语能用白话解释清楚，就不要为了显得专业而故意说得更难。"}], "quiz": [{"q": "用自己的话解释“结论先行”。", "a": "先说结论，再说原因和细节。技术沟通里，别人通常先想知道‘所以呢’。"}, {"q": "“结论先行”和“金字塔结构”分别在提醒你什么？", "a": "结论先行强调先说结论，再说原因和细节。技术沟通里，别人通常先想知道‘所以呢’；金字塔结构强调表达时按结论—分点—证据展开，会比想到哪说到哪更清楚。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "把一个 PHP 技术点讲给外行听，录音 3 分钟。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 10, "title": "英文缩写与国际高频词", "goal": "减少看资料时的陌生感。", "read": "认识 GDP、CPI、API、SDK、OKR、KPI、HTTP、OAuth、CPU、GPU、NLP 等。", "keywords": ["缩写", "行业术语", "英文阅读", "国际化"], "output": "选 15 个缩写，各写中文解释和使用场景。", "resource": "可搜索：高频英文缩写大全 / 技术与商业缩写", "milestone": "建立常见缩写感知力。", "week": 40, "overview": "这一周补常见英文缩写。真正需要的是‘见到不慌、能猜大意、知道在哪个语境里常用’。", "cards": [{"title": "技术缩写", "body": "API 是接口，SDK 是开发工具包，HTTP 是超文本传输协议，CPU/GPU 是计算核心。"}, {"title": "工作沟通", "body": "FYI 是供你参考，ASAP 是尽快，ETA 是预计到达/完成时间，TBD 是待定。"}, {"title": "产品研发", "body": "PRD 是需求文档，MVP 是最小可行产品，POC 是概念验证。"}, {"title": "商业分析", "body": "KPI、ROI、GMV 经常一起出现，分别对应考核、投入回报和成交规模。"}, {"title": "阅读方法", "body": "遇到缩写先看上下文：它是在讲技术、流程、商业还是沟通语气。"}], "quiz": [{"q": "用自己的话解释“技术缩写”。", "a": "API 是接口，SDK 是开发工具包，HTTP 是超文本传输协议，CPU/GPU 是计算核心。"}, {"q": "“技术缩写”和“工作沟通”分别在提醒你什么？", "a": "技术缩写强调API 是接口，SDK 是开发工具包，HTTP 是超文本传输协议，CPU/GPU 是计算核心；工作沟通强调FYI 是供你参考，ASAP 是尽快，ETA 是预计到达/完成时间，TBD 是待定。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "选 15 个缩写，各写中文解释和使用场景。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 11, "title": "非虚构阅读：历史、人物、社会", "goal": "开始读稍微厚一点但有收获的书。", "read": "选一本非虚构书，如《万历十五年》《人类简史》《乡土中国》，先读一本到两章。", "keywords": ["非虚构", "历史视角", "社会观察", "人物"], "output": "写 200 字读书摘要：作者到底想说什么。", "resource": "可搜索：非虚构阅读入门 / 适合新手的人文书单", "milestone": "迈过‘我读不进书’这道坎。", "week": 41, "overview": "非虚构阅读的关键不是‘读完一本’，而是能抓主题、结构、作者立场，并留下可复用的理解。", "cards": [{"title": "先抓主题", "body": "先问这本书到底想解决什么问题，不要一开始就陷入每个细节。"}, {"title": "看结构", "body": "目录、章节标题、开头和结尾常常最能暴露作者结构。先看骨架，阅读会轻松很多。"}, {"title": "辨作者立场", "body": "作者选择什么材料、怎么评价人物，都体现立场；非虚构也不是绝对中性。"}, {"title": "做摘要", "body": "每读完一节，用 3 到 5 句话写摘要，能明显提高理解和记忆。"}, {"title": "提出问题", "body": "好阅读不是一直接受，而是边读边问：这句话依据是什么？有没有别的解释？"}], "quiz": [{"q": "用自己的话解释“先抓主题”。", "a": "先问这本书到底想解决什么问题，不要一开始就陷入每个细节。"}, {"q": "“先抓主题”和“看结构”分别在提醒你什么？", "a": "先抓主题强调先问这本书到底想解决什么问题，不要一开始就陷入每个细节；看结构强调目录、章节标题、开头和结尾常常最能暴露作者结构。先看骨架，阅读会轻松很多。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "写 200 字读书摘要：作者到底想说什么。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 11, "title": "现代文学短篇", "goal": "通过短篇进入文学世界。", "read": "选读鲁迅、汪曾祺、余华、史铁生等作家的短篇或散文。", "keywords": ["鲁迅", "汪曾祺", "余华", "史铁生"], "output": "挑一篇你最有感触的文章，说说它打动你的地方。", "resource": "可搜索：现代文学短篇推荐 / 鲁迅入门 / 余华散文", "milestone": "建立对现代中文写作的感受力。", "week": 42, "overview": "短篇小说适合入门文学，因为篇幅短、冲击集中。你要学会看人物、处境、细节和作品想照亮什么。", "cards": [{"title": "鲁迅", "body": "读鲁迅要看人物背后的社会病症，他不是为了讲故事而讲故事，而是在揭露麻木与困境。"}, {"title": "老舍", "body": "老舍擅长写市井、语言和普通人的难处，读他能感受到城市生活的烟火与辛酸。"}, {"title": "沈从文", "body": "沈从文常写乡土、人情和柔软的生命感，和鲁迅形成很不一样的文学气质。"}, {"title": "汪曾祺", "body": "汪曾祺善于从日常小事里写出温润与生活味道，提醒你文学不只写沉重。"}, {"title": "读短篇方法", "body": "看完后先说：谁是主角？遇到什么冲突？哪些细节最能体现主题？"}], "quiz": [{"q": "用自己的话解释“鲁迅”。", "a": "读鲁迅要看人物背后的社会病症，他不是为了讲故事而讲故事，而是在揭露麻木与困境。"}, {"q": "“鲁迅”和“老舍”分别在提醒你什么？", "a": "鲁迅强调读鲁迅要看人物背后的社会病症，他不是为了讲故事而讲故事，而是在揭露麻木与困境；老舍强调老舍擅长写市井、语言和普通人的难处，读他能感受到城市生活的烟火与辛酸。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "挑一篇你最有感触的文章，说说它打动你的地方。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 11, "title": "书评、影评、人物评", "goal": "从‘我觉得不错’升级到‘我能说出为什么’。", "read": "学习基本评价框架：主题、结构、人物、语言、观点、局限。", "keywords": ["主题", "结构", "人物", "观点"], "output": "写一篇 300 字短评：一本书、一部电影或一个历史人物。", "resource": "可搜索：如何写书评 / 影评基础 / 人物评论方法", "milestone": "形成可迁移的评价能力。", "week": 43, "overview": "书评、影评、人物评最怕空话。真正有说服力的评价，一定要有观点，也一定要有依据。", "cards": [{"title": "先给判断", "body": "评价时先说你怎么看：好在哪里、问题在哪，不要一直绕圈不落地。"}, {"title": "拿证据说话", "body": "观点后面要跟情节、镜头、句子、行为细节，避免只说‘我觉得挺好’。"}, {"title": "结构清楚", "body": "可以按‘对象是什么—我怎么看—依据是什么—我的结论’来写。"}, {"title": "避免贴标签", "body": "不要把复杂人物简单说成好人坏人，试着描述他的动机和处境。"}, {"title": "允许部分判断", "body": "不需要对作品下终极结论，说清‘哪一部分打动我，哪一部分我不认同’也很好。"}], "quiz": [{"q": "用自己的话解释“先给判断”。", "a": "评价时先说你怎么看：好在哪里、问题在哪，不要一直绕圈不落地。"}, {"q": "“先给判断”和“拿证据说话”分别在提醒你什么？", "a": "先给判断强调评价时先说你怎么看：好在哪里、问题在哪，不要一直绕圈不落地；拿证据说话强调观点后面要跟情节、镜头、句子、行为细节，避免只说‘我觉得挺好’。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "写一篇 300 字短评：一本书、一部电影或一个历史人物。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 11, "title": "演讲与口头表达", "goal": "让你在聊天和工作中更从容。", "read": "练习 1 分钟、3 分钟、5 分钟表达；学习开头、转折、结尾的结构。", "keywords": ["演讲结构", "开头", "转折", "结尾"], "output": "录一段 3 分钟分享：‘我这一年最有收获的 3 件事’。", "resource": "可搜索：演讲表达训练 / 即兴表达技巧", "milestone": "建立公开表达的基本自信。", "week": 44, "overview": "口头表达的核心不是华丽，而是让人迅速跟上。会说话的人，往往是会替听众节省理解成本的人。", "cards": [{"title": "30 秒版本", "body": "先练把一件事在 30 秒内说清楚：是什么、为什么重要、你想表达什么。"}, {"title": "先结论后展开", "body": "尤其在工作场景里，结论先行能让对方快速知道重点，不容易被信息淹没。"}, {"title": "故事和例子", "body": "抽象观点最好配一个故事、例子或类比，否则听者容易抓不住。"}, {"title": "停顿与节奏", "body": "说话不是越快越好；适当停顿反而让重点更明显，也让你显得更稳。"}, {"title": "处理紧张", "body": "紧张不是敌人，提前列提纲、先说第一句、盯一个友善目标点，都会有帮助。"}], "quiz": [{"q": "用自己的话解释“30 秒版本”。", "a": "先练把一件事在 30 秒内说清楚：是什么、为什么重要、你想表达什么。"}, {"q": "“30 秒版本”和“先结论后展开”分别在提醒你什么？", "a": "30 秒版本强调先练把一件事在 30 秒内说清楚：是什么、为什么重要、你想表达什么；先结论后展开强调尤其在工作场景里，结论先行能让对方快速知道重点，不容易被信息淹没。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "录一段 3 分钟分享：‘我这一年最有收获的 3 件事’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "建立知识卡片库", "goal": "把一年的学习沉淀为长期资产。", "read": "整理你的成语卡、诗句卡、历史卡、名著卡、术语卡、人物卡。", "keywords": ["知识管理", "卡片笔记", "复习", "沉淀"], "output": "做一个属于你的‘文化知识索引页’。", "resource": "可搜索：卡片笔记法 / Zettelkasten 入门", "milestone": "拥有可反复复习的资料库。", "week": 45, "overview": "知识卡片库是把零散学习沉淀成长期资产的方法。关键不是做得炫，而是以后真能找得到、复习得到。", "cards": [{"title": "概念卡", "body": "一张卡解释一个概念，如‘耦合’‘边际成本’。最好带白话解释和一个例子。"}, {"title": "人物卡", "body": "记录人物是谁、处于什么时代、最重要的事迹和一句你自己的理解。"}, {"title": "名句卡", "body": "记录原句、作者、语境、现代可用场景，避免只会背不会用。"}, {"title": "故事卡", "body": "记录故事梗概、冲突、意义和能对应的现实场景。"}, {"title": "复习标签", "body": "给卡片打标签，如历史/诗词/术语/人物，后续检索和复盘会省很多力。"}], "quiz": [{"q": "用自己的话解释“概念卡”。", "a": "一张卡解释一个概念，如‘耦合’‘边际成本’。最好带白话解释和一个例子。"}, {"q": "“概念卡”和“人物卡”分别在提醒你什么？", "a": "概念卡强调一张卡解释一个概念，如‘耦合’‘边际成本’。最好带白话解释和一个例子；人物卡强调记录人物是谁、处于什么时代、最重要的事迹和一句你自己的理解。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "做一个属于你的‘文化知识索引页’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "讲一段历史给别人听", "goal": "把输入变成真正的表达能力。", "read": "从中国史或世界史中选一段你最有兴趣的主题，重新梳理。", "keywords": ["时间线", "因果", "人物", "转折"], "output": "讲 5 分钟历史小故事，要求让外行也能听懂。", "resource": "可搜索：历史讲述技巧 / 讲故事的方法", "milestone": "第一次把历史讲成故事。", "week": 46, "overview": "这一周练‘把一段历史讲给别人听’。真正会历史，不是知道散点，而是能讲出来龙去脉。", "cards": [{"title": "先交代背景", "body": "先说这件事发生在什么时代、什么问题之下，否则听众很难进入状态。"}, {"title": "抓冲突", "body": "历史不是流水账，要抓核心冲突：谁和谁对立，为什么会爆发。"}, {"title": "讲转折点", "body": "一段历史里最值得讲的，往往是局势在哪一步发生扭转。"}, {"title": "说结果与影响", "body": "不要只讲发生了什么，还要讲它后来改变了什么。"}, {"title": "避免细节淹没", "body": "第一次讲历史时，宁可少一点人物枝叶，也要把主线讲清楚。"}], "quiz": [{"q": "用自己的话解释“先交代背景”。", "a": "先说这件事发生在什么时代、什么问题之下，否则听众很难进入状态。"}, {"q": "“先交代背景”和“抓冲突”分别在提醒你什么？", "a": "先交代背景强调先说这件事发生在什么时代、什么问题之下，否则听众很难进入状态；抓冲突强调历史不是流水账，要抓核心冲突：谁和谁对立，为什么会爆发。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "讲 5 分钟历史小故事，要求让外行也能听懂。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "讲一本书或一首诗", "goal": "让文化知识真正进入你的语言系统。", "read": "从四大名著、非虚构、诗词中各选一个最喜欢的内容做分享。", "keywords": ["主题提炼", "金句", "分享", "表达"], "output": "写一篇 500 字分享稿，或者录 5 分钟语音。", "resource": "可搜索：如何做读书分享 / 诗词分享技巧", "milestone": "形成一次完整的文化输出。", "week": 47, "overview": "这一周练‘讲一本书或一首诗’。不是做讲师，而是学会把自己的理解组织成一段有起承转合的话。", "cards": [{"title": "先说对象", "body": "先说明你讲的是谁的哪本书、哪首诗，避免听众连对象都没抓住。"}, {"title": "再说主题", "body": "这本书/这首诗主要在讲什么？主题是爱情、离别、权力，还是成长？"}, {"title": "抓一个细节", "body": "挑一个最有代表性的细节、句子或人物行为来支撑你的理解。"}, {"title": "说你的感受", "body": "不要只讲标准答案，讲它为什么打动你，你才是在真正表达。"}, {"title": "控制长度", "body": "第一次练习只讲 2 到 3 分钟，短而完整，比长而散更好。"}], "quiz": [{"q": "用自己的话解释“先说对象”。", "a": "先说明你讲的是谁的哪本书、哪首诗，避免听众连对象都没抓住。"}, {"q": "“先说对象”和“再说主题”分别在提醒你什么？", "a": "先说对象强调先说明你讲的是谁的哪本书、哪首诗，避免听众连对象都没抓住；再说主题强调这本书/这首诗主要在讲什么？主题是爱情、离别、权力，还是成长？。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "写一篇 500 字分享稿，或者录 5 分钟语音。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "写你的成长总结", "goal": "看见变化，巩固自信。", "read": "回顾第一周写下的‘一年后我想成为什么样的人’。", "keywords": ["复盘", "成长", "自我叙事", "自信"], "output": "写一篇‘这一年我不再自卑的 10 个证据’。", "resource": "可搜索：年度复盘模板 / 成长记录方法", "milestone": "把变化看得见、说得出。", "week": 48, "overview": "成长总结不是写漂亮话，而是把一年的变化变成证据：我以前怎样，现在怎样，差别体现在哪些具体地方。", "cards": [{"title": "前后对比", "body": "总结最有力量的写法是对比：以前遇到典故会发慌，现在至少能拆解和追问。"}, {"title": "用事实说话", "body": "尽量写具体变化，如打卡次数、记住多少张卡片、能讲多少个故事。"}, {"title": "看到短板", "body": "复盘不是自夸，也要诚实写出还薄弱的部分，比如世界史和哲学还不够熟。"}, {"title": "提炼方法", "body": "把有效的方法总结出来，如‘白话复述最有用’‘卡片比长笔记更适合我’。"}, {"title": "指向下一步", "body": "一份好的总结最后会自然引出下一阶段计划，而不是写完就结束。"}], "quiz": [{"q": "用自己的话解释“前后对比”。", "a": "总结最有力量的写法是对比：以前遇到典故会发慌，现在至少能拆解和追问。"}, {"q": "“前后对比”和“用事实说话”分别在提醒你什么？", "a": "前后对比强调总结最有力量的写法是对比：以前遇到典故会发慌，现在至少能拆解和追问；用事实说话强调尽量写具体变化，如打卡次数、记住多少张卡片、能讲多少个故事。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "写一篇‘这一年我不再自卑的 10 个证据’。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "总复习 1：诗词与成语", "goal": "集中复盘最常用的中文文化知识。", "read": "回顾所有成语典故、诗词名句与场景应用卡片。", "keywords": ["成语", "名句", "复习", "应用"], "output": "随机抽 10 张卡片，自测并复述。", "resource": "复习你的卡片库和笔记", "milestone": "把高频内容真正记住。", "week": 49, "overview": "复习周的重点是把前面学过的内容重新串起来。诗词与成语都属于高频中文文化表达，要会用而不只会认。", "cards": [{"title": "意象复盘", "body": "把月、柳、雁、酒、秋这些意象重新归类，看它们分别对应哪些情绪。"}, {"title": "名句分类", "body": "把鼓励、离别、思乡、坚持、感慨这几类名句各挑 2 句重新练习。"}, {"title": "成语分类", "body": "把战场类、处世类、判断类成语分组复习，防止一锅粥。"}, {"title": "常见误用", "body": "区分‘破釜沉舟’和‘背水一战’、‘纸上谈兵’和‘夸夸其谈’这类近义误区。"}, {"title": "一口气讲出来", "body": "真正复习到位，是能不看资料一口气讲出 5 个成语和 5 句诗的大意。"}], "quiz": [{"q": "用自己的话解释“意象复盘”。", "a": "把月、柳、雁、酒、秋这些意象重新归类，看它们分别对应哪些情绪。"}, {"q": "“意象复盘”和“名句分类”分别在提醒你什么？", "a": "意象复盘强调把月、柳、雁、酒、秋这些意象重新归类，看它们分别对应哪些情绪；名句分类强调把鼓励、离别、思乡、坚持、感慨这几类名句各挑 2 句重新练习。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "随机抽 10 张卡片，自测并复述。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "总复习 2：历史与地理", "goal": "把时间感和地图感再巩固一次。", "read": "复盘中国史、世界史、中国地理、中国城市文化。", "keywords": ["时间线", "地图感", "文明", "城市"], "output": "不看资料，画出一条朝代线和一张中国区域图。", "resource": "复习你的时间线和地图笔记", "milestone": "历史地理框架更加牢固。", "week": 50, "overview": "历史和地理最好一起复习：历史给你时间线，地理给你空间线，两条线一合，很多知识才会稳定。", "cards": [{"title": "朝代主线", "body": "从先秦、秦汉、隋唐、宋元明清到近现代，先复述大主线，不要急着抠细节。"}, {"title": "关键转折", "body": "想一想哪些节点最重要：秦统一、安史之乱、鸦片战争、改革开放等。"}, {"title": "空间地图", "body": "把三级阶梯、秦岭淮河、长江黄河和主要城市重新在脑海里画一遍。"}, {"title": "城市记忆法", "body": "用‘城市—时代—景观—气质’四连法复习北京、西安、杭州、广州等。"}, {"title": "时间空间结合", "body": "看到一个历史事件时，顺手问一句：它发生在哪儿？地理条件对它有没有影响？"}], "quiz": [{"q": "用自己的话解释“朝代主线”。", "a": "从先秦、秦汉、隋唐、宋元明清到近现代，先复述大主线，不要急着抠细节。"}, {"q": "“朝代主线”和“关键转折”分别在提醒你什么？", "a": "朝代主线强调从先秦、秦汉、隋唐、宋元明清到近现代，先复述大主线，不要急着抠细节；关键转折强调想一想哪些节点最重要：秦统一、安史之乱、鸦片战争、改革开放等。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "不看资料，画出一条朝代线和一张中国区域图。 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "总复习 3：名著、哲学、艺术", "goal": "把比较抽象的人文内容串起来。", "read": "回顾四大名著、诸子百家、西方哲学、艺术风格与经典作品。", "keywords": ["名著", "哲学", "艺术", "人文"], "output": "回答 3 个问题：我最喜欢哪本书、哪个人物、哪种思想？为什么？", "resource": "复习你的阅读摘要和短评", "milestone": "形成个人的人文偏好。", "week": 51, "overview": "这一周把前面比较抽象的内容串起来：名著、哲学、艺术。重点是形成几个稳定的理解框架。", "cards": [{"title": "名著母题", "body": "西游记讲修行，三国讲时势与人物，水浒讲反抗与秩序，红楼讲盛衰与人情。"}, {"title": "思想坐标", "body": "儒家重关系与秩序，道家重自然与松弛，法家重制度执行，西哲重追问与概念分析。"}, {"title": "艺术观察", "body": "看画看构图和情绪，看建筑看功能和风格，看电影看镜头和冲突。"}, {"title": "跨领域连接", "body": "越会学习的人，越能把诗词情绪、历史人物、哲学观点和现实场景连接起来。"}, {"title": "表达升级", "body": "真正的文化底色，不是背知识点，而是你说话时自然能调动这些理解。"}], "quiz": [{"q": "用自己的话解释“名著母题”。", "a": "西游记讲修行，三国讲时势与人物，水浒讲反抗与秩序，红楼讲盛衰与人情。"}, {"q": "“名著母题”和“思想坐标”分别在提醒你什么？", "a": "名著母题强调西游记讲修行，三国讲时势与人物，水浒讲反抗与秩序，红楼讲盛衰与人情；思想坐标强调儒家重关系与秩序，道家重自然与松弛，法家重制度执行，西哲重追问与概念分析。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "回答 3 个问题：我最喜欢哪本书、哪个人物、哪种思想？为什么？ 只要能说清场景、概念和你的理解，就算达标。"}]}, {"stage": 12, "title": "毕业展示与下一年计划", "goal": "从‘补文化’进入‘持续成长’。", "read": "回顾一年全部打卡记录、笔记、输出内容。", "keywords": ["毕业展示", "持续成长", "下一年", "长期主义"], "output": "做一个 10 分钟的‘我的一年成长演讲’提纲，并规划下一年的新主题。", "resource": "复用你一年的全部素材", "milestone": "完成这一年的闭环，准备下一阶段。", "week": 52, "overview": "毕业周不是结束，而是把这一年沉淀成一个能长期维持的系统。你需要看见自己已经不一样了。", "cards": [{"title": "作品化", "body": "把你的卡片、笔记、打卡记录、总结文章整理成一个看得见的成果包。"}, {"title": "代表性输出", "body": "选 3 个最能代表你变化的内容，比如一段历史讲解、一篇短评、一次术语白话解释。"}, {"title": "维护机制", "body": "决定以后每周至少保留几次阅读、几次卡片复盘，不让系统停掉。"}, {"title": "第二年方向", "body": "第二年不必再大而全，可以选一条主线深挖，如中国史、世界史、表达训练或阅读。"}, {"title": "新的自我认知", "body": "毕业周最重要的收获，不是‘我懂了很多’，而是‘我已经会持续变强了’。"}], "quiz": [{"q": "用自己的话解释“作品化”。", "a": "把你的卡片、笔记、打卡记录、总结文章整理成一个看得见的成果包。"}, {"q": "“作品化”和“代表性输出”分别在提醒你什么？", "a": "作品化强调把你的卡片、笔记、打卡记录、总结文章整理成一个看得见的成果包；代表性输出强调选 3 个最能代表你变化的内容，比如一段历史讲解、一篇短评、一次术语白话解释。"}, {"q": "把本周内容放进一个真实场景，你会怎么说？", "a": "做一个 10 分钟的‘我的一年成长演讲’提纲，并规划下一年的新主题。 只要能说清场景、概念和你的理解，就算达标。"}]}]</script>
   <script id="stage-data" type="application/json">{"1": {"name": "第 1 阶段｜重建自信与表达底座", "target": "先把‘听不懂就自卑’变成‘听不懂我就去拆解’。"}, "2": {"name": "第 2 阶段｜诗词名句与中文表达", "target": "建立最常见的古诗词意象和名句表达。"}, "3": {"name": "第 3 阶段｜中国历史骨架", "target": "先抓朝代主线和关键节点。"}, "4": {"name": "第 4 阶段｜中国地理与风土人情", "target": "形成地图感、城市感和区域文化感。"}, "5": {"name": "第 5 阶段｜四大名著与经典故事", "target": "补上最常被引用的文学母题。"}, "6": {"name": "第 6 阶段｜世界史与西方文化典故", "target": "增强国际与西方文化理解力。"}, "7": {"name": "第 7 阶段｜哲学与文明地图", "target": "理解思想如何影响语言和社会。"}, "8": {"name": "第 8 阶段｜艺术与审美", "target": "建立基础审美与艺术识别力。"}, "9": {"name": "第 9 阶段｜社会运行常识", "target": "补经济、法律、心理、信息判断。"}, "10": {"name": "第 10 阶段｜技术人文与跨界表达", "target": "把术语焦虑转化为解释能力。"}, "11": {"name": "第 11 阶段｜阅读与写作输出", "target": "从知道一些，到开始能写能讲。"}, "12": {"name": "第 12 阶段｜复盘、展示与升级", "target": "把一年学习沉淀成长期能力。"}}</script>
-  <script id="quote-data" type="application/json">["你不是没文化，你只是还没建立自己的知识地图。", "成长不是一口气补完，而是每天多懂一点点。", "真正让人自信的，不是全知道，而是遇到不知道也能学会。", "会解释，才算真正懂；会应用，才算真正会。", "一年后回头看，最值钱的是你留下的理解与表达能力。"]</script>
-
+  <script id="quote-data" type="application/json">["文化底色不是别人送的，是你一点点练出来的。", "真正的成长，不是一天学很多，而是一天都没有断。", "你不需要装得很懂，你只需要开始系统地懂。", "懂一个词、会讲一个故事，都是在给自己补底气。", "长期主义最厉害的地方，是它会悄悄把自卑改成从容。", "把知识讲明白，你就已经比昨天更强。", "先有骨架，再补细节；先会表达，再求全面。", "你不是没文化，你只是还没有被系统训练过这部分知识。"]</script>
   <script>
     const weeks = JSON.parse(document.getElementById('plan-data').textContent);
     const stageMeta = JSON.parse(document.getElementById('stage-data').textContent);
     const quotes = JSON.parse(document.getElementById('quote-data').textContent);
 
     const STORAGE_KEYS = {
-      startDate: 'dh-culture-growth-start-date',
-      notes: 'dh-culture-growth-notes',
-      checkins: 'dh-culture-growth-checkins'
+      startDate: 'culture-growth-start-date',
+      notes: 'culture-growth-notes',
+      checkins: 'culture-growth-checkins'
     };
 
-    const dayTemplates = [
-      function (w) {
-        return [
-          ['20 分钟输入', w.read],
-          ['20 分钟卡片', '从今天的内容里整理 5 张卡片：概念 / 人物 / 故事 / 名句 / 场景。'],
-          ['15 分钟输出', '用自己的话解释：' + w.keywords.slice(0, 2).join('、') + '。尽量像给初中生讲。'],
-          ['5 分钟打卡', '写下：今天最有收获的一点是什么？']
-        ];
-      },
-      function (w) {
-        return [
-          ['20 分钟输入', '围绕本周主题，再补一个相关故事或人物：' + w.title],
-          ['20 分钟卡片', '把关键词 ' + w.keywords.join('、') + ' 做成问答卡片。'],
-          ['15 分钟输出', '口头复述 3 分钟，不看资料。'],
-          ['5 分钟打卡', '写一句：如果明天和别人聊到这个主题，我会怎么开口？']
-        ];
-      },
-      function (w) {
-        return [
-          ['20 分钟输入', '找一个短视频、文章或讲解，把同一主题换个角度再看一遍。'],
-          ['20 分钟卡片', '做一次自测：遮住答案，只看问题，检验你记住了多少。'],
-          ['15 分钟输出', '挑 1 个关键词举例说明它在现实中的使用场景。'],
-          ['5 分钟打卡', '记录：今天最难理解的点是什么？']
-        ];
-      },
-      function (w) {
-        return [
-          ['20 分钟输入', '回顾前三天笔记，重点看你反复记不住的内容。'],
-          ['20 分钟卡片', '把容易混淆的概念做对比卡片。'],
-          ['15 分钟输出', w.title + ' 为什么值得了解？写 120 到 200 字。'],
-          ['5 分钟打卡', '给今天的学习完成度打个分（1 到 5）。']
-        ];
-      },
-      function (w) {
-        return [
-          ['20 分钟输入', '把本周主题和你的工作、成长、自卑感连接起来想一想。'],
-          ['20 分钟卡片', '写下 3 个现实场景：这个知识可以怎么用？'],
-          ['15 分钟输出', '尝试自然使用一个本周学到的词、典故或概念。'],
-          ['5 分钟打卡', '记录今天你最想分享给朋友的一点。']
-        ];
-      },
-      function (w) {
-        return [
-          ['20 分钟输入', '做一个延伸：人物、地图、时间线、作品、电影任选一种。'],
-          ['20 分钟卡片', '整理本周最佳 5 张卡片，删掉无用的。'],
-          ['15 分钟输出', '完成本周核心输出：' + w.output],
-          ['5 分钟打卡', '写一句鼓励自己的话。']
-        ];
-      },
-      function (w) {
-        return [
-          ['20 分钟轻复习', '翻看本周所有卡片，只求熟悉，不求完美。'],
-          ['15 分钟总复盘', '回答 3 个问题：我学会了什么？哪里还模糊？下周怎么更轻松？'],
-          ['20 分钟自由拓展', '看一篇相关文章、一个纪录片片段，或者和别人聊聊本周内容。'],
-          ['5 分钟打卡', '写下本周里程碑：' + w.milestone]
-        ];
-      }
-    ];
+    const state = { stageFilter: 'all', toastTimer: null };
 
-    const state = {
-      installPrompt: null,
-      activeScreen: 'today',
-      stageFilter: 'all',
-      noteSaveTimer: null
-    };
-
-    const dayNames = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-
-    function byId(id) {
-      return document.getElementById(id);
+    function byId(id) { return document.getElementById(id); }
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function todayStr(date = new Date()) {
+      return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
     }
-
-    function todayStr(date) {
-      const d = date || new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return y + '-' + m + '-' + day;
+    function parseDate(str) {
+      const parts = String(str || '').split('-').map(Number);
+      return new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
     }
-
-    function parseSafe(key, fallback) {
-      try {
-        const value = localStorage.getItem(key);
-        return value ? JSON.parse(value) : fallback;
-      } catch (error) {
-        return fallback;
-      }
+    function addDays(dateStr, offset) {
+      const d = parseDate(dateStr);
+      d.setDate(d.getDate() + offset);
+      return todayStr(d);
     }
-
+    function diffDays(from, to) {
+      const a = parseDate(from);
+      const b = parseDate(to);
+      const ms = b.setHours(0,0,0,0) - a.setHours(0,0,0,0);
+      return Math.floor(ms / 86400000);
+    }
+    function formatCNDate(str) {
+      const d = parseDate(str);
+      return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日';
+    }
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+    function toast(msg) {
+      const node = byId('toast');
+      node.textContent = msg;
+      node.classList.add('show');
+      clearTimeout(state.toastTimer);
+      state.toastTimer = setTimeout(() => node.classList.remove('show'), 2200);
+    }
     function getStartDate() {
       return localStorage.getItem(STORAGE_KEYS.startDate) || todayStr();
     }
-
-    function setStartDate(value) {
-      localStorage.setItem(STORAGE_KEYS.startDate, value);
+    function setStartDate(v) {
+      localStorage.setItem(STORAGE_KEYS.startDate, v);
     }
-
-    function getNotes() { return parseSafe(STORAGE_KEYS.notes, {}); }
-    function setNotes(value) { localStorage.setItem(STORAGE_KEYS.notes, JSON.stringify(value)); }
-    function getCheckins() { return parseSafe(STORAGE_KEYS.checkins, []); }
-    function setCheckins(value) { localStorage.setItem(STORAGE_KEYS.checkins, JSON.stringify(value)); }
-
-    function diffDays(aStr, bStr) {
-      const a = new Date(aStr + 'T00:00:00');
-      const b = new Date(bStr + 'T00:00:00');
-      return Math.floor((b - a) / 86400000);
+    function getNotes() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.notes) || '{}'); } catch (e) { return {}; }
     }
-
-    function addDays(baseStr, amount) {
-      const d = new Date(baseStr + 'T00:00:00');
-      d.setDate(d.getDate() + amount);
-      return todayStr(d);
+    function setNotes(notes) {
+      localStorage.setItem(STORAGE_KEYS.notes, JSON.stringify(notes));
     }
-
-    function formatCNDate(dateStr) {
-      const d = new Date(dateStr + 'T00:00:00');
-      return (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日';
+    function getCheckins() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(STORAGE_KEYS.checkins) || '[]');
+        return Array.isArray(raw) ? raw.sort() : [];
+      } catch (e) { return []; }
     }
-
-    function greetingText() {
-      const hour = new Date().getHours();
-      if (hour < 11) return '早上好，今天也继续一点点变强。';
-      if (hour < 14) return '中午好，给自己留出 1 小时，就已经很了不起。';
-      if (hour < 19) return '下午好，今天学一点，明天就少怕一点。';
-      return '晚上好，安静地学 1 小时，也是在给未来铺路。';
+    function setCheckins(items) {
+      localStorage.setItem(STORAGE_KEYS.checkins, JSON.stringify(Array.from(new Set(items)).sort()));
     }
-
-    function randomQuote() {
-      const idx = new Date().getDate() % quotes.length;
-      return '“' + quotes[idx] + '”';
+    function isCheckedIn(dateStr) {
+      return getCheckins().includes(dateStr);
     }
-
+    function calcStreak(items) {
+      const set = new Set(items);
+      let streak = 0;
+      let d = new Date();
+      while (true) {
+        const cur = todayStr(d);
+        if (set.has(cur)) {
+          streak += 1;
+          d.setDate(d.getDate() - 1);
+          continue;
+        }
+        if (streak === 0) {
+          d.setDate(d.getDate() - 1);
+          const y = todayStr(d);
+          if (set.has(y)) {
+            streak += 1;
+            d.setDate(d.getDate() - 1);
+            while (set.has(todayStr(d))) {
+              streak += 1;
+              d.setDate(d.getDate() - 1);
+            }
+          }
+        }
+        break;
+      }
+      return streak;
+    }
     function currentPlanInfo() {
       const start = getStartDate();
       const now = todayStr();
       let dayIndex = diffDays(start, now);
       if (dayIndex < 0) dayIndex = 0;
       if (dayIndex > 364) dayIndex = 364;
-      const weekIndex = Math.min(Math.floor(dayIndex / 7), weeks.length - 1);
-      const dayOfWeek = dayIndex % 7;
+      const weekIndex = Math.min(51, Math.floor(dayIndex / 7));
       return {
-        dayIndex: dayIndex,
-        weekIndex: weekIndex,
-        dayOfWeek: dayOfWeek,
-        week: weeks[weekIndex],
-        start: start,
-        now: now
+        start,
+        now,
+        dayIndex,
+        dayOfWeek: dayIndex % 7,
+        weekIndex,
+        week: weeks[weekIndex]
       };
     }
-
-    function isCheckedIn(dateStr) {
-      return getCheckins().includes(dateStr);
-    }
-
-    function toggleCheckin(dateStr) {
-      const arr = getCheckins();
-      const idx = arr.indexOf(dateStr);
-      if (idx >= 0) arr.splice(idx, 1);
-      else arr.push(dateStr);
-      arr.sort();
-      setCheckins(arr);
-    }
-
-    function calcStreak(checkins) {
-      if (!checkins.length) return 0;
-      const set = new Set(checkins);
-      let streak = 0;
-      let cursor = new Date();
-      while (set.has(todayStr(cursor))) {
-        streak += 1;
-        cursor.setDate(cursor.getDate() - 1);
-      }
-      return streak;
-    }
-
-    function weekDoneCount(info) {
-      let count = 0;
-      for (let i = 0; i < 7; i += 1) {
-        const dateStr = addDays(info.start, info.weekIndex * 7 + i);
-        if (isCheckedIn(dateStr)) count += 1;
-      }
-      return count;
-    }
-
     function progressPercent() {
-      return Math.min(100, Math.round((currentPlanInfo().dayIndex + 1) / 365 * 100));
+      return Math.min(100, Math.round(((currentPlanInfo().dayIndex + 1) / 365) * 100));
     }
-
-    function toast(message) {
-      const node = byId('toast');
-      node.textContent = message;
-      node.classList.add('show');
-      clearTimeout(node._timer);
-      node._timer = setTimeout(function () {
-        node.classList.remove('show');
-      }, 2200);
+    function focusIndices(count, day) {
+      const plans = [
+        [0, 1],
+        [2, 3],
+        [4],
+        [0, 2],
+        [1, 3],
+        [0, 1, 2, 3, 4],
+        []
+      ];
+      const arr = (plans[day] || []).filter(i => i < count);
+      return arr.length ? arr : Array.from({ length: Math.min(2, count) }, (_, i) => i);
+    }
+    function buildDayTasks(week, day) {
+      const cards = week.cards || [];
+      const focus = focusIndices(cards.length, day).map(i => cards[i] && cards[i].title).filter(Boolean);
+      const focusText = focus.length ? focus.join('、') : '回顾本周全部卡片';
+      const stages = [
+        ['20 分钟输入', '先读一遍本周导学，再重点理解：' + focusText + '。目标不是背，而是用白话讲明白。'],
+        ['20 分钟卡片', '把今天重点内容各写成一张自己的卡片：概念是什么、为什么重要、现实里怎么用。'],
+        ['15 分钟输出', '按本周输出要求练一次：' + week.output],
+        ['5 分钟打卡', '写一句今天真正懂了什么；如果只学会一个点，也要明确写出来。']
+      ];
+      if (day === 5) {
+        stages[0][1] = '把本周全部核心卡片快速重读一遍，重点查漏补缺，看看哪些概念你还讲不顺。';
+        stages[2][1] = '完成本周输出的初稿，尽量带一个真实例子或工作场景。';
+      }
+      if (day === 6) {
+        stages[0][1] = '本周收束：不看资料，先口头复述本周学到了什么，再对照下面卡片补漏。';
+        stages[1][1] = '完成自测题，并把最容易混淆的两个点单独再写一遍。';
+        stages[2][1] = '把本周输出整理成可复用笔记，下周之前可以回看。';
+      }
+      return { tasks: stages, focusText };
     }
 
     function renderHero() {
       const info = currentPlanInfo();
-      byId('heroTitle').textContent = '每天长一点';
-      byId('heroSubtitle').textContent = greetingText();
-      byId('dailyQuote').textContent = randomQuote();
-      const status = [];
-      status.push('<span class="pill">📅 第 ' + (info.dayIndex + 1) + ' / 365 天</span>');
-      status.push('<span class="pill">🗂️ 当前阶段：' + stageMeta[info.week.stage].name + '</span>');
-      status.push('<span class="pill">🎯 本周主题：第 ' + info.week.week + ' 周</span>');
-      byId('heroStatusRow').innerHTML = status.join('');
-    }
-
-    function renderSummary() {
-      const info = currentPlanInfo();
-      const checkins = getCheckins();
-      const streak = calcStreak(checkins);
-      const progress = progressPercent();
-      byId('metricCheckins').textContent = checkins.length;
-      byId('metricStreak').textContent = streak;
+      byId('metricDay').textContent = info.dayIndex + 1;
       byId('metricWeek').textContent = info.week.week;
-      byId('ringValue').textContent = progress + '%';
-      byId('progressRing').style.background = 'conic-gradient(var(--primary) ' + Math.round(progress * 3.6) + 'deg, rgba(255,255,255,0.10) 0deg)';
-      const leftDays = 365 - (info.dayIndex + 1);
-      byId('summaryText').textContent = '你已经进入第 ' + info.week.week + ' 个主题周，当前阶段是“' + stageMeta[info.week.stage].name + '”。距离一年计划完成还剩 ' + leftDays + ' 天。';
-    }
-
-    function renderWeekStrip() {
-      const info = currentPlanInfo();
-      const currentWeekStartOffset = info.weekIndex * 7;
-      const html = [];
-      for (let i = 0; i < 7; i += 1) {
-        const dateStr = addDays(info.start, currentWeekStartOffset + i);
-        const checked = isCheckedIn(dateStr);
-        const isToday = dateStr === info.now;
-        const isFuture = diffDays(info.now, dateStr) > 0;
-        const cls = ['day-pill'];
-        if (checked) cls.push('done');
-        if (isToday) cls.push('today');
-        if (isFuture) cls.push('future');
-        html.push('<div class="' + cls.join(' ') + '">'
-          + '<div class="day-name">' + dayNames[i] + '</div>'
-          + '<div class="day-num">' + dateStr.slice(8) + '</div>'
-          + '<div class="day-state">' + (checked ? '已打卡' : (isFuture ? '未到' : '待完成')) + '</div>'
-          + '</div>');
-      }
-      byId('weekStrip').innerHTML = html.join('');
-      byId('weekTip').textContent = '本周 7 天已完成 ' + weekDoneCount(info) + ' / 7 天。允许慢一点，但别停。';
+      byId('metricStreak').textContent = calcStreak(getCheckins());
+      byId('metricProgress').textContent = progressPercent() + '%';
+      const quote = quotes[(info.dayIndex) % quotes.length];
+      byId('dailyQuote').textContent = '“' + quote + '”';
     }
 
     function renderToday() {
       const info = currentPlanInfo();
-      const w = info.week;
-      byId('todayMeta').textContent = '今天是计划第 ' + (info.dayIndex + 1) + ' 天 · 第 ' + w.week + ' 周 · ' + stageMeta[w.stage].name;
-      byId('todayTitle').textContent = '本周主题：' + w.title;
-      byId('todayGoal').textContent = '本周目标：' + w.goal;
-      byId('keywordRow').innerHTML = w.keywords.map(function (k) { return '<span class="pill">' + k + '</span>'; }).join('');
-      const tasks = dayTemplates[info.dayOfWeek](w);
-      byId('todayTasks').innerHTML = tasks.map(function (item) {
-        return '<div class="time-card"><div class="time">' + item[0] + '</div><div class="desc">' + item[1] + '</div></div>';
+      const week = info.week;
+      const stage = stageMeta[week.stage];
+      const dayPlan = buildDayTasks(week, info.dayOfWeek);
+      byId('todayMeta').textContent = '今天是计划第 ' + (info.dayIndex + 1) + ' 天 · 第 ' + week.week + ' 周 · ' + stage.name;
+      byId('todayTitle').textContent = '本周主题：' + week.title;
+      byId('todayGoal').textContent = '本周目标：' + week.goal;
+      byId('keywordRow').innerHTML = (week.keywords || []).map(k => '<span class="pill">' + esc(k) + '</span>').join('');
+      byId('focusBar').textContent = '今天先把这些内容讲明白：' + dayPlan.focusText + '。先求真的懂，再求记得多。';
+      byId('weekOverview').textContent = week.overview;
+      byId('stageTarget').textContent = stage.target;
+      byId('todayTasks').innerHTML = dayPlan.tasks.map(item => '<div class="time-card"><div class="time">' + esc(item[0]) + '</div><div class="helper">' + esc(item[1]) + '</div></div>').join('');
+
+      const focus = focusIndices((week.cards || []).length, info.dayOfWeek);
+      byId('lessonList').innerHTML = (week.cards || []).map((card, idx) => {
+        const cls = focus.includes(idx) ? 'lesson-card focus' : 'lesson-card';
+        return '<div class="' + cls + '"><div><span class="index">' + (idx + 1) + '</span><strong>' + esc(card.title) + '</strong></div><p>' + esc(card.body) + '</p></div>';
       }).join('');
-      byId('outputList').innerHTML = '<div>• ' + w.output + '</div><div style="margin-top:8px;">• ' + w.milestone + '</div>';
-      byId('resourceText').textContent = w.resource;
+
+      byId('quizList').innerHTML = (week.quiz || []).map((qa, idx) => {
+        return '<details class="qa"' + (idx === 0 ? ' open' : '') + '><summary>' + esc(qa.q) + '</summary><div class="answer">' + esc(qa.a) + '</div></details>';
+      }).join('');
+
+      byId('outputText').textContent = week.output;
+      byId('milestoneText').textContent = week.milestone;
+      byId('resourceText').textContent = week.resource;
+
       const notes = getNotes();
       byId('noteBox').value = notes[info.now] || '';
       const checked = isCheckedIn(info.now);
       byId('checkinBtn').textContent = checked ? '✅ 今天已打卡（点此撤销）' : '✅ 今日打卡';
       byId('checkinStatus').textContent = checked
-        ? '你今天已经打卡了。继续保持，哪怕只前进了一点点，也算赢。'
-        : '今天还没有打卡。哪怕只学了 20 分钟，也允许自己先完成一次。';
+        ? '你今天已经打卡了。继续把今天真正懂的 1 个点写清楚。'
+        : '今天还没有打卡。先学一个点、写一句话，也算完成。';
     }
 
     function renderRoadmap() {
       const info = currentPlanInfo();
-      const stageNums = Object.keys(stageMeta);
+      const stageKeys = Object.keys(stageMeta);
       byId('stageFilterRow').innerHTML = ['<button class="tag ' + (state.stageFilter === 'all' ? 'active' : '') + '" data-stage="all">全部阶段</button>']
-        .concat(stageNums.map(function (stageNum) {
-          const active = String(state.stageFilter) === String(stageNum) ? 'active' : '';
-          return '<button class="tag ' + active + '" data-stage="' + stageNum + '">第 ' + stageNum + ' 阶段</button>';
-        })).join('');
+        .concat(stageKeys.map(k => '<button class="tag ' + (String(state.stageFilter) === String(k) ? 'active' : '') + '" data-stage="' + k + '">第 ' + k + ' 阶段</button>'))
+        .join('');
+
+      const filtered = weeks.filter(w => state.stageFilter === 'all' || String(w.stage) === String(state.stageFilter));
+      byId('roadmapSummary').textContent = '你当前正在第 ' + info.week.week + ' 周：' + info.week.title + '。别急着往后翻，先把当前周的 4 到 5 张卡片学透。';
 
       const grouped = {};
-      weeks.forEach(function (w) {
-        if (state.stageFilter !== 'all' && String(w.stage) !== String(state.stageFilter)) return;
+      filtered.forEach(w => {
         if (!grouped[w.stage]) grouped[w.stage] = [];
         grouped[w.stage].push(w);
       });
 
-      const stageKeys = Object.keys(grouped);
-      if (!stageKeys.length) {
-        byId('roadmapSummary').textContent = '当前筛选条件下没有内容。';
-        byId('roadmapList').innerHTML = '';
-        return;
-      }
-
-      byId('roadmapSummary').textContent = '你当前正在第 ' + info.week.week + ' 周：' + info.week.title + '。如果只想专注当下，就先把当前周学透。';
-
-      byId('roadmapList').innerHTML = stageKeys.map(function (stageNum) {
+      byId('roadmapList').innerHTML = Object.keys(grouped).map(stageNum => {
         const meta = stageMeta[stageNum];
-        const body = grouped[stageNum].map(function (w) {
-          const current = w.week === info.week.week ? 'current' : '';
-          return '<div class="week-card ' + current + '">'
-            + '<h4>第 ' + w.week + ' 周｜' + w.title + '</h4>'
-            + '<p>' + w.goal + '</p>'
-            + '<div class="mini"><b>建议输入：</b>' + w.read + '</div>'
-            + '<div class="mini"><b>核心输出：</b>' + w.output + '</div>'
-            + '</div>';
+        const weeksHtml = grouped[stageNum].map(w => {
+          const open = w.week === info.week.week ? ' open' : '';
+          return '<details class="week-detail"' + open + '><summary>第 ' + w.week + ' 周｜' + esc(w.title) + '</summary>'
+            + '<div class="mini-list">'
+            + '<div class="mini"><b>目标：</b>' + esc(w.goal) + '</div>'
+            + '<div class="mini"><b>导学：</b>' + esc(w.overview) + '</div>'
+            + '<div class="mini"><b>核心卡片：</b><br/>' + w.cards.map((c, i) => (i + 1) + '. ' + esc(c.title) + '：' + esc(c.body)).join('<br/>') + '</div>'
+            + '<div class="mini"><b>本周输出：</b>' + esc(w.output) + '</div>'
+            + '</div></details>';
         }).join('');
-        const open = String(stageNum) === String(info.week.stage) ? 'open current' : '';
-        return '<div class="roadmap-item ' + open + '">'
-          + '<div class="roadmap-head">'
-          + '<div><strong>' + meta.name + '</strong><div class="helper small" style="margin-top:4px;">' + meta.target + '</div></div>'
-          + '<div class="helper small">点击展开</div>'
-          + '</div>'
-          + '<div class="roadmap-body">' + body + '</div>'
-          + '</div>';
+        return '<section class="roadmap-stage"><div class="summary-item"><div><strong>' + esc(meta.name) + '</strong></div><div class="mini" style="margin-top:8px;">' + esc(meta.target) + '</div></div>' + weeksHtml + '</section>';
       }).join('');
 
-      document.querySelectorAll('.roadmap-head').forEach(function (node) {
-        node.addEventListener('click', function () {
-          node.parentElement.classList.toggle('open');
-        });
-      });
-      document.querySelectorAll('#stageFilterRow [data-stage]').forEach(function (node) {
-        node.addEventListener('click', function () {
+      document.querySelectorAll('#stageFilterRow [data-stage]').forEach(node => {
+        node.addEventListener('click', () => {
           state.stageFilter = node.getAttribute('data-stage');
           renderRoadmap();
         });
@@ -1117,13 +638,9 @@
         { target: 180, title: '半年进化', text: '半年坚持，底色已经明显改变。' },
         { target: 365, title: '年度毕业', text: '完成一年闭环，进入下一阶段。' }
       ];
-      byId('achievementList').innerHTML = items.map(function (item) {
+      byId('achievementList').innerHTML = items.map(item => {
         const unlocked = total >= item.target;
-        return '<div class="achievement-item ' + (unlocked ? '' : 'locked') + '">'
-          + '<div><b>' + (unlocked ? '🏅 ' : '🔒 ') + item.title + '</b></div>'
-          + '<div class="helper small" style="margin-top:6px;">' + item.text + '</div>'
-          + '<div class="helper small" style="margin-top:6px;">进度：' + Math.min(total, item.target) + ' / ' + item.target + ' · 当前连续 ' + streak + ' 天</div>'
-          + '</div>';
+        return '<div class="achievement-item ' + (unlocked ? '' : 'locked') + '"><div><b>' + (unlocked ? '🏅 ' : '🔒 ') + item.title + '</b></div><div class="mini" style="margin-top:8px;">' + item.text + '</div><div class="mini" style="margin-top:8px;">进度：' + Math.min(total, item.target) + ' / ' + item.target + ' · 当前连续 ' + streak + ' 天</div></div>';
       }).join('');
     }
 
@@ -1134,9 +651,9 @@
         byId('historyList').innerHTML = '<div class="history-item">还没有打卡记录。今天先完成第 1 次。</div>';
         return;
       }
-      byId('historyList').innerHTML = checkins.map(function (dateStr) {
+      byId('historyList').innerHTML = checkins.map(dateStr => {
         const note = notes[dateStr] ? notes[dateStr].slice(0, 120) : '这一天没有额外笔记。';
-        return '<div class="history-item"><div><b>' + formatCNDate(dateStr) + '</b> · ' + dateStr + ' · 已打卡</div><div class="helper small" style="margin-top:6px;">' + note + '</div></div>';
+        return '<div class="history-item"><div><b>' + formatCNDate(dateStr) + '</b> · 已打卡</div><div class="mini" style="margin-top:8px;">' + esc(note) + '</div></div>';
       }).join('');
     }
 
@@ -1146,7 +663,7 @@
         notes: getNotes(),
         checkins: getCheckins(),
         exportedAt: new Date().toISOString(),
-        appVersion: 'pwa-v2'
+        appVersion: 'course-v1'
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -1155,7 +672,7 @@
       a.download = 'culture-growth-data-' + todayStr() + '.json';
       a.click();
       URL.revokeObjectURL(url);
-      toast('已导出打卡数据。');
+      toast('已导出数据。');
     }
 
     function importDataFromFile(file) {
@@ -1164,216 +681,39 @@
       reader.onload = function () {
         try {
           const data = JSON.parse(String(reader.result || '{}'));
-          if (!data || typeof data !== 'object') throw new Error('无效数据');
           if (data.startDate) setStartDate(data.startDate);
           if (data.notes && typeof data.notes === 'object') setNotes(data.notes);
-          if (Array.isArray(data.checkins)) setCheckins(data.checkins.sort());
+          if (Array.isArray(data.checkins)) setCheckins(data.checkins);
           byId('startDate').value = getStartDate();
           renderAll();
-          toast('数据导入成功。');
+          toast('导入成功。');
         } catch (error) {
-          toast('导入失败：文件格式不正确。');
+          toast('导入失败，请检查文件。');
         }
       };
       reader.readAsText(file, 'utf-8');
     }
 
-    function saveNote(manual) {
+    function saveNote() {
+      const info = currentPlanInfo();
       const notes = getNotes();
-      notes[todayStr()] = byId('noteBox').value.trim();
+      notes[info.now] = byId('noteBox').value.trim();
       setNotes(notes);
       renderHistory();
-      if (manual) toast('笔记已保存。');
+      toast('今天的笔记已保存。');
     }
 
-    function shareProgress() {
+    function toggleCheckin() {
       const info = currentPlanInfo();
-      const text = '我正在用《每天长一点》做一年成长计划。今天是第 ' + (info.dayIndex + 1) + ' 天，第 ' + info.week.week + ' 周，主题是：' + info.week.title + '。目前累计打卡 ' + getCheckins().length + ' 次，连续 ' + calcStreak(getCheckins()) + ' 天。';
-      if (navigator.share) {
-        navigator.share({
-          title: '每天长一点',
-          text: text,
-          url: location.href
-        }).catch(function () {});
-        return;
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function () {
-          toast('已复制你的成长进度。');
-        }).catch(function () {
-          toast(text);
-        });
-        return;
-      }
-      toast(text);
+      const items = new Set(getCheckins());
+      if (items.has(info.now)) items.delete(info.now); else items.add(info.now);
+      setCheckins(Array.from(items));
+      renderAll();
+      toast(items.has(info.now) ? '已完成今日打卡。' : '已撤销今天的打卡。');
     }
-
-
-function detectClient() {
-  const ua = navigator.userAgent || '';
-  return {
-    ios: /iPhone|iPad|iPod/i.test(ua),
-    android: /Android/i.test(ua),
-    safari: /Safari/i.test(ua) && !/Chrome|CriOS|Edg|OPR|SamsungBrowser/i.test(ua),
-    chrome: /Chrome|CriOS/i.test(ua) && !/Edg|OPR|SamsungBrowser/i.test(ua),
-    edge: /Edg/i.test(ua),
-    samsung: /SamsungBrowser/i.test(ua),
-    wechat: /MicroMessenger/i.test(ua),
-    qq: /QQ\//i.test(ua)
-  };
-}
-
-function getInstallEnv() {
-  const client = detectClient();
-  const supportedProtocol = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-  const secureContext = window.isSecureContext || supportedProtocol;
-  const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-  const inAppBrowser = client.wechat || client.qq;
-  let browserName = '当前浏览器';
-  if (client.wechat) browserName = '微信内置浏览器';
-  else if (client.qq) browserName = 'QQ 内置浏览器';
-  else if (client.safari) browserName = 'Safari';
-  else if (client.edge) browserName = 'Edge';
-  else if (client.samsung) browserName = 'Samsung Internet';
-  else if (client.chrome) browserName = 'Chrome';
-  else if (client.android) browserName = 'Android 浏览器';
-  else if (client.ios) browserName = 'iPhone / iPad 浏览器';
-
-  return {
-    client: client,
-    browserName: browserName,
-    supportedProtocol: supportedProtocol,
-    secureContext: secureContext,
-    standalone: standalone,
-    swSupported: 'serviceWorker' in navigator,
-    canPromptInstall: !!state.installPrompt,
-    fileMode: location.protocol === 'file:',
-    inAppBrowser: inAppBrowser,
-    currentUrl: location.href
-  };
-}
-
-function renderInstallGuide() {
-  const env = getInstallEnv();
-  const envChecks = [
-    ['当前打开方式', env.fileMode ? '⚠️ 本地文件 file://' : '✅ 网址访问'],
-    ['当前浏览器', env.browserName + (env.inAppBrowser ? '（建议切到系统浏览器）' : '')],
-    ['安装协议环境', env.supportedProtocol ? '✅ 满足 HTTP / HTTPS / localhost 条件' : '⚠️ 当前不满足安装条件'],
-    ['安装提示事件', env.canPromptInstall ? '✅ 浏览器已准备安装提示' : 'ℹ️ 暂未收到自动安装提示'],
-    ['离线缓存能力', (env.swSupported && env.supportedProtocol) ? '✅ 可启用离线缓存' : '⚠️ 当前环境受限'],
-    ['当前安装状态', env.standalone ? '✅ 已安装到主屏幕' : '未安装']
-  ];
-  byId('envChecks').innerHTML = envChecks.map(function (item) {
-    return '<div class="env-item"><div class="label">' + item[0] + '</div><div class="value">' + item[1] + '</div></div>';
-  }).join('');
-
-  let summary = '';
-  if (env.standalone) {
-    summary = '你已经把它安装成 App 了，以后直接从主屏幕打开就行。';
-  } else if (env.fileMode) {
-    summary = '你现在是直接打开本地 index.html（file://），这种方式下一般不会弹出“安装”。打卡和笔记能用，但想安装到手机，请把整个 culture-growth-app 文件夹放到网站目录、宝塔站点或 localhost，再用网址打开。';
-  } else if (env.inAppBrowser) {
-    summary = '你现在像是在微信 / QQ 这类内置浏览器里打开，很多内置浏览器不支持安装。请先用 Safari、Chrome 或 Edge 打开。';
-  } else if (env.client.ios && env.client.safari) {
-    summary = 'iPhone 上通常不会自动弹出安装窗口，这是正常的。请点击 Safari 的“分享”按钮，再选择“添加到主屏幕”。';
-  } else if (env.canPromptInstall) {
-    summary = '当前环境已经具备安装条件。你可以点顶部“安装到手机”，如果浏览器没有弹窗，也可以在浏览器菜单里找“安装应用”或“添加到主屏幕”。';
-  } else if (env.supportedProtocol) {
-    summary = '当前环境已经基本符合安装条件，但浏览器不一定会自动弹窗。你可以等页面加载几秒后再试，或者直接去浏览器菜单里手动安装。';
-  } else {
-    summary = '当前环境暂时不适合安装。建议改成通过 HTTP / HTTPS / localhost 打开，再重新尝试。';
-  }
-  byId('installGuideSummary').textContent = summary;
-
-  const cards = [
-    {
-      title: 'Android · Chrome / Edge',
-      tag: (!env.fileMode && !env.inAppBrowser && env.client.android) ? '推荐当前方案' : '安卓通用',
-      tagClass: (!env.fileMode && !env.inAppBrowser && env.client.android) ? 'ok' : 'warn',
-      body: [
-        '用 Chrome 或 Edge 打开这个网址。',
-        '等页面加载几秒。',
-        '先点顶部“安装到手机”。',
-        '如果没弹窗，再去浏览器菜单找“安装应用”或“添加到主屏幕”。'
-      ]
-    },
-    {
-      title: 'iPhone · Safari',
-      tag: (env.client.ios && env.client.safari) ? '你当前适用' : 'iPhone 通用',
-      tagClass: (env.client.ios && env.client.safari) ? 'ok' : 'warn',
-      body: [
-        '用 Safari 打开网址。',
-        '点击底部或顶部“分享”按钮。',
-        '选择“添加到主屏幕”。',
-        '确认添加后，就能像 App 一样从桌面打开。'
-      ]
-    },
-    {
-      title: '如果你现在是 file://',
-      tag: env.fileMode ? '当前问题点' : '常见原因',
-      tagClass: 'warn',
-      body: [
-        '直接双击本地 HTML 时，浏览器通常不会提供安装能力。',
-        '基础功能还能用，但安装与离线缓存一般不完整。',
-        '请把整个文件夹部署到网站目录、宝塔站点或 localhost。',
-        '然后重新用网址打开。'
-      ]
-    },
-    {
-      title: '如果你在微信 / QQ 里',
-      tag: env.inAppBrowser ? '当前问题点' : '备用排查',
-      tagClass: 'warn',
-      body: [
-        '很多内置浏览器不支持安装 App。',
-        '请点右上角，选择“在浏览器中打开”。',
-        '再使用 Safari、Chrome 或 Edge 完成安装。',
-        '安装后建议固定从主屏幕打开。'
-      ]
-    }
-  ];
-  byId('installGuideCards').innerHTML = cards.map(function (card) {
-    return '<div class="guide-card">'
-      + '<h3><span>' + card.title + '</span><span class="guide-tag ' + card.tagClass + '">' + card.tag + '</span></h3>'
-      + '<ol>' + card.body.map(function (line) { return '<li>' + line + '</li>'; }).join('') + '</ol>'
-      + '</div>';
-  }).join('');
-
-  byId('settingsTip').textContent = env.fileMode
-    ? '提示：你当前是直接打开本地文件，安装提示不弹出基本是正常的。先部署后再测试。'
-    : '提示：即使浏览器不自动弹“安装”，你通常仍可从浏览器菜单里手动选择“安装应用”或“添加到主屏幕”。';
-}
-
-    function copyInstallTips() {
-  const env = getInstallEnv();
-  let text = '《每天长一点》安装说明：';
-  if (env.standalone) {
-    text += '当前已经安装成功，可以直接从主屏幕打开。';
-  } else if (env.fileMode) {
-    text += '你现在是直接打开本地 HTML（file://），浏览器通常不会弹出安装。请把整个 culture-growth-app 文件夹部署到 PHP 网站目录、宝塔站点或 localhost，再用网址打开。';
-  } else if (env.inAppBrowser) {
-    text += '你当前在微信或 QQ 内置浏览器中打开，很多内置浏览器不支持安装。请先切换到 Safari、Chrome 或 Edge。';
-  } else if (env.client.ios && env.client.safari) {
-    text += 'iPhone 上通常不会自动弹出安装窗口。请在 Safari 里点击“分享”，再选择“添加到主屏幕”。';
-  } else if (env.canPromptInstall) {
-    text += '当前环境已经支持安装。你可以点击页面顶部“安装到手机”；如果浏览器没弹窗，也可以在浏览器菜单里找“安装应用”或“添加到主屏幕”。';
-  } else {
-    text += '当前环境基本满足安装条件，但浏览器不一定自动弹窗。请稍等几秒，或去浏览器菜单里手动选择“安装应用”/“添加到主屏幕”。';
-  }
-  text += ' 当前地址：' + env.currentUrl;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function () {
-      toast('安装说明已复制。');
-    }).catch(function () {
-      toast(text);
-    });
-  } else {
-    toast(text);
-  }
-}
 
     function resetAllData() {
-      const ok = confirm('确定要清空本浏览器中的开始日期、笔记和打卡记录吗？');
-      if (!ok) return;
+      if (!confirm('确定要清空这个浏览器里的开始日期、笔记和打卡记录吗？')) return;
       localStorage.removeItem(STORAGE_KEYS.startDate);
       localStorage.removeItem(STORAGE_KEYS.notes);
       localStorage.removeItem(STORAGE_KEYS.checkins);
@@ -1382,226 +722,41 @@ function renderInstallGuide() {
       toast('本地数据已重置。');
     }
 
-    function updateOnlineBadge() {
-      const online = navigator.onLine;
-      const node = byId('onlineBadge');
-      node.textContent = online ? '🟢 当前在线' : '🟡 当前离线';
-      node.className = 'mini-badge ' + (online ? 'ok' : 'warn');
-    }
-
-    function updatePWABadge() {
-  const env = getInstallEnv();
-  const node = byId('pwaBadge');
-  if (env.standalone) {
-    node.textContent = '📱 已安装为 App';
-    node.className = 'mini-badge ok';
-  } else if (env.fileMode) {
-    node.textContent = 'ℹ️ 当前是 file 模式';
-    node.className = 'mini-badge warn';
-  } else if (env.inAppBrowser) {
-    node.textContent = '↗️ 请用系统浏览器打开';
-    node.className = 'mini-badge warn';
-  } else if (env.client.ios && env.client.safari) {
-    node.textContent = '🍎 Safari 可手动添加';
-    node.className = 'mini-badge warn';
-  } else if (env.canPromptInstall) {
-    node.textContent = '📲 可安装到主屏幕';
-    node.className = 'mini-badge ok';
-  } else if (env.supportedProtocol) {
-    node.textContent = '✨ 支持 PWA · 可手动安装';
-    node.className = 'mini-badge warn';
-  } else {
-    node.textContent = 'ℹ️ 当前环境暂不支持安装';
-    node.className = 'mini-badge warn';
-  }
-}
-
-    function switchScreen(screenName) {
-      state.activeScreen = screenName;
-      document.querySelectorAll('.screen').forEach(function (node) {
-        node.classList.toggle('active', node.id === 'screen-' + screenName);
-      });
-      document.querySelectorAll('.tabbar button').forEach(function (node) {
-        node.classList.toggle('active', node.getAttribute('data-screen') === screenName);
-      });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function attachTabbar() {
-      document.querySelectorAll('.tabbar button').forEach(function (node) {
-        node.addEventListener('click', function () {
-          switchScreen(node.getAttribute('data-screen'));
-        });
-      });
-    }
-
-    function updateInstallButton() {
-  const env = getInstallEnv();
-  const button = byId('installBtn');
-  if (env.standalone) {
-    button.disabled = true;
-    button.textContent = '✅ 已安装';
-    return;
-  }
-  button.disabled = false;
-  if (env.fileMode) {
-    button.textContent = '📘 查看安装说明';
-  } else if (env.inAppBrowser) {
-    button.textContent = '↗️ 用浏览器打开';
-  } else if (env.client.ios && env.client.safari) {
-    button.textContent = '🍎 添加到主屏幕';
-  } else if (env.canPromptInstall) {
-    button.textContent = '📲 安装到手机';
-  } else if (env.supportedProtocol) {
-    button.textContent = '📘 查看安装帮助';
-  } else {
-    button.textContent = '📘 安装环境受限';
-  }
-}
-
-    function handleInstall() {
-  const env = getInstallEnv();
-  if (env.standalone) {
-    toast('已经安装好了，直接从主屏幕打开即可。');
-    return;
-  }
-  if (env.fileMode) {
-    switchScreen('settings');
-    toast('你现在是直接打开本地 HTML，先部署到网站目录或 localhost 再安装。');
-    return;
-  }
-  if (env.inAppBrowser) {
-    switchScreen('settings');
-    toast('请先在 Safari、Chrome 或 Edge 里打开，再进行安装。');
-    return;
-  }
-  if (env.client.ios && env.client.safari) {
-    switchScreen('settings');
-    toast('iPhone 请点 Safari 的“分享”，再选“添加到主屏幕”。');
-    return;
-  }
-  if (!env.canPromptInstall) {
-    switchScreen('settings');
-    toast('浏览器不一定自动弹安装，试试菜单里的“安装应用”或“添加到主屏幕”。');
-    return;
-  }
-  state.installPrompt.prompt();
-  state.installPrompt.userChoice.finally(function () {
-    state.installPrompt = null;
-    updateInstallButton();
-    updatePWABadge();
-    renderInstallGuide();
-  });
-}
-
-    function registerServiceWorker() {
-      const supportedProtocol = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-      if (!('serviceWorker' in navigator) || !supportedProtocol) return;
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
-    }
-
-    function attachEvents() {
-      byId('checkinBtn').addEventListener('click', function () {
-        const dateStr = todayStr();
-        const checked = isCheckedIn(dateStr);
-        if (checked) {
-          const ok = confirm('今天已经打卡了，要撤销吗？');
-          if (!ok) return;
-        }
-        toggleCheckin(dateStr);
-        saveNote(false);
-        renderAll();
-        toast(checked ? '已撤销今天打卡。' : '今天打卡成功，继续保持。');
-      });
-
-      byId('saveNoteBtn').addEventListener('click', function () {
-        saveNote(true);
-      });
-
-      byId('noteBox').addEventListener('input', function () {
-        clearTimeout(state.noteSaveTimer);
-        state.noteSaveTimer = setTimeout(function () {
-          saveNote(false);
-        }, 500);
-      });
-
-      byId('saveStartBtn').addEventListener('click', function () {
-        const value = byId('startDate').value;
-        if (!value) {
-          toast('请先选择开始日期。');
-          return;
-        }
-        setStartDate(value);
-        renderAll();
-        toast('开始日期已保存。');
-      });
-
-      byId('todayBtn').addEventListener('click', function () {
-        const t = todayStr();
-        byId('startDate').value = t;
-        setStartDate(t);
-        renderAll();
-        toast('已改为从今天开始。');
-      });
-
-      byId('exportBtn').addEventListener('click', exportData);
-      byId('importBtn').addEventListener('click', function () { byId('importInput').click(); });
-      byId('importInput').addEventListener('change', function (event) {
-        importDataFromFile(event.target.files && event.target.files[0]);
-        event.target.value = '';
-      });
-      byId('resetBtn').addEventListener('click', resetAllData);
-      byId('copyInstallBtn').addEventListener('click', copyInstallTips);
-      byId('shareBtn').addEventListener('click', shareProgress);
-      byId('installBtn').addEventListener('click', handleInstall);
-      byId('installHelpBtn').addEventListener('click', function () {
-        switchScreen('settings');
-        toast('已打开安装帮助。');
-      });
-      byId('viewPlanBtn').addEventListener('click', function () {
-        window.open('./一年成长计划.md', '_blank', 'noopener');
-      });
-
-      window.addEventListener('online', updateOnlineBadge);
-      window.addEventListener('offline', updateOnlineBadge);
-      window.addEventListener('beforeinstallprompt', function (event) {
-        event.preventDefault();
-        state.installPrompt = event;
-        updateInstallButton();
-        updatePWABadge();
-      });
-      window.addEventListener('appinstalled', function () {
-        state.installPrompt = null;
-        updateInstallButton();
-        updatePWABadge();
-        toast('App 已安装到主屏幕。');
-      });
+    function switchScreen(name) {
+      document.querySelectorAll('.screen').forEach(node => node.classList.toggle('active', node.id === 'screen-' + name));
+      document.querySelectorAll('.tabbar button').forEach(node => node.classList.toggle('active', node.getAttribute('data-screen') === name));
     }
 
     function renderAll() {
-      byId('startDate').value = getStartDate();
       renderHero();
-      renderSummary();
-      renderWeekStrip();
       renderToday();
       renderRoadmap();
       renderHeatmap();
       renderAchievements();
       renderHistory();
-      updateOnlineBadge();
-      updatePWABadge();
-      updateInstallButton();
-      renderInstallGuide();
     }
 
-    function init() {
-      attachTabbar();
-      attachEvents();
+    byId('saveNoteBtn').addEventListener('click', saveNote);
+    byId('checkinBtn').addEventListener('click', toggleCheckin);
+    byId('saveDateBtn').addEventListener('click', () => {
+      const value = byId('startDate').value;
+      if (!value) return toast('请先选择开始日期。');
+      setStartDate(value);
       renderAll();
-      registerServiceWorker();
-    }
+      toast('开始日期已保存。');
+    });
+    byId('exportBtn').addEventListener('click', exportData);
+    byId('importBtn').addEventListener('click', () => byId('importInput').click());
+    byId('importInput').addEventListener('change', (e) => importDataFromFile(e.target.files && e.target.files[0]));
+    byId('resetBtn').addEventListener('click', resetAllData);
+    document.querySelectorAll('.tabbar button').forEach(btn => btn.addEventListener('click', () => switchScreen(btn.getAttribute('data-screen'))));
 
-    init();
+    byId('startDate').value = getStartDate();
+    renderAll();
+
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
   </script>
 </body>
 </html>
