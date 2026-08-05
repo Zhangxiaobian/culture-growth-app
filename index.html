@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#7ea4ff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="每天长一点" />
+  <meta name="description" content="每天 1 小时，一年系统补齐诗词、历史、地理、名著与表达力。" />
+  <title>每天长一点｜文化成长打卡 App</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="./icons/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" sizes="180x180" />
+  <style>
+    :root {
+      --bg: #091022;
+      --bg-soft: #111b38;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.12);
+      --line: rgba(255,255,255,0.10);
+      --text: #edf2ff;
+      --muted: #b7c1e2;
+      --primary: #7ea4ff;
+      --primary-2: #5de1b0;
+      --accent: #ffd36e;
+      --ok: #2fd28c;
+      --warn: #ffbf43;
+      --danger: #ff7f7f;
+      --shadow: 0 24px 60px rgba(0,0,0,0.34);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --tabbar-height: 76px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(126,164,255,0.28), transparent 28%),
+        radial-gradient(circle at top right, rgba(93,225,176,0.18), transparent 24%),
+        linear-gradient(180deg, #091022 0%, #131d3c 100%);
+      min-height: 100vh;
+      padding: max(14px, env(safe-area-inset-top)) 14px calc(var(--tabbar-height) + 20px + env(safe-area-inset-bottom));
+    }
+    button, input, textarea {
+      font: inherit;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-weight: 700;
+      transition: transform 0.08s ease, opacity 0.18s ease;
+    }
+    button:active { transform: scale(0.98); }
+    .app-shell {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding-top: 2px;
+      backdrop-filter: blur(14px);
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(126,164,255,0.22), rgba(93,225,176,0.14));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 18px 16px;
+      margin-bottom: 14px;
+    }
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .mini-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f3f7ff;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .mini-badge.ok { color: #bdf2d8; background: rgba(47,210,140,0.12); border-color: rgba(47,210,140,0.18); }
+    .mini-badge.warn { color: #ffe7a7; background: rgba(255,191,67,0.12); border-color: rgba(255,191,67,0.18); }
+    .hero h1 {
+      margin: 12px 0 8px;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: 0.2px;
+    }
+    .subtitle, .quote, .helper, .muted {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .subtitle { margin: 0; font-size: 14px; }
+    .quote {
+      margin: 12px 0 0;
+      color: #fff1c8;
+      font-size: 14px;
+    }
+    .helper { font-size: 13px; }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      min-width: 172px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #8f79ff);
+      color: white;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.10);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #24c97f, #58e3aa);
+      color: #062617;
+    }
+    .btn-warning {
+      background: linear-gradient(135deg, #ffd36e, #ffb703);
+      color: #4d3000;
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ff9696, #ff6b6b);
+      color: #3d0606;
+    }
+    .screen {
+      display: none;
+      animation: fadeIn 0.18s ease;
+    }
+    .screen.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .grid { display: grid; gap: 14px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 760px) {
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .hero-top { flex-direction: column; }
+      .hero-actions { justify-content: flex-start; min-width: 0; }
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      backdrop-filter: blur(12px);
+    }
+    .card h2, .card h3 { margin: 0 0 8px; }
+    .card h2 { font-size: 20px; }
+    .card h3 { font-size: 16px; }
+    .subline {
+      color: var(--primary-2);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .summary-card {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+    .ring {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.10) 0deg);
+      position: relative;
+      margin: 0 auto;
+    }
+    .ring::after {
+      content: '';
+      position: absolute;
+      inset: 11px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(10,17,36,0.96), rgba(17,27,56,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .ring-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .ring-value { font-size: 24px; font-weight: 800; }
+    .ring-label { font-size: 12px; color: var(--muted); }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .metric {
+      background: rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    @media (max-width: 540px) {
+      .summary-card { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .week-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .day-pill {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 10px 6px;
+      text-align: center;
+      min-height: 78px;
+    }
+    .day-pill.today { border-color: rgba(126,164,255,0.45); box-shadow: 0 0 0 1px rgba(126,164,255,0.24) inset; }
+    .day-pill.done { background: rgba(47,210,140,0.14); color: #dcffee; }
+    .day-pill.future { opacity: 0.72; }
+    .day-pill .day-name { font-size: 12px; color: var(--muted); }
+    .day-pill .day-num { font-size: 18px; font-weight: 800; margin-top: 6px; }
+    .day-pill .day-state { margin-top: 4px; font-size: 11px; }
+    .time-card {
+      display: grid;
+      grid-template-columns: 94px 1fr;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-top: 10px;
+    }
+    .time-card .time {
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .time-card .desc {
+      line-height: 1.72;
+      color: #f2f6ff;
+      font-size: 14px;
+    }
+    @media (max-width: 560px) {
+      .time-card { grid-template-columns: 1fr; }
+    }
+    textarea, input[type="date"], input[type="text"] {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.95);
+      color: #111827;
+      font-size: 14px;
+    }
+    textarea { min-height: 140px; resize: vertical; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .tip-box {
+      background: rgba(126,164,255,0.11);
+      border: 1px solid rgba(126,164,255,0.18);
+      color: #ecf2ff;
+      border-radius: 18px;
+      padding: 12px;
+      line-height: 1.7;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+    .pill-row, .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill, .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+    }
+    .tag.active {
+      background: rgba(126,164,255,0.16);
+      border-color: rgba(126,164,255,0.28);
+      color: #f4f7ff;
+    }
+    .task-title {
+      font-size: 24px;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+    .roadmap-item {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.04);
+    }
+    .roadmap-item.current {
+      border-color: rgba(126,164,255,0.28);
+      box-shadow: 0 0 0 1px rgba(126,164,255,0.16) inset;
+    }
+    .roadmap-head {
+      padding: 14px 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      cursor: pointer;
+      background: rgba(255,255,255,0.06);
+    }
+    .roadmap-body { display: none; padding: 0 12px 12px; }
+    .roadmap-item.open .roadmap-body { display: block; }
+    .week-card {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .week-card.current {
+      background: rgba(126,164,255,0.12);
+      border-color: rgba(126,164,255,0.22);
+    }
+    .week-card h4 { margin: 0 0 6px; font-size: 15px; }
+    .week-card p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .mini {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #eef3ff;
+    }
+    .heatmap {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .heat-cell {
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .heat-cell.done { background: rgba(47,210,140,0.18); color: #dcffee; }
+    .heat-cell.today { box-shadow: 0 0 0 1px rgba(126,164,255,0.28) inset; }
+    .history-list, .achievement-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .history-item, .achievement-item {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 12px;
+      line-height: 1.65;
+    }
+    .achievement-item.locked { opacity: 0.72; }
+    .form-block { margin-top: 12px; }
+    .link-btn {
+      color: #f7fbff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 700;
+    }
+    .small { font-size: 13px; }
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 18px;
+      padding-bottom: 12px;
+    }
+    .tabbar {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      width: min(920px, calc(100vw - 16px));
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: rgba(9,16,34,0.82);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 24px;
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      z-index: 30;
+    }
+    .tabbar button {
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 8px;
+      border-radius: 18px;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+    .tabbar button.active {
+      background: rgba(126,164,255,0.16);
+      color: #f7fbff;
+      border: 1px solid rgba(126,164,255,0.22);
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%) translateY(24px);
+      bottom: calc(var(--tabbar-height) + 22px + env(safe-area-inset-bottom));
+      background: rgba(12,18,39,0.94);
+      color: white;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.18s ease;
+      z-index: 40;
+      box-shadow: var(--shadow);
+      max-width: calc(100vw - 40px);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+.install-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.guide-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 14px;
+  min-height: 150px;
+}
+.guide-card h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.guide-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #ecf3ff;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  white-space: nowrap;
+}
+.guide-tag.ok { color: #bdf2d8; background: rgba(47,210,140,0.12); border-color: rgba(47,210,140,0.18); }
+.guide-tag.warn { color: #ffe7a7; background: rgba(255,191,67,0.12); border-color: rgba(255,191,67,0.18); }
+.guide-card ol, .guide-card ul {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: 13px;
+}
+.env-list {
+  display: grid;
+  gap: 10px;
+}
+.env-item {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 13px;
+}
+.env-item .label {
+  color: var(--muted);
+  min-width: 96px;
+}
+.env-item .value {
+  text-align: right;
+  color: #f4f7ff;
+  flex: 1;
+  word-break: break-word;
+}
+.install-summary {
+  margin-top: 12px;
+}
+@media (max-width: 760px) {
+  .install-grid {
+    grid-template-columns: 1fr;
+  }
+  .env-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .env-item .value {
+    text-align: left;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <section class="hero">
+        <div class="hero-top">
+          <div>
+            <div class="mini-badge">📚 每天 1 小时 · 365 天成长计划</div>
+            <div class="mini-badge ok" id="onlineBadge">在线状态检测中</div>
+            <div class="mini-badge warn" id="pwaBadge">PWA 状态检测中</div>
+            <h1 id="heroTitle">每天长一点</h1>
+            <p class="subtitle" id="heroSubtitle">把“听不懂就自卑”，慢慢练成“听得懂、说得清、能表达”。</p>
+            <p class="quote" id="dailyQuote"></p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn-primary" id="installBtn">📲 安装到手机</button>
+            <button class="btn-secondary" id="installHelpBtn">🧭 安装帮助</button>
+            <button class="btn-secondary" id="shareBtn">🔗 分享进度</button>
+          </div>
+        </div>
+        <div class="status-row" id="heroStatusRow"></div>
+      </section>
+    </header>
+
+    <main>
+      <section class="screen active" id="screen-today">
+        <div class="grid two">
+          <section class="card summary-card">
+            <div class="ring" id="progressRing">
+              <div class="ring-inner">
+                <div class="ring-value" id="ringValue">0%</div>
+                <div class="ring-label">全年进度</div>
+              </div>
+            </div>
+            <div>
+              <h2>今天继续往前走</h2>
+              <p class="helper" id="summaryText">正在加载你的成长数据……</p>
+              <div class="metrics">
+                <div class="metric"><strong id="metricCheckins">0</strong><span class="helper">累计打卡</span></div>
+                <div class="metric"><strong id="metricStreak">0</strong><span class="helper">连续天数</span></div>
+                <div class="metric"><strong id="metricWeek">1</strong><span class="helper">当前主题周</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>当前 7 天</h2>
+            <p class="helper">这一栏会告诉你：本周的 7 天里，哪些天已经完成。</p>
+            <div class="week-strip" id="weekStrip"></div>
+            <div class="tip-box" id="weekTip">保持节奏，比一时冲刺更重要。</div>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top:14px;">
+          <div class="subline" id="todayMeta">今天的计划信息</div>
+          <h2 class="task-title" id="todayTitle">本周主题</h2>
+          <p class="helper" id="todayGoal">本周目标</p>
+
+          <div class="pill-row" id="keywordRow" style="margin-top:12px;"></div>
+
+          <div style="margin-top:16px;">
+            <h3>今天的一小时任务</h3>
+            <div id="todayTasks"></div>
+          </div>
+
+          <div class="grid two" style="margin-top:14px;">
+            <div class="card" style="padding:14px; background:rgba(255,255,255,0.05); box-shadow:none;">
+              <h3>本周核心输出</h3>
+              <div id="outputList" class="helper"></div>
+            </div>
+            <div class="card" style="padding:14px; background:rgba(255,255,255,0.05); box-shadow:none;">
+              <h3>建议搜索 / 阅读方向</h3>
+              <div id="resourceText" class="helper"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:14px;">
+          <h2>今天的笔记与打卡</h2>
+          <p class="helper">你可以只写一句话：今天学会了什么，或者今天最想记住哪句话。</p>
+          <textarea id="noteBox" placeholder="写下一句名句、一个故事、一个概念，或者今天最有收获的一点……"></textarea>
+          <div class="row">
+            <button class="btn-success" id="checkinBtn">✅ 今日打卡</button>
+            <button class="btn-warning" id="saveNoteBtn">💾 手动保存</button>
+            <button class="btn-secondary" id="viewPlanBtn">📖 查看全年计划</button>
+          </div>
+          <div class="tip-box" id="checkinStatus">今天还没有打卡。</div>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-roadmap">
+        <section class="card">
+          <h2>年度路线图</h2>
+          <p class="helper">你不需要一下学完 52 周。只需要知道自己现在在哪一周，然后继续走下一步。</p>
+          <div class="tag-row" id="stageFilterRow" style="margin-top:12px;"></div>
+          <div class="tip-box" id="roadmapSummary">正在生成路线图摘要……</div>
+          <div id="roadmapList"></div>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-history">
+        <div class="grid two">
+          <section class="card">
+            <h2>最近 28 天热力图</h2>
+            <p class="helper">颜色越亮，说明那天完成过打卡。</p>
+            <div class="heatmap" id="heatmap"></div>
+          </section>
+          <section class="card">
+            <h2>成长徽章</h2>
+            <p class="helper">把长期坚持变成一枚一枚看得见的证据。</p>
+            <div class="achievement-list" id="achievementList"></div>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top:14px;">
+          <h2>最近打卡记录</h2>
+          <div class="history-list" id="historyList"></div>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-settings">
+        <section class="card">
+          <h2>设置与备份</h2>
+          <p class="helper">这里会根据你当前的打开方式，告诉你为什么没有弹出安装提示，以及下一步该怎么做。完整 App 体验建议：把整个文件夹部署到你的 PHP 网站目录、宝塔站点或 localhost，再用手机浏览器打开。</p>
+
+          <div class="form-block">
+            <label class="small helper" for="startDate">你的计划开始日期</label>
+            <input id="startDate" type="date" />
+          </div>
+          <div class="row">
+            <button class="btn-primary" id="saveStartBtn">保存开始日期</button>
+            <button class="btn-secondary" id="todayBtn">从今天开始</button>
+          </div>
+
+          <div class="form-block">
+            <label class="small helper">数据管理</label>
+            <div class="row">
+              <button class="btn-secondary" id="exportBtn">导出数据</button>
+              <button class="btn-secondary" id="importBtn">导入数据</button>
+              <button class="btn-danger" id="resetBtn">重置本地数据</button>
+            </div>
+            <input id="importInput" type="file" accept="application/json" style="display:none;" />
+          </div>
+
+          <div class="form-block">
+            <label class="small helper">辅助操作</label>
+            <div class="row">
+              <button class="btn-secondary" id="copyInstallBtn">复制安装提示</button>
+              <a class="link-btn" href="./一年成长计划.md" target="_blank" rel="noopener">打开文字版计划</a>
+              <a class="link-btn" href="./README.md" target="_blank" rel="noopener">打开使用说明</a>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <label class="small helper">安装环境检测</label>
+            <div class="env-list" id="envChecks"></div>
+          </div>
+
+          <div class="tip-box install-summary" id="installGuideSummary">
+            正在识别你的安装环境……
+          </div>
+
+          <div class="form-block">
+            <label class="small helper">按你的设备看安装方法</label>
+            <div class="install-grid" id="installGuideCards"></div>
+          </div>
+
+          <div class="tip-box" id="settingsTip">
+            提示：就算浏览器不自动弹“安装”，很多时候也仍然可以从浏览器菜单里手动选择“安装应用”或“添加到主屏幕”。
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="footer-note">你不是“没文化”，你只是还没有被系统训练过这部分知识。把这一年坚持下来，你会非常明显地不一样。</div>
+  </div>
+
+  <nav class="tabbar">
+    <button class="active" data-screen="today">🏠<br/>今天</button>
+    <button data-screen="roadmap">🗺️<br/>路线图</button>
+    <button data-screen="history">🔥<br/>记录</button>
+    <button data-screen="settings">⚙️<br/>设置</button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script id="plan-data" type="application/json">[{"stage": 1, "title": "重建自信与学习系统", "goal": "先把‘我不行’改成‘我还没系统学过’，建立一年学习节奏。", "read": "列出你最怕听不懂的 20 个词：专业名词、诗句、历史梗、地理概念各 5 个。再了解‘费曼学习法’和‘刻意练习’的核心思想。", "keywords": ["费曼学习法", "刻意练习", "输出倒逼输入", "长期主义"], "output": "写一段 150 字的自我宣言：一年后你想成为什么样的人。", "resource": "可搜索：认知觉醒 / 费曼学习法 / 如何高效做笔记", "milestone": "完成学习启动，建立自己的成长理由。", "week": 1}, {"stage": 1, "title": "高频成语典故 1：历史战场", "goal": "补上聊天中最常见的一批历史成语。", "read": "了解‘破釜沉舟、背水一战、四面楚歌、纸上谈兵、指鹿为马’的故事出处。", "keywords": ["项羽", "韩信", "赵括", "秦二世", "楚汉争霸"], "output": "每个成语各写一个现代工作场景造句。", "resource": "可搜索：成语故事 楚汉争霸 / 战国典故", "milestone": "能把 5 个成语讲给别人听。", "week": 2}, {"stage": 1, "title": "高频成语典故 2：处世与判断", "goal": "把常被引用的处世类成语真正理解。", "read": "了解‘卧薪尝胆、讳疾忌医、唇亡齿寒、一鼓作气、滥竽充数’的故事。", "keywords": ["勾践", "扁鹊", "齐宣王", "春秋", "战国"], "output": "挑 3 个成语，分别解释‘字面意思 + 典故 + 今天怎么用’。", "resource": "可搜索：春秋战国成语故事 / 成语在职场中的使用", "milestone": "再掌握 5 个高频成语。", "week": 3}, {"stage": 1, "title": "专业表达与术语拆解", "goal": "降低别人说专业词时的压迫感。", "read": "整理你工作中常见但不够熟的词：架构、耦合、抽象、范式、SLA、性能瓶颈、容错、可扩展性。", "keywords": ["架构", "耦合", "抽象", "SLA"], "output": "用‘像给初中生解释’的方式解释 8 个术语。", "resource": "可搜索：系统设计基础 / 面向对象核心概念 / 程序员如何表达清楚", "milestone": "建立第一个‘专业词翻译表’。", "week": 4}, {"stage": 2, "title": "古诗词入门：意象和情感", "goal": "知道诗词不是死背，而是理解意象。", "read": "认识常见意象：月、酒、柳、雁、秋、山水、长安。读《静夜思》《黄鹤楼送孟浩然之广陵》《枫桥夜泊》等。", "keywords": ["意象", "离别", "思乡", "山水"], "output": "挑 3 句诗，解释它表达的情感和画面。", "resource": "可搜索：古诗词意象入门 / 唐诗鉴赏基础", "milestone": "能说出 6 个常见诗词意象。", "week": 5}, {"stage": 2, "title": "唐诗名篇 1：盛唐气象", "goal": "理解唐诗为什么常被引用。", "read": "读李白、杜甫、王维、高适的代表作各 1 到 2 首。", "keywords": ["李白", "杜甫", "王维", "边塞诗"], "output": "用自己的话解释‘天生我材必有用’‘会当凌绝顶’‘大漠孤烟直’。", "resource": "可搜索：李白 杜甫 王维 代表作 / 盛唐气象", "milestone": "积累 6 句高频唐诗名句。", "week": 6}, {"stage": 2, "title": "宋词名篇：婉约与豪放", "goal": "听到别人提到苏轼、辛弃疾、李清照时不再陌生。", "read": "读《念奴娇·赤壁怀古》《水调歌头》《声声慢》《青玉案·元夕》等。", "keywords": ["苏轼", "辛弃疾", "李清照", "豪放派"], "output": "比较一首豪放词和一首婉约词的气质差异。", "resource": "可搜索：宋词入门 / 苏轼 辛弃疾 李清照", "milestone": "会举例说明‘豪放’与‘婉约’。", "week": 7}, {"stage": 2, "title": "名句场景化表达", "goal": "让诗句真正能在生活中使用。", "read": "整理 12 句适合聊天、鼓励、感慨、离别、坚持时用的名句。", "keywords": ["名句活用", "场景表达", "引用能力", "表达升级"], "output": "为 6 个生活场景各配一句合适的诗句。", "resource": "可搜索：高频诗词名句 / 诗句如何用于日常表达", "milestone": "建立你的第一份‘名句场景卡片’。", "week": 8}, {"stage": 3, "title": "中国历史骨架 1：先秦到秦汉", "goal": "先抓主线，不陷入细节。", "read": "理清夏商周、春秋战国、秦统一、楚汉之争、汉武帝几个节点。", "keywords": ["分封制", "百家争鸣", "秦始皇", "汉武帝"], "output": "用 5 分钟讲清‘为什么秦很短但很重要’。", "resource": "可搜索：中国历史朝代顺序 / 先秦到汉代梳理", "milestone": "背出朝代大致顺序和关键转折。", "week": 9}, {"stage": 3, "title": "中国历史骨架 2：魏晋南北朝到隋唐", "goal": "理解乱世与盛世如何转换。", "read": "了解三国、两晋、南北朝、隋统一、唐朝盛世与安史之乱。", "keywords": ["三国", "门阀", "隋炀帝", "安史之乱"], "output": "解释‘为什么很多典故都出自三国与唐朝’。", "resource": "可搜索：魏晋风度 / 隋唐历史入门", "milestone": "能概括三国到唐朝的主线。", "week": 10}, {"stage": 3, "title": "中国历史骨架 3：宋元明清", "goal": "补齐现代人最容易混淆的几个朝代。", "read": "了解宋的文治、元的版图、明的制度、清的入关与晚清。", "keywords": ["科举", "行省", "内阁", "闭关"], "output": "做一张‘宋元明清对比表’。", "resource": "可搜索：宋元明清简史 / 朝代对比", "milestone": "知道每个朝代最鲜明的标签。", "week": 11}, {"stage": 3, "title": "近现代史常识", "goal": "建立近现代时间感，减少常识断层。", "read": "梳理鸦片战争、洋务运动、辛亥革命、抗战、新中国成立、改革开放。", "keywords": ["近代化", "辛亥革命", "抗战", "改革开放"], "output": "用时间线写出 8 个关键节点和各自意义。", "resource": "可搜索：中国近现代史时间线 / 近代史入门", "milestone": "形成近现代史的基本地图。", "week": 12}, {"stage": 4, "title": "中国地理骨架：版图与地形", "goal": "先有地图感，再记细节。", "read": "了解中国四大地理区域、三级阶梯、主要山脉河流与气候差异。", "keywords": ["秦岭淮河", "三级阶梯", "长江黄河", "季风"], "output": "口头讲一遍‘中国南北差异为什么这么大’。", "resource": "可搜索：中国地理基础 / 中国地形图入门", "milestone": "建立中国地图的空间感。", "week": 13}, {"stage": 4, "title": "省份简称与区域文化", "goal": "不再把简称、位置、文化标签混淆。", "read": "记住 34 个省级单位的大致位置、简称和代表文化。", "keywords": ["简称", "华北华东华南", "巴蜀", "江浙沪"], "output": "做一张‘省份简称 + 代表城市 + 一个文化标签’表。", "resource": "可搜索：中国省份简称记忆 / 区域文化差异", "milestone": "掌握常见省份简称和区域标签。", "week": 14}, {"stage": 4, "title": "核心城市与名胜", "goal": "别人聊城市和景点时能接得上。", "read": "了解北京、西安、南京、杭州、成都、广州、上海、武汉、洛阳等城市的历史标签与代表景点。", "keywords": ["古都", "江南", "天府之国", "海派"], "output": "每个城市用 3 句话总结‘历史 + 文化 + 今天的气质’。", "resource": "可搜索：中国核心城市文化名片", "milestone": "会讲 8 个城市的文化标签。", "week": 15}, {"stage": 4, "title": "饮食、方言与风俗", "goal": "理解中国文化为什么丰富多样。", "read": "了解八大菜系、典型方言区、春节、清明、端午、中秋等节日风俗。", "keywords": ["八大菜系", "方言区", "民俗", "节日"], "output": "解释‘为什么南北饮食差异明显’。", "resource": "可搜索：中国饮食文化 / 中国节日由来", "milestone": "建立对日常文化差异的理解。", "week": 16}, {"stage": 5, "title": "《西游记》：人物与隐喻", "goal": "知道它不只是‘打妖怪’。", "read": "了解唐僧、孙悟空、猪八戒、沙僧的象征与经典故事。", "keywords": ["大闹天宫", "取经", "九九八十一难", "修行"], "output": "讲 3 个最经典桥段，并说说它们映射了什么人性。", "resource": "可搜索：西游记故事梳理 / 西游记人物分析", "milestone": "能讲清《西游记》为什么经典。", "week": 17}, {"stage": 5, "title": "《三国演义》：人物、权谋与格局", "goal": "别人提曹操、诸葛亮、关羽时能听懂。", "read": "了解桃园结义、官渡之战、赤壁之战、三顾茅庐、空城计等。", "keywords": ["曹操", "刘备", "诸葛亮", "赤壁"], "output": "比较曹操与刘备两种领导风格。", "resource": "可搜索：三国演义入门 / 三国重要战役", "milestone": "形成三国人物与阵营地图。", "week": 18}, {"stage": 5, "title": "《水浒传》：好汉、秩序与反抗", "goal": "理解水浒不只是‘打打杀杀’。", "read": "了解宋江、武松、林冲、鲁智深、李逵等人物命运。", "keywords": ["逼上梁山", "忠义", "草莽", "官逼民反"], "output": "挑 2 个角色，分析他们为何走上梁山。", "resource": "可搜索：水浒传人物分析 / 经典故事", "milestone": "知道《水浒传》的核心冲突。", "week": 19}, {"stage": 5, "title": "《红楼梦》：人物关系与审美", "goal": "跨过‘看不懂’这道坎。", "read": "了解贾宝玉、林黛玉、薛宝钗、王熙凤以及贾府兴衰。", "keywords": ["金陵十二钗", "贾府", "悲剧", "世情"], "output": "用通俗语言解释‘为什么很多人说《红楼梦》伟大’。", "resource": "可搜索：红楼梦人物关系 / 红楼梦入门", "milestone": "能说出《红楼梦》的基本人物格局。", "week": 20}, {"stage": 6, "title": "希腊罗马神话与西方典故", "goal": "补上西方文化中的高频隐喻。", "read": "了解宙斯、雅典娜、普罗米修斯、阿喀琉斯、奥德修斯等故事。", "keywords": ["普罗米修斯", "阿喀琉斯之踵", "奥德赛", "缪斯"], "output": "解释 5 个常见西方典故今天怎么用。", "resource": "可搜索：希腊神话入门 / 西方典故常识", "milestone": "掌握常见西方文化梗。", "week": 21}, {"stage": 6, "title": "圣经故事与西方文化常识", "goal": "不信仰也能了解重要文化母题。", "read": "了解创世、伊甸园、诺亚方舟、巴别塔、最后的晚餐等故事。", "keywords": ["伊甸园", "诺亚方舟", "巴别塔", "最后的晚餐"], "output": "挑 3 个故事，说明它们为什么在文学影视中常出现。", "resource": "可搜索：圣经故事文化常识 / 西方文学母题", "milestone": "建立西方文学典故识别能力。", "week": 22}, {"stage": 6, "title": "世界历史骨架：古代到近代", "goal": "建立世界文明演化的时间感。", "read": "梳理古埃及、两河、希腊罗马、中世纪、文艺复兴、大航海、工业革命。", "keywords": ["城邦", "文艺复兴", "启蒙运动", "工业革命"], "output": "画一条简单时间线并说出每段最重要的变化。", "resource": "可搜索：世界史入门 / 文明简史", "milestone": "能讲出世界史的几个大台阶。", "week": 23}, {"stage": 6, "title": "现代世界格局与国家常识", "goal": "增强国际新闻理解力。", "read": "了解联合国、欧盟、美国、中国、俄罗斯、日本、中东等基础常识。", "keywords": ["联合国", "欧盟", "冷战", "全球化"], "output": "用非专业语言解释‘为什么国际关系总在变化’。", "resource": "可搜索：国际关系基础 / 世界主要国家概览", "milestone": "具备看国际新闻的最低背景。", "week": 24}, {"stage": 7, "title": "儒家：修身齐家与做人逻辑", "goal": "明白很多中文表达背后的价值观来源。", "read": "认识孔子、孟子，了解仁、义、礼、智、信、中庸等概念。", "keywords": ["仁义礼智信", "中庸", "修身齐家", "孟子"], "output": "用今天的话解释‘仁’‘礼’‘中庸’。", "resource": "可搜索：论语入门 / 孟子核心思想", "milestone": "初步理解儒家如何影响中国人。", "week": 25}, {"stage": 7, "title": "道家、法家、墨家", "goal": "建立中国思想的多样性视角。", "read": "了解老子、庄子、韩非子、墨子的核心主张。", "keywords": ["无为", "逍遥", "法治", "兼爱"], "output": "比较儒家与道家的差异：一个更重什么，一个更重什么。", "resource": "可搜索：诸子百家入门 / 老庄韩非墨子", "milestone": "能区分几家思想的基本气质。", "week": 26}, {"stage": 7, "title": "西方哲学入门", "goal": "听到‘苏格拉底、柏拉图、尼采’不再发怵。", "read": "认识苏格拉底、柏拉图、亚里士多德、笛卡尔、康德、尼采的最核心标签。", "keywords": ["理性", "理念论", "怀疑", "意志"], "output": "每位哲学家用一句‘最容易懂的话’概括。", "resource": "可搜索：西方哲学史入门 / 哲学家一句话理解", "milestone": "建立哲学人物与关键词映射。", "week": 27}, {"stage": 7, "title": "宗教与文明地图", "goal": "理解宗教在历史与文化中的作用。", "read": "了解佛教、基督教、伊斯兰教的基本起源、传播区域与代表节日。", "keywords": ["佛教", "基督教", "伊斯兰教", "文明圈"], "output": "做一张‘宗教 - 地区 - 影响’的简单表格。", "resource": "可搜索：世界宗教常识 / 宗教与文明", "milestone": "对世界文明版图有更清楚的感觉。", "week": 28}, {"stage": 8, "title": "绘画与雕塑常识", "goal": "建立最基础的艺术识别力。", "read": "了解达芬奇、米开朗琪罗、梵高、莫奈、毕加索及其风格标签。", "keywords": ["文艺复兴", "印象派", "后印象派", "立体主义"], "output": "看 5 幅名画，各用一句话说出你的直观感受。", "resource": "可搜索：西方美术史入门 / 名画赏析", "milestone": "能认出几类常见艺术风格。", "week": 29}, {"stage": 8, "title": "建筑风格与名作", "goal": "旅行或聊天时能识别基本建筑风格。", "read": "了解哥特式、巴洛克、古典主义、现代主义，以及故宫、帕特农神庙、巴黎圣母院等。", "keywords": ["哥特式", "穹顶", "柱式", "现代主义"], "output": "比较一座中国古建和一座欧洲建筑的风格差异。", "resource": "可搜索：建筑风格入门 / 世界经典建筑", "milestone": "形成建筑审美的最小框架。", "week": 30}, {"stage": 8, "title": "音乐、戏剧、电影常识", "goal": "补一点文艺谈资，不求专业但求不陌生。", "read": "了解交响乐、歌剧、京剧、电影类型片、奥斯卡、戛纳等基本概念。", "keywords": ["交响乐", "歌剧", "京剧", "类型片"], "output": "挑 3 个概念，用通俗语言解释给朋友听。", "resource": "可搜索：艺术门类常识 / 电影基础概念", "milestone": "建立艺术门类的全局感。", "week": 31}, {"stage": 8, "title": "设计审美：配色、字体与界面", "goal": "把审美和你的技术工作连接起来。", "read": "了解基础配色、对齐、留白、层级、字体搭配与信息密度。", "keywords": ["留白", "层级", "对齐", "可读性"], "output": "找 2 个常用 App，分析它们为什么‘看起来舒服 / 不舒服’。", "resource": "可搜索：设计基础四原则 / UI 审美入门", "milestone": "获得最基础的设计判断力。", "week": 32}, {"stage": 9, "title": "经济学入门", "goal": "听懂一些社会话题背后的基本逻辑。", "read": "理解供需、成本、边际、通胀、利率、市场、周期这些基本词。", "keywords": ["供需", "边际", "通胀", "利率"], "output": "用生活中的例子解释‘供需’和‘边际’。", "resource": "可搜索：经济学原理入门 / 十个经济学名词", "milestone": "建立经济学最小词汇表。", "week": 33}, {"stage": 9, "title": "法律与社会规则常识", "goal": "提高规则意识和现实判断力。", "read": "了解合同、劳动法、著作权、隐私权、侵权、举证等基础概念。", "keywords": ["合同", "著作权", "劳动法", "隐私权"], "output": "列出与你工作最相关的 5 条法律常识。", "resource": "可搜索：程序员法律常识 / 劳动法基础 / 著作权入门", "milestone": "补齐生活与工作中的规则短板。", "week": 34}, {"stage": 9, "title": "心理学与沟通", "goal": "提升对自己和别人的理解。", "read": "了解认知偏差、情绪、投射、刻板印象、同理心、非暴力沟通。", "keywords": ["认知偏差", "情绪", "同理心", "非暴力沟通"], "output": "复盘一次误会：从心理学角度重新解释它。", "resource": "可搜索：心理学入门 / 非暴力沟通 / 常见认知偏差", "milestone": "改善表达与关系感知。", "week": 35}, {"stage": 9, "title": "新闻阅读与信息判断", "goal": "减少被标题党和情绪牵着走。", "read": "学习区分事实、观点、数据、立场；了解信息源、偏见、断章取义。", "keywords": ["事实与观点", "信息源", "偏见", "媒体素养"], "output": "找 2 条新闻，拆分其中的事实和观点。", "resource": "可搜索：媒体素养入门 / 如何读新闻", "milestone": "建立基本的信息辨别能力。", "week": 36}, {"stage": 10, "title": "互联网、AI、产品、商业术语", "goal": "把‘听起来厉害’的词变成‘我能解释’的词。", "read": "整理并理解：SaaS、B 端、C 端、增长、闭环、A/B 测试、ROI、Agent、RAG、向量数据库等。", "keywords": ["SaaS", "增长", "ROI", "Agent"], "output": "做一份‘我常见术语白话翻译表 2.0’。", "resource": "可搜索：互联网黑话翻译 / AI 基础术语", "milestone": "大幅降低术语焦虑。", "week": 37}, {"stage": 10, "title": "科学史与关键发明", "goal": "知道现代世界是怎么一步步变成今天的。", "read": "了解印刷术、蒸汽机、电力、相对论、计算机、互联网、DNA、人工智能几个节点。", "keywords": ["科学革命", "工业革命", "计算机", "互联网"], "output": "画一条‘改变世界的 8 项发明’时间线。", "resource": "可搜索：科学史入门 / 改变世界的发明", "milestone": "建立科技与文明的连接视角。", "week": 38}, {"stage": 10, "title": "程序员的表达训练", "goal": "把你脑子里的东西讲得更清楚。", "read": "学习金字塔结构、先结论后原因、对比、举例、类比等表达方法。", "keywords": ["金字塔结构", "结论先行", "类比", "案例"], "output": "把一个 PHP 技术点讲给外行听，录音 3 分钟。", "resource": "可搜索：结构化表达 / 金字塔原理入门", "milestone": "表达开始变得更有层次。", "week": 39}, {"stage": 10, "title": "英文缩写与国际高频词", "goal": "减少看资料时的陌生感。", "read": "认识 GDP、CPI、API、SDK、OKR、KPI、HTTP、OAuth、CPU、GPU、NLP 等。", "keywords": ["缩写", "行业术语", "英文阅读", "国际化"], "output": "选 15 个缩写，各写中文解释和使用场景。", "resource": "可搜索：高频英文缩写大全 / 技术与商业缩写", "milestone": "建立常见缩写感知力。", "week": 40}, {"stage": 11, "title": "非虚构阅读：历史、人物、社会", "goal": "开始读稍微厚一点但有收获的书。", "read": "选一本非虚构书，如《万历十五年》《人类简史》《乡土中国》，先读一本到两章。", "keywords": ["非虚构", "历史视角", "社会观察", "人物"], "output": "写 200 字读书摘要：作者到底想说什么。", "resource": "可搜索：非虚构阅读入门 / 适合新手的人文书单", "milestone": "迈过‘我读不进书’这道坎。", "week": 41}, {"stage": 11, "title": "现代文学短篇", "goal": "通过短篇进入文学世界。", "read": "选读鲁迅、汪曾祺、余华、史铁生等作家的短篇或散文。", "keywords": ["鲁迅", "汪曾祺", "余华", "史铁生"], "output": "挑一篇你最有感触的文章，说说它打动你的地方。", "resource": "可搜索：现代文学短篇推荐 / 鲁迅入门 / 余华散文", "milestone": "建立对现代中文写作的感受力。", "week": 42}, {"stage": 11, "title": "书评、影评、人物评", "goal": "从‘我觉得不错’升级到‘我能说出为什么’。", "read": "学习基本评价框架：主题、结构、人物、语言、观点、局限。", "keywords": ["主题", "结构", "人物", "观点"], "output": "写一篇 300 字短评：一本书、一部电影或一个历史人物。", "resource": "可搜索：如何写书评 / 影评基础 / 人物评论方法", "milestone": "形成可迁移的评价能力。", "week": 43}, {"stage": 11, "title": "演讲与口头表达", "goal": "让你在聊天和工作中更从容。", "read": "练习 1 分钟、3 分钟、5 分钟表达；学习开头、转折、结尾的结构。", "keywords": ["演讲结构", "开头", "转折", "结尾"], "output": "录一段 3 分钟分享：‘我这一年最有收获的 3 件事’。", "resource": "可搜索：演讲表达训练 / 即兴表达技巧", "milestone": "建立公开表达的基本自信。", "week": 44}, {"stage": 12, "title": "建立知识卡片库", "goal": "把一年的学习沉淀为长期资产。", "read": "整理你的成语卡、诗句卡、历史卡、名著卡、术语卡、人物卡。", "keywords": ["知识管理", "卡片笔记", "复习", "沉淀"], "output": "做一个属于你的‘文化知识索引页’。", "resource": "可搜索：卡片笔记法 / Zettelkasten 入门", "milestone": "拥有可反复复习的资料库。", "week": 45}, {"stage": 12, "title": "讲一段历史给别人听", "goal": "把输入变成真正的表达能力。", "read": "从中国史或世界史中选一段你最有兴趣的主题，重新梳理。", "keywords": ["时间线", "因果", "人物", "转折"], "output": "讲 5 分钟历史小故事，要求让外行也能听懂。", "resource": "可搜索：历史讲述技巧 / 讲故事的方法", "milestone": "第一次把历史讲成故事。", "week": 46}, {"stage": 12, "title": "讲一本书或一首诗", "goal": "让文化知识真正进入你的语言系统。", "read": "从四大名著、非虚构、诗词中各选一个最喜欢的内容做分享。", "keywords": ["主题提炼", "金句", "分享", "表达"], "output": "写一篇 500 字分享稿，或者录 5 分钟语音。", "resource": "可搜索：如何做读书分享 / 诗词分享技巧", "milestone": "形成一次完整的文化输出。", "week": 47}, {"stage": 12, "title": "写你的成长总结", "goal": "看见变化，巩固自信。", "read": "回顾第一周写下的‘一年后我想成为什么样的人’。", "keywords": ["复盘", "成长", "自我叙事", "自信"], "output": "写一篇‘这一年我不再自卑的 10 个证据’。", "resource": "可搜索：年度复盘模板 / 成长记录方法", "milestone": "把变化看得见、说得出。", "week": 48}, {"stage": 12, "title": "总复习 1：诗词与成语", "goal": "集中复盘最常用的中文文化知识。", "read": "回顾所有成语典故、诗词名句与场景应用卡片。", "keywords": ["成语", "名句", "复习", "应用"], "output": "随机抽 10 张卡片，自测并复述。", "resource": "复习你的卡片库和笔记", "milestone": "把高频内容真正记住。", "week": 49}, {"stage": 12, "title": "总复习 2：历史与地理", "goal": "把时间感和地图感再巩固一次。", "read": "复盘中国史、世界史、中国地理、中国城市文化。", "keywords": ["时间线", "地图感", "文明", "城市"], "output": "不看资料，画出一条朝代线和一张中国区域图。", "resource": "复习你的时间线和地图笔记", "milestone": "历史地理框架更加牢固。", "week": 50}, {"stage": 12, "title": "总复习 3：名著、哲学、艺术", "goal": "把比较抽象的人文内容串起来。", "read": "回顾四大名著、诸子百家、西方哲学、艺术风格与经典作品。", "keywords": ["名著", "哲学", "艺术", "人文"], "output": "回答 3 个问题：我最喜欢哪本书、哪个人物、哪种思想？为什么？", "resource": "复习你的阅读摘要和短评", "milestone": "形成个人的人文偏好。", "week": 51}, {"stage": 12, "title": "毕业展示与下一年计划", "goal": "从‘补文化’进入‘持续成长’。", "read": "回顾一年全部打卡记录、笔记、输出内容。", "keywords": ["毕业展示", "持续成长", "下一年", "长期主义"], "output": "做一个 10 分钟的‘我的一年成长演讲’提纲，并规划下一年的新主题。", "resource": "复用你一年的全部素材", "milestone": "完成这一年的闭环，准备下一阶段。", "week": 52}]</script>
+  <script id="stage-data" type="application/json">{"1": {"name": "第 1 阶段｜重建自信与表达底座", "target": "先把‘听不懂就自卑’变成‘听不懂我就去拆解’。"}, "2": {"name": "第 2 阶段｜诗词名句与中文表达", "target": "建立最常见的古诗词意象和名句表达。"}, "3": {"name": "第 3 阶段｜中国历史骨架", "target": "先抓朝代主线和关键节点。"}, "4": {"name": "第 4 阶段｜中国地理与风土人情", "target": "形成地图感、城市感和区域文化感。"}, "5": {"name": "第 5 阶段｜四大名著与经典故事", "target": "补上最常被引用的文学母题。"}, "6": {"name": "第 6 阶段｜世界史与西方文化典故", "target": "增强国际与西方文化理解力。"}, "7": {"name": "第 7 阶段｜哲学与文明地图", "target": "理解思想如何影响语言和社会。"}, "8": {"name": "第 8 阶段｜艺术与审美", "target": "建立基础审美与艺术识别力。"}, "9": {"name": "第 9 阶段｜社会运行常识", "target": "补经济、法律、心理、信息判断。"}, "10": {"name": "第 10 阶段｜技术人文与跨界表达", "target": "把术语焦虑转化为解释能力。"}, "11": {"name": "第 11 阶段｜阅读与写作输出", "target": "从知道一些，到开始能写能讲。"}, "12": {"name": "第 12 阶段｜复盘、展示与升级", "target": "把一年学习沉淀成长期能力。"}}</script>
+  <script id="quote-data" type="application/json">["你不是没文化，你只是还没建立自己的知识地图。", "成长不是一口气补完，而是每天多懂一点点。", "真正让人自信的，不是全知道，而是遇到不知道也能学会。", "会解释，才算真正懂；会应用，才算真正会。", "一年后回头看，最值钱的是你留下的理解与表达能力。"]</script>
+
+  <script>
+    const weeks = JSON.parse(document.getElementById('plan-data').textContent);
+    const stageMeta = JSON.parse(document.getElementById('stage-data').textContent);
+    const quotes = JSON.parse(document.getElementById('quote-data').textContent);
+
+    const STORAGE_KEYS = {
+      startDate: 'dh-culture-growth-start-date',
+      notes: 'dh-culture-growth-notes',
+      checkins: 'dh-culture-growth-checkins'
+    };
+
+    const dayTemplates = [
+      function (w) {
+        return [
+          ['20 分钟输入', w.read],
+          ['20 分钟卡片', '从今天的内容里整理 5 张卡片：概念 / 人物 / 故事 / 名句 / 场景。'],
+          ['15 分钟输出', '用自己的话解释：' + w.keywords.slice(0, 2).join('、') + '。尽量像给初中生讲。'],
+          ['5 分钟打卡', '写下：今天最有收获的一点是什么？']
+        ];
+      },
+      function (w) {
+        return [
+          ['20 分钟输入', '围绕本周主题，再补一个相关故事或人物：' + w.title],
+          ['20 分钟卡片', '把关键词 ' + w.keywords.join('、') + ' 做成问答卡片。'],
+          ['15 分钟输出', '口头复述 3 分钟，不看资料。'],
+          ['5 分钟打卡', '写一句：如果明天和别人聊到这个主题，我会怎么开口？']
+        ];
+      },
+      function (w) {
+        return [
+          ['20 分钟输入', '找一个短视频、文章或讲解，把同一主题换个角度再看一遍。'],
+          ['20 分钟卡片', '做一次自测：遮住答案，只看问题，检验你记住了多少。'],
+          ['15 分钟输出', '挑 1 个关键词举例说明它在现实中的使用场景。'],
+          ['5 分钟打卡', '记录：今天最难理解的点是什么？']
+        ];
+      },
+      function (w) {
+        return [
+          ['20 分钟输入', '回顾前三天笔记，重点看你反复记不住的内容。'],
+          ['20 分钟卡片', '把容易混淆的概念做对比卡片。'],
+          ['15 分钟输出', w.title + ' 为什么值得了解？写 120 到 200 字。'],
+          ['5 分钟打卡', '给今天的学习完成度打个分（1 到 5）。']
+        ];
+      },
+      function (w) {
+        return [
+          ['20 分钟输入', '把本周主题和你的工作、成长、自卑感连接起来想一想。'],
+          ['20 分钟卡片', '写下 3 个现实场景：这个知识可以怎么用？'],
+          ['15 分钟输出', '尝试自然使用一个本周学到的词、典故或概念。'],
+          ['5 分钟打卡', '记录今天你最想分享给朋友的一点。']
+        ];
+      },
+      function (w) {
+        return [
+          ['20 分钟输入', '做一个延伸：人物、地图、时间线、作品、电影任选一种。'],
+          ['20 分钟卡片', '整理本周最佳 5 张卡片，删掉无用的。'],
+          ['15 分钟输出', '完成本周核心输出：' + w.output],
+          ['5 分钟打卡', '写一句鼓励自己的话。']
+        ];
+      },
+      function (w) {
+        return [
+          ['20 分钟轻复习', '翻看本周所有卡片，只求熟悉，不求完美。'],
+          ['15 分钟总复盘', '回答 3 个问题：我学会了什么？哪里还模糊？下周怎么更轻松？'],
+          ['20 分钟自由拓展', '看一篇相关文章、一个纪录片片段，或者和别人聊聊本周内容。'],
+          ['5 分钟打卡', '写下本周里程碑：' + w.milestone]
+        ];
+      }
+    ];
+
+    const state = {
+      installPrompt: null,
+      activeScreen: 'today',
+      stageFilter: 'all',
+      noteSaveTimer: null
+    };
+
+    const dayNames = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function todayStr(date) {
+      const d = date || new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + day;
+    }
+
+    function parseSafe(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function getStartDate() {
+      return localStorage.getItem(STORAGE_KEYS.startDate) || todayStr();
+    }
+
+    function setStartDate(value) {
+      localStorage.setItem(STORAGE_KEYS.startDate, value);
+    }
+
+    function getNotes() { return parseSafe(STORAGE_KEYS.notes, {}); }
+    function setNotes(value) { localStorage.setItem(STORAGE_KEYS.notes, JSON.stringify(value)); }
+    function getCheckins() { return parseSafe(STORAGE_KEYS.checkins, []); }
+    function setCheckins(value) { localStorage.setItem(STORAGE_KEYS.checkins, JSON.stringify(value)); }
+
+    function diffDays(aStr, bStr) {
+      const a = new Date(aStr + 'T00:00:00');
+      const b = new Date(bStr + 'T00:00:00');
+      return Math.floor((b - a) / 86400000);
+    }
+
+    function addDays(baseStr, amount) {
+      const d = new Date(baseStr + 'T00:00:00');
+      d.setDate(d.getDate() + amount);
+      return todayStr(d);
+    }
+
+    function formatCNDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      return (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日';
+    }
+
+    function greetingText() {
+      const hour = new Date().getHours();
+      if (hour < 11) return '早上好，今天也继续一点点变强。';
+      if (hour < 14) return '中午好，给自己留出 1 小时，就已经很了不起。';
+      if (hour < 19) return '下午好，今天学一点，明天就少怕一点。';
+      return '晚上好，安静地学 1 小时，也是在给未来铺路。';
+    }
+
+    function randomQuote() {
+      const idx = new Date().getDate() % quotes.length;
+      return '“' + quotes[idx] + '”';
+    }
+
+    function currentPlanInfo() {
+      const start = getStartDate();
+      const now = todayStr();
+      let dayIndex = diffDays(start, now);
+      if (dayIndex < 0) dayIndex = 0;
+      if (dayIndex > 364) dayIndex = 364;
+      const weekIndex = Math.min(Math.floor(dayIndex / 7), weeks.length - 1);
+      const dayOfWeek = dayIndex % 7;
+      return {
+        dayIndex: dayIndex,
+        weekIndex: weekIndex,
+        dayOfWeek: dayOfWeek,
+        week: weeks[weekIndex],
+        start: start,
+        now: now
+      };
+    }
+
+    function isCheckedIn(dateStr) {
+      return getCheckins().includes(dateStr);
+    }
+
+    function toggleCheckin(dateStr) {
+      const arr = getCheckins();
+      const idx = arr.indexOf(dateStr);
+      if (idx >= 0) arr.splice(idx, 1);
+      else arr.push(dateStr);
+      arr.sort();
+      setCheckins(arr);
+    }
+
+    function calcStreak(checkins) {
+      if (!checkins.length) return 0;
+      const set = new Set(checkins);
+      let streak = 0;
+      let cursor = new Date();
+      while (set.has(todayStr(cursor))) {
+        streak += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+      return streak;
+    }
+
+    function weekDoneCount(info) {
+      let count = 0;
+      for (let i = 0; i < 7; i += 1) {
+        const dateStr = addDays(info.start, info.weekIndex * 7 + i);
+        if (isCheckedIn(dateStr)) count += 1;
+      }
+      return count;
+    }
+
+    function progressPercent() {
+      return Math.min(100, Math.round((currentPlanInfo().dayIndex + 1) / 365 * 100));
+    }
+
+    function toast(message) {
+      const node = byId('toast');
+      node.textContent = message;
+      node.classList.add('show');
+      clearTimeout(node._timer);
+      node._timer = setTimeout(function () {
+        node.classList.remove('show');
+      }, 2200);
+    }
+
+    function renderHero() {
+      const info = currentPlanInfo();
+      byId('heroTitle').textContent = '每天长一点';
+      byId('heroSubtitle').textContent = greetingText();
+      byId('dailyQuote').textContent = randomQuote();
+      const status = [];
+      status.push('<span class="pill">📅 第 ' + (info.dayIndex + 1) + ' / 365 天</span>');
+      status.push('<span class="pill">🗂️ 当前阶段：' + stageMeta[info.week.stage].name + '</span>');
+      status.push('<span class="pill">🎯 本周主题：第 ' + info.week.week + ' 周</span>');
+      byId('heroStatusRow').innerHTML = status.join('');
+    }
+
+    function renderSummary() {
+      const info = currentPlanInfo();
+      const checkins = getCheckins();
+      const streak = calcStreak(checkins);
+      const progress = progressPercent();
+      byId('metricCheckins').textContent = checkins.length;
+      byId('metricStreak').textContent = streak;
+      byId('metricWeek').textContent = info.week.week;
+      byId('ringValue').textContent = progress + '%';
+      byId('progressRing').style.background = 'conic-gradient(var(--primary) ' + Math.round(progress * 3.6) + 'deg, rgba(255,255,255,0.10) 0deg)';
+      const leftDays = 365 - (info.dayIndex + 1);
+      byId('summaryText').textContent = '你已经进入第 ' + info.week.week + ' 个主题周，当前阶段是“' + stageMeta[info.week.stage].name + '”。距离一年计划完成还剩 ' + leftDays + ' 天。';
+    }
+
+    function renderWeekStrip() {
+      const info = currentPlanInfo();
+      const currentWeekStartOffset = info.weekIndex * 7;
+      const html = [];
+      for (let i = 0; i < 7; i += 1) {
+        const dateStr = addDays(info.start, currentWeekStartOffset + i);
+        const checked = isCheckedIn(dateStr);
+        const isToday = dateStr === info.now;
+        const isFuture = diffDays(info.now, dateStr) > 0;
+        const cls = ['day-pill'];
+        if (checked) cls.push('done');
+        if (isToday) cls.push('today');
+        if (isFuture) cls.push('future');
+        html.push('<div class="' + cls.join(' ') + '">'
+          + '<div class="day-name">' + dayNames[i] + '</div>'
+          + '<div class="day-num">' + dateStr.slice(8) + '</div>'
+          + '<div class="day-state">' + (checked ? '已打卡' : (isFuture ? '未到' : '待完成')) + '</div>'
+          + '</div>');
+      }
+      byId('weekStrip').innerHTML = html.join('');
+      byId('weekTip').textContent = '本周 7 天已完成 ' + weekDoneCount(info) + ' / 7 天。允许慢一点，但别停。';
+    }
+
+    function renderToday() {
+      const info = currentPlanInfo();
+      const w = info.week;
+      byId('todayMeta').textContent = '今天是计划第 ' + (info.dayIndex + 1) + ' 天 · 第 ' + w.week + ' 周 · ' + stageMeta[w.stage].name;
+      byId('todayTitle').textContent = '本周主题：' + w.title;
+      byId('todayGoal').textContent = '本周目标：' + w.goal;
+      byId('keywordRow').innerHTML = w.keywords.map(function (k) { return '<span class="pill">' + k + '</span>'; }).join('');
+      const tasks = dayTemplates[info.dayOfWeek](w);
+      byId('todayTasks').innerHTML = tasks.map(function (item) {
+        return '<div class="time-card"><div class="time">' + item[0] + '</div><div class="desc">' + item[1] + '</div></div>';
+      }).join('');
+      byId('outputList').innerHTML = '<div>• ' + w.output + '</div><div style="margin-top:8px;">• ' + w.milestone + '</div>';
+      byId('resourceText').textContent = w.resource;
+      const notes = getNotes();
+      byId('noteBox').value = notes[info.now] || '';
+      const checked = isCheckedIn(info.now);
+      byId('checkinBtn').textContent = checked ? '✅ 今天已打卡（点此撤销）' : '✅ 今日打卡';
+      byId('checkinStatus').textContent = checked
+        ? '你今天已经打卡了。继续保持，哪怕只前进了一点点，也算赢。'
+        : '今天还没有打卡。哪怕只学了 20 分钟，也允许自己先完成一次。';
+    }
+
+    function renderRoadmap() {
+      const info = currentPlanInfo();
+      const stageNums = Object.keys(stageMeta);
+      byId('stageFilterRow').innerHTML = ['<button class="tag ' + (state.stageFilter === 'all' ? 'active' : '') + '" data-stage="all">全部阶段</button>']
+        .concat(stageNums.map(function (stageNum) {
+          const active = String(state.stageFilter) === String(stageNum) ? 'active' : '';
+          return '<button class="tag ' + active + '" data-stage="' + stageNum + '">第 ' + stageNum + ' 阶段</button>';
+        })).join('');
+
+      const grouped = {};
+      weeks.forEach(function (w) {
+        if (state.stageFilter !== 'all' && String(w.stage) !== String(state.stageFilter)) return;
+        if (!grouped[w.stage]) grouped[w.stage] = [];
+        grouped[w.stage].push(w);
+      });
+
+      const stageKeys = Object.keys(grouped);
+      if (!stageKeys.length) {
+        byId('roadmapSummary').textContent = '当前筛选条件下没有内容。';
+        byId('roadmapList').innerHTML = '';
+        return;
+      }
+
+      byId('roadmapSummary').textContent = '你当前正在第 ' + info.week.week + ' 周：' + info.week.title + '。如果只想专注当下，就先把当前周学透。';
+
+      byId('roadmapList').innerHTML = stageKeys.map(function (stageNum) {
+        const meta = stageMeta[stageNum];
+        const body = grouped[stageNum].map(function (w) {
+          const current = w.week === info.week.week ? 'current' : '';
+          return '<div class="week-card ' + current + '">'
+            + '<h4>第 ' + w.week + ' 周｜' + w.title + '</h4>'
+            + '<p>' + w.goal + '</p>'
+            + '<div class="mini"><b>建议输入：</b>' + w.read + '</div>'
+            + '<div class="mini"><b>核心输出：</b>' + w.output + '</div>'
+            + '</div>';
+        }).join('');
+        const open = String(stageNum) === String(info.week.stage) ? 'open current' : '';
+        return '<div class="roadmap-item ' + open + '">'
+          + '<div class="roadmap-head">'
+          + '<div><strong>' + meta.name + '</strong><div class="helper small" style="margin-top:4px;">' + meta.target + '</div></div>'
+          + '<div class="helper small">点击展开</div>'
+          + '</div>'
+          + '<div class="roadmap-body">' + body + '</div>'
+          + '</div>';
+      }).join('');
+
+      document.querySelectorAll('.roadmap-head').forEach(function (node) {
+        node.addEventListener('click', function () {
+          node.parentElement.classList.toggle('open');
+        });
+      });
+      document.querySelectorAll('#stageFilterRow [data-stage]').forEach(function (node) {
+        node.addEventListener('click', function () {
+          state.stageFilter = node.getAttribute('data-stage');
+          renderRoadmap();
+        });
+      });
+    }
+
+    function renderHeatmap() {
+      const checkins = new Set(getCheckins());
+      const cells = [];
+      for (let i = 27; i >= 0; i -= 1) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateStr = todayStr(d);
+        const checked = checkins.has(dateStr);
+        const cls = ['heat-cell'];
+        if (checked) cls.push('done');
+        if (dateStr === todayStr()) cls.push('today');
+        cells.push('<div class="' + cls.join(' ') + '" title="' + dateStr + '">' + d.getDate() + '</div>');
+      }
+      byId('heatmap').innerHTML = cells.join('');
+    }
+
+    function renderAchievements() {
+      const total = getCheckins().length;
+      const streak = calcStreak(getCheckins());
+      const items = [
+        { target: 1, title: '起步徽章', text: '完成第 1 次打卡。' },
+        { target: 7, title: '连续一周', text: '先证明你能坚持 7 天。' },
+        { target: 21, title: '习惯初成', text: '跨过 21 次，习惯开始成形。' },
+        { target: 30, title: '月度稳定', text: '一个月打卡，让自信有证据。' },
+        { target: 100, title: '百日积累', text: '100 次以后，你已经不是以前的你。' },
+        { target: 180, title: '半年进化', text: '半年坚持，底色已经明显改变。' },
+        { target: 365, title: '年度毕业', text: '完成一年闭环，进入下一阶段。' }
+      ];
+      byId('achievementList').innerHTML = items.map(function (item) {
+        const unlocked = total >= item.target;
+        return '<div class="achievement-item ' + (unlocked ? '' : 'locked') + '">'
+          + '<div><b>' + (unlocked ? '🏅 ' : '🔒 ') + item.title + '</b></div>'
+          + '<div class="helper small" style="margin-top:6px;">' + item.text + '</div>'
+          + '<div class="helper small" style="margin-top:6px;">进度：' + Math.min(total, item.target) + ' / ' + item.target + ' · 当前连续 ' + streak + ' 天</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    function renderHistory() {
+      const notes = getNotes();
+      const checkins = getCheckins().slice().reverse().slice(0, 15);
+      if (!checkins.length) {
+        byId('historyList').innerHTML = '<div class="history-item">还没有打卡记录。今天先完成第 1 次。</div>';
+        return;
+      }
+      byId('historyList').innerHTML = checkins.map(function (dateStr) {
+        const note = notes[dateStr] ? notes[dateStr].slice(0, 120) : '这一天没有额外笔记。';
+        return '<div class="history-item"><div><b>' + formatCNDate(dateStr) + '</b> · ' + dateStr + ' · 已打卡</div><div class="helper small" style="margin-top:6px;">' + note + '</div></div>';
+      }).join('');
+    }
+
+    function exportData() {
+      const payload = {
+        startDate: getStartDate(),
+        notes: getNotes(),
+        checkins: getCheckins(),
+        exportedAt: new Date().toISOString(),
+        appVersion: 'pwa-v2'
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'culture-growth-data-' + todayStr() + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('已导出打卡数据。');
+    }
+
+    function importDataFromFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function () {
+        try {
+          const data = JSON.parse(String(reader.result || '{}'));
+          if (!data || typeof data !== 'object') throw new Error('无效数据');
+          if (data.startDate) setStartDate(data.startDate);
+          if (data.notes && typeof data.notes === 'object') setNotes(data.notes);
+          if (Array.isArray(data.checkins)) setCheckins(data.checkins.sort());
+          byId('startDate').value = getStartDate();
+          renderAll();
+          toast('数据导入成功。');
+        } catch (error) {
+          toast('导入失败：文件格式不正确。');
+        }
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    function saveNote(manual) {
+      const notes = getNotes();
+      notes[todayStr()] = byId('noteBox').value.trim();
+      setNotes(notes);
+      renderHistory();
+      if (manual) toast('笔记已保存。');
+    }
+
+    function shareProgress() {
+      const info = currentPlanInfo();
+      const text = '我正在用《每天长一点》做一年成长计划。今天是第 ' + (info.dayIndex + 1) + ' 天，第 ' + info.week.week + ' 周，主题是：' + info.week.title + '。目前累计打卡 ' + getCheckins().length + ' 次，连续 ' + calcStreak(getCheckins()) + ' 天。';
+      if (navigator.share) {
+        navigator.share({
+          title: '每天长一点',
+          text: text,
+          url: location.href
+        }).catch(function () {});
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          toast('已复制你的成长进度。');
+        }).catch(function () {
+          toast(text);
+        });
+        return;
+      }
+      toast(text);
+    }
+
+
+function detectClient() {
+  const ua = navigator.userAgent || '';
+  return {
+    ios: /iPhone|iPad|iPod/i.test(ua),
+    android: /Android/i.test(ua),
+    safari: /Safari/i.test(ua) && !/Chrome|CriOS|Edg|OPR|SamsungBrowser/i.test(ua),
+    chrome: /Chrome|CriOS/i.test(ua) && !/Edg|OPR|SamsungBrowser/i.test(ua),
+    edge: /Edg/i.test(ua),
+    samsung: /SamsungBrowser/i.test(ua),
+    wechat: /MicroMessenger/i.test(ua),
+    qq: /QQ\//i.test(ua)
+  };
+}
+
+function getInstallEnv() {
+  const client = detectClient();
+  const supportedProtocol = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  const secureContext = window.isSecureContext || supportedProtocol;
+  const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const inAppBrowser = client.wechat || client.qq;
+  let browserName = '当前浏览器';
+  if (client.wechat) browserName = '微信内置浏览器';
+  else if (client.qq) browserName = 'QQ 内置浏览器';
+  else if (client.safari) browserName = 'Safari';
+  else if (client.edge) browserName = 'Edge';
+  else if (client.samsung) browserName = 'Samsung Internet';
+  else if (client.chrome) browserName = 'Chrome';
+  else if (client.android) browserName = 'Android 浏览器';
+  else if (client.ios) browserName = 'iPhone / iPad 浏览器';
+
+  return {
+    client: client,
+    browserName: browserName,
+    supportedProtocol: supportedProtocol,
+    secureContext: secureContext,
+    standalone: standalone,
+    swSupported: 'serviceWorker' in navigator,
+    canPromptInstall: !!state.installPrompt,
+    fileMode: location.protocol === 'file:',
+    inAppBrowser: inAppBrowser,
+    currentUrl: location.href
+  };
+}
+
+function renderInstallGuide() {
+  const env = getInstallEnv();
+  const envChecks = [
+    ['当前打开方式', env.fileMode ? '⚠️ 本地文件 file://' : '✅ 网址访问'],
+    ['当前浏览器', env.browserName + (env.inAppBrowser ? '（建议切到系统浏览器）' : '')],
+    ['安装协议环境', env.supportedProtocol ? '✅ 满足 HTTP / HTTPS / localhost 条件' : '⚠️ 当前不满足安装条件'],
+    ['安装提示事件', env.canPromptInstall ? '✅ 浏览器已准备安装提示' : 'ℹ️ 暂未收到自动安装提示'],
+    ['离线缓存能力', (env.swSupported && env.supportedProtocol) ? '✅ 可启用离线缓存' : '⚠️ 当前环境受限'],
+    ['当前安装状态', env.standalone ? '✅ 已安装到主屏幕' : '未安装']
+  ];
+  byId('envChecks').innerHTML = envChecks.map(function (item) {
+    return '<div class="env-item"><div class="label">' + item[0] + '</div><div class="value">' + item[1] + '</div></div>';
+  }).join('');
+
+  let summary = '';
+  if (env.standalone) {
+    summary = '你已经把它安装成 App 了，以后直接从主屏幕打开就行。';
+  } else if (env.fileMode) {
+    summary = '你现在是直接打开本地 index.html（file://），这种方式下一般不会弹出“安装”。打卡和笔记能用，但想安装到手机，请把整个 culture-growth-app 文件夹放到网站目录、宝塔站点或 localhost，再用网址打开。';
+  } else if (env.inAppBrowser) {
+    summary = '你现在像是在微信 / QQ 这类内置浏览器里打开，很多内置浏览器不支持安装。请先用 Safari、Chrome 或 Edge 打开。';
+  } else if (env.client.ios && env.client.safari) {
+    summary = 'iPhone 上通常不会自动弹出安装窗口，这是正常的。请点击 Safari 的“分享”按钮，再选择“添加到主屏幕”。';
+  } else if (env.canPromptInstall) {
+    summary = '当前环境已经具备安装条件。你可以点顶部“安装到手机”，如果浏览器没有弹窗，也可以在浏览器菜单里找“安装应用”或“添加到主屏幕”。';
+  } else if (env.supportedProtocol) {
+    summary = '当前环境已经基本符合安装条件，但浏览器不一定会自动弹窗。你可以等页面加载几秒后再试，或者直接去浏览器菜单里手动安装。';
+  } else {
+    summary = '当前环境暂时不适合安装。建议改成通过 HTTP / HTTPS / localhost 打开，再重新尝试。';
+  }
+  byId('installGuideSummary').textContent = summary;
+
+  const cards = [
+    {
+      title: 'Android · Chrome / Edge',
+      tag: (!env.fileMode && !env.inAppBrowser && env.client.android) ? '推荐当前方案' : '安卓通用',
+      tagClass: (!env.fileMode && !env.inAppBrowser && env.client.android) ? 'ok' : 'warn',
+      body: [
+        '用 Chrome 或 Edge 打开这个网址。',
+        '等页面加载几秒。',
+        '先点顶部“安装到手机”。',
+        '如果没弹窗，再去浏览器菜单找“安装应用”或“添加到主屏幕”。'
+      ]
+    },
+    {
+      title: 'iPhone · Safari',
+      tag: (env.client.ios && env.client.safari) ? '你当前适用' : 'iPhone 通用',
+      tagClass: (env.client.ios && env.client.safari) ? 'ok' : 'warn',
+      body: [
+        '用 Safari 打开网址。',
+        '点击底部或顶部“分享”按钮。',
+        '选择“添加到主屏幕”。',
+        '确认添加后，就能像 App 一样从桌面打开。'
+      ]
+    },
+    {
+      title: '如果你现在是 file://',
+      tag: env.fileMode ? '当前问题点' : '常见原因',
+      tagClass: 'warn',
+      body: [
+        '直接双击本地 HTML 时，浏览器通常不会提供安装能力。',
+        '基础功能还能用，但安装与离线缓存一般不完整。',
+        '请把整个文件夹部署到网站目录、宝塔站点或 localhost。',
+        '然后重新用网址打开。'
+      ]
+    },
+    {
+      title: '如果你在微信 / QQ 里',
+      tag: env.inAppBrowser ? '当前问题点' : '备用排查',
+      tagClass: 'warn',
+      body: [
+        '很多内置浏览器不支持安装 App。',
+        '请点右上角，选择“在浏览器中打开”。',
+        '再使用 Safari、Chrome 或 Edge 完成安装。',
+        '安装后建议固定从主屏幕打开。'
+      ]
+    }
+  ];
+  byId('installGuideCards').innerHTML = cards.map(function (card) {
+    return '<div class="guide-card">'
+      + '<h3><span>' + card.title + '</span><span class="guide-tag ' + card.tagClass + '">' + card.tag + '</span></h3>'
+      + '<ol>' + card.body.map(function (line) { return '<li>' + line + '</li>'; }).join('') + '</ol>'
+      + '</div>';
+  }).join('');
+
+  byId('settingsTip').textContent = env.fileMode
+    ? '提示：你当前是直接打开本地文件，安装提示不弹出基本是正常的。先部署后再测试。'
+    : '提示：即使浏览器不自动弹“安装”，你通常仍可从浏览器菜单里手动选择“安装应用”或“添加到主屏幕”。';
+}
+
+    function copyInstallTips() {
+  const env = getInstallEnv();
+  let text = '《每天长一点》安装说明：';
+  if (env.standalone) {
+    text += '当前已经安装成功，可以直接从主屏幕打开。';
+  } else if (env.fileMode) {
+    text += '你现在是直接打开本地 HTML（file://），浏览器通常不会弹出安装。请把整个 culture-growth-app 文件夹部署到 PHP 网站目录、宝塔站点或 localhost，再用网址打开。';
+  } else if (env.inAppBrowser) {
+    text += '你当前在微信或 QQ 内置浏览器中打开，很多内置浏览器不支持安装。请先切换到 Safari、Chrome 或 Edge。';
+  } else if (env.client.ios && env.client.safari) {
+    text += 'iPhone 上通常不会自动弹出安装窗口。请在 Safari 里点击“分享”，再选择“添加到主屏幕”。';
+  } else if (env.canPromptInstall) {
+    text += '当前环境已经支持安装。你可以点击页面顶部“安装到手机”；如果浏览器没弹窗，也可以在浏览器菜单里找“安装应用”或“添加到主屏幕”。';
+  } else {
+    text += '当前环境基本满足安装条件，但浏览器不一定自动弹窗。请稍等几秒，或去浏览器菜单里手动选择“安装应用”/“添加到主屏幕”。';
+  }
+  text += ' 当前地址：' + env.currentUrl;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function () {
+      toast('安装说明已复制。');
+    }).catch(function () {
+      toast(text);
+    });
+  } else {
+    toast(text);
+  }
+}
+
+    function resetAllData() {
+      const ok = confirm('确定要清空本浏览器中的开始日期、笔记和打卡记录吗？');
+      if (!ok) return;
+      localStorage.removeItem(STORAGE_KEYS.startDate);
+      localStorage.removeItem(STORAGE_KEYS.notes);
+      localStorage.removeItem(STORAGE_KEYS.checkins);
+      byId('startDate').value = getStartDate();
+      renderAll();
+      toast('本地数据已重置。');
+    }
+
+    function updateOnlineBadge() {
+      const online = navigator.onLine;
+      const node = byId('onlineBadge');
+      node.textContent = online ? '🟢 当前在线' : '🟡 当前离线';
+      node.className = 'mini-badge ' + (online ? 'ok' : 'warn');
+    }
+
+    function updatePWABadge() {
+  const env = getInstallEnv();
+  const node = byId('pwaBadge');
+  if (env.standalone) {
+    node.textContent = '📱 已安装为 App';
+    node.className = 'mini-badge ok';
+  } else if (env.fileMode) {
+    node.textContent = 'ℹ️ 当前是 file 模式';
+    node.className = 'mini-badge warn';
+  } else if (env.inAppBrowser) {
+    node.textContent = '↗️ 请用系统浏览器打开';
+    node.className = 'mini-badge warn';
+  } else if (env.client.ios && env.client.safari) {
+    node.textContent = '🍎 Safari 可手动添加';
+    node.className = 'mini-badge warn';
+  } else if (env.canPromptInstall) {
+    node.textContent = '📲 可安装到主屏幕';
+    node.className = 'mini-badge ok';
+  } else if (env.supportedProtocol) {
+    node.textContent = '✨ 支持 PWA · 可手动安装';
+    node.className = 'mini-badge warn';
+  } else {
+    node.textContent = 'ℹ️ 当前环境暂不支持安装';
+    node.className = 'mini-badge warn';
+  }
+}
+
+    function switchScreen(screenName) {
+      state.activeScreen = screenName;
+      document.querySelectorAll('.screen').forEach(function (node) {
+        node.classList.toggle('active', node.id === 'screen-' + screenName);
+      });
+      document.querySelectorAll('.tabbar button').forEach(function (node) {
+        node.classList.toggle('active', node.getAttribute('data-screen') === screenName);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function attachTabbar() {
+      document.querySelectorAll('.tabbar button').forEach(function (node) {
+        node.addEventListener('click', function () {
+          switchScreen(node.getAttribute('data-screen'));
+        });
+      });
+    }
+
+    function updateInstallButton() {
+  const env = getInstallEnv();
+  const button = byId('installBtn');
+  if (env.standalone) {
+    button.disabled = true;
+    button.textContent = '✅ 已安装';
+    return;
+  }
+  button.disabled = false;
+  if (env.fileMode) {
+    button.textContent = '📘 查看安装说明';
+  } else if (env.inAppBrowser) {
+    button.textContent = '↗️ 用浏览器打开';
+  } else if (env.client.ios && env.client.safari) {
+    button.textContent = '🍎 添加到主屏幕';
+  } else if (env.canPromptInstall) {
+    button.textContent = '📲 安装到手机';
+  } else if (env.supportedProtocol) {
+    button.textContent = '📘 查看安装帮助';
+  } else {
+    button.textContent = '📘 安装环境受限';
+  }
+}
+
+    function handleInstall() {
+  const env = getInstallEnv();
+  if (env.standalone) {
+    toast('已经安装好了，直接从主屏幕打开即可。');
+    return;
+  }
+  if (env.fileMode) {
+    switchScreen('settings');
+    toast('你现在是直接打开本地 HTML，先部署到网站目录或 localhost 再安装。');
+    return;
+  }
+  if (env.inAppBrowser) {
+    switchScreen('settings');
+    toast('请先在 Safari、Chrome 或 Edge 里打开，再进行安装。');
+    return;
+  }
+  if (env.client.ios && env.client.safari) {
+    switchScreen('settings');
+    toast('iPhone 请点 Safari 的“分享”，再选“添加到主屏幕”。');
+    return;
+  }
+  if (!env.canPromptInstall) {
+    switchScreen('settings');
+    toast('浏览器不一定自动弹安装，试试菜单里的“安装应用”或“添加到主屏幕”。');
+    return;
+  }
+  state.installPrompt.prompt();
+  state.installPrompt.userChoice.finally(function () {
+    state.installPrompt = null;
+    updateInstallButton();
+    updatePWABadge();
+    renderInstallGuide();
+  });
+}
+
+    function registerServiceWorker() {
+      const supportedProtocol = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if (!('serviceWorker' in navigator) || !supportedProtocol) return;
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    }
+
+    function attachEvents() {
+      byId('checkinBtn').addEventListener('click', function () {
+        const dateStr = todayStr();
+        const checked = isCheckedIn(dateStr);
+        if (checked) {
+          const ok = confirm('今天已经打卡了，要撤销吗？');
+          if (!ok) return;
+        }
+        toggleCheckin(dateStr);
+        saveNote(false);
+        renderAll();
+        toast(checked ? '已撤销今天打卡。' : '今天打卡成功，继续保持。');
+      });
+
+      byId('saveNoteBtn').addEventListener('click', function () {
+        saveNote(true);
+      });
+
+      byId('noteBox').addEventListener('input', function () {
+        clearTimeout(state.noteSaveTimer);
+        state.noteSaveTimer = setTimeout(function () {
+          saveNote(false);
+        }, 500);
+      });
+
+      byId('saveStartBtn').addEventListener('click', function () {
+        const value = byId('startDate').value;
+        if (!value) {
+          toast('请先选择开始日期。');
+          return;
+        }
+        setStartDate(value);
+        renderAll();
+        toast('开始日期已保存。');
+      });
+
+      byId('todayBtn').addEventListener('click', function () {
+        const t = todayStr();
+        byId('startDate').value = t;
+        setStartDate(t);
+        renderAll();
+        toast('已改为从今天开始。');
+      });
+
+      byId('exportBtn').addEventListener('click', exportData);
+      byId('importBtn').addEventListener('click', function () { byId('importInput').click(); });
+      byId('importInput').addEventListener('change', function (event) {
+        importDataFromFile(event.target.files && event.target.files[0]);
+        event.target.value = '';
+      });
+      byId('resetBtn').addEventListener('click', resetAllData);
+      byId('copyInstallBtn').addEventListener('click', copyInstallTips);
+      byId('shareBtn').addEventListener('click', shareProgress);
+      byId('installBtn').addEventListener('click', handleInstall);
+      byId('installHelpBtn').addEventListener('click', function () {
+        switchScreen('settings');
+        toast('已打开安装帮助。');
+      });
+      byId('viewPlanBtn').addEventListener('click', function () {
+        window.open('./一年成长计划.md', '_blank', 'noopener');
+      });
+
+      window.addEventListener('online', updateOnlineBadge);
+      window.addEventListener('offline', updateOnlineBadge);
+      window.addEventListener('beforeinstallprompt', function (event) {
+        event.preventDefault();
+        state.installPrompt = event;
+        updateInstallButton();
+        updatePWABadge();
+      });
+      window.addEventListener('appinstalled', function () {
+        state.installPrompt = null;
+        updateInstallButton();
+        updatePWABadge();
+        toast('App 已安装到主屏幕。');
+      });
+    }
+
+    function renderAll() {
+      byId('startDate').value = getStartDate();
+      renderHero();
+      renderSummary();
+      renderWeekStrip();
+      renderToday();
+      renderRoadmap();
+      renderHeatmap();
+      renderAchievements();
+      renderHistory();
+      updateOnlineBadge();
+      updatePWABadge();
+      updateInstallButton();
+      renderInstallGuide();
+    }
+
+    function init() {
+      attachTabbar();
+      attachEvents();
+      renderAll();
+      registerServiceWorker();
+    }
+
+    init();
+  </script>
+</body>
+</html>
