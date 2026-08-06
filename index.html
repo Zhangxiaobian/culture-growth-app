@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#7ea4ff" />
+  <meta name="theme-color" content="#eef5ed" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="每天长一点" />
   <meta name="description" content="每天 1 小时，用 52 周课程和每周 7 天拆分，系统补齐诗词、历史、地理、名著与表达力。" />
   <link rel="manifest" href="./manifest.webmanifest" />
@@ -197,52 +197,157 @@
       .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .time-card { grid-template-columns: 1fr; gap: 8px; }
     }
-  </style>
+    /* DHWORK_LIGHT_THEME_OVERRIDE_START */
+  :root {
+    --bg: #f6f8fb;
+    --bg-soft: #eef4ed;
+    --panel: rgba(255,255,255,.94);
+    --panel-strong: #f7faf6;
+    --line: rgba(104,124,145,.18);
+    --text: #223548;
+    --muted: #58697a;
+    --primary: #5f8f6b;
+    --primary-2: #7ba992;
+    --accent: #e4ae54;
+    --ok: #3f9364;
+    --warn: #c9872d;
+    --danger: #bf6a6a;
+    --shadow: 0 14px 36px rgba(87,108,129,.12);
+  }
+  body {
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(119,171,138,.15), transparent 30%),
+      radial-gradient(circle at top right, rgba(245,223,180,.18), transparent 26%),
+      linear-gradient(180deg, #fbfcfe 0%, #eef5ed 100%);
+  }
+  .hero, .card {
+    background: rgba(255,255,255,.94);
+    border-color: rgba(104,124,145,.18);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+  .badge {
+    background: rgba(95,143,107,.10);
+    border-color: rgba(95,143,107,.16);
+    color: #355243;
+  }
+  .subtitle, .helper, .mini, label { color: #5c6c7b; }
+  .quote { color: #705823; }
+  .subline { color: #5b7369; }
+  .metric,
+  .day-pill,
+  .lesson-card,
+  .summary-item,
+  .history-item,
+  .achievement-item,
+  .day-outline,
+  .time-card,
+  details.qa,
+  details.week-detail,
+  .heat-cell,
+  .tag,
+  .btn-secondary,
+  .link-btn {
+    background: #ffffff;
+    border-color: rgba(104,124,145,.16);
+  }
+  .metric strong,
+  h1, h2, h3,
+  .time,
+  details.qa summary,
+  details.week-detail summary {
+    color: #203345;
+  }
+  .pill {
+    background: #f0f6ef;
+    border-color: rgba(95,143,107,.14);
+    color: #355243;
+  }
+  .focus-bar, .tip-box {
+    background: #eef5ed;
+    border-color: rgba(95,143,107,.18);
+    color: #284036;
+  }
+  .day-pill.done, .heat-cell.done {
+    background: #e8f3ea;
+    border-color: rgba(63,147,100,.22);
+    color: #2d6c49;
+  }
+  .day-pill.today, .heat-cell.today {
+    outline: 2px solid rgba(228,174,84,.75);
+  }
+  .day-state { color: #5a7069; }
+  .lesson-card.focus {
+    background: #eef6ef;
+    border-color: rgba(95,143,107,.26);
+  }
+  .lesson-card p, .day-outline p, .answer { color: #30465a; }
+  .index, .day-cap {
+    background: #f9eed6;
+    color: #76571c;
+    border-color: rgba(228,174,84,.24);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #5f8f6b, #7ba992);
+    color: #ffffff;
+  }
+  .btn-secondary, .link-btn { color: #274153; }
+  .btn-danger {
+    background: linear-gradient(135deg, #e7b4b4, #d88989);
+    color: #5b2222;
+  }
+  input[type="date"], textarea {
+    background: #ffffff;
+    color: #1e2b38;
+    border: 1px solid rgba(104,124,145,.18);
+    box-shadow: inset 0 1px 2px rgba(50,70,90,.04);
+  }
+  .tag { color: #35506b; }
+  .tag.active {
+    background: #eef5ed;
+    border-color: rgba(95,143,107,.22);
+    color: #294437;
+  }
+  .tabbar {
+    background: rgba(255,255,255,.94);
+    border-color: rgba(104,124,145,.18);
+    box-shadow: 0 12px 30px rgba(87,108,129,.15);
+  }
+  .tabbar button { color: #637384; }
+  .tabbar button.active {
+    background: #eef5ed;
+    color: #234133;
+    border: 1px solid rgba(95,143,107,.24);
+  }
+  .toast {
+    background: rgba(38,58,73,.96);
+    border-color: rgba(38,58,73,.18);
+  }
+  /* DHWORK_LIGHT_THEME_OVERRIDE_END */
+</style>
 </head>
 <body>
   <div class="app-shell">
-    <header class="hero">
-      <div class="badge">📚 52 周课程版 · 每周 7 天拆分</div>
-      <h1>每天长一点</h1>
-      <p class="subtitle">这次不只是“每周有内容”，而是把每一周继续拆成 7 天。你每天打开，都会看到今天该学哪一张卡、该回答什么问题、该做什么输出。</p>
-      <p class="quote" id="dailyQuote"></p>
-      <div class="hero-metrics">
-        <div class="metric"><strong id="metricDay">1</strong><span class="helper">计划天数</span></div>
-        <div class="metric"><strong id="metricWeek">1</strong><span class="helper">当前周</span></div>
-        <div class="metric"><strong id="metricWeekDay">1/7</strong><span class="helper">周内进度</span></div>
-        <div class="metric"><strong id="metricProgress">0%</strong><span class="helper">全年进度</span></div>
-      </div>
-    </header>
-
     <main>
       <section class="screen active" id="screen-today">
-        <div class="grid two">
-          <section class="card">
-            <div class="subline" id="todayMeta">今天的课程信息</div>
-            <h2 id="todayTitle">本周主题</h2>
-            <p class="helper" id="todayGoal">本周目标</p>
-            <div class="pill-row" id="keywordRow"></div>
-            <div class="focus-bar" id="focusBar">正在生成今日重点……</div>
-            <div class="week-strip" id="weekStrip"></div>
-            <div class="tip-box" id="weekTip">正在生成本周节奏提示……</div>
-          </section>
-          <section class="card">
-            <h2 id="dayTitle">第 1 天｜今日主题</h2>
-            <div class="tip-box" id="weekOverview">正在加载本周导学……</div>
-            <div class="summary-item" style="margin-top:12px;">
-              <div><strong>今日拆分重点</strong></div>
-              <div class="mini" id="dayFocus" style="margin-top:8px;">正在加载今日重点……</div>
-            </div>
-            <div class="summary-item" style="margin-top:12px;">
-              <div><strong>阶段目标</strong></div>
-              <div class="mini" id="stageTarget" style="margin-top:8px;">正在加载阶段目标……</div>
-            </div>
-          </section>
-        </div>
+        <section class="card">
+          <div class="subline" id="todayMeta">今天的课程信息</div>
+          <h2 id="dayTitle">第 1 天｜今日主题</h2>
+          <p class="helper" id="focusBar">正在生成今日重点……</p>
+          <div class="summary-item" style="margin-top:12px;">
+            <div><strong>今天学什么</strong></div>
+            <div class="mini" id="dayFocus" style="margin-top:8px;">正在加载今天要学的内容……</div>
+          </div>
+          <div class="summary-item" style="margin-top:12px;">
+            <div><strong>今天要完成什么</strong></div>
+            <div class="mini" id="todayDeliverable" style="margin-top:8px;">正在加载今日任务……</div>
+          </div>
+        </section>
 
         <section class="card" style="margin-top:14px;">
           <h2>今日必学卡片</h2>
-          <p class="helper">今天不要贪多，先把今天安排到的 1 到 2 张卡片彻底学懂。</p>
+          <p class="helper">今天只看这里，先把今天安排到的 1 到 2 张卡片彻底学懂。</p>
           <div class="lesson-list" id="dailyCardList" style="margin-top:12px;"></div>
         </section>
 
@@ -257,31 +362,10 @@
           </section>
         </div>
 
-        <div class="grid two" style="margin-top:14px;">
-          <section class="card">
-            <h2>今日小自测</h2>
-            <div class="qa-list" id="dailyCheckList"></div>
-          </section>
-          <section class="card">
-            <h2>今日输出与本周结果</h2>
-            <div class="summary-item">
-              <div><strong>今天要完成什么</strong></div>
-              <div class="mini" id="todayDeliverable" style="margin-top:8px;"></div>
-            </div>
-            <div class="summary-item" style="margin-top:12px;">
-              <div><strong>本周总输出</strong></div>
-              <div class="mini" id="weekOutputText" style="margin-top:8px;"></div>
-            </div>
-            <div class="summary-item" style="margin-top:12px;">
-              <div><strong>本周里程碑</strong></div>
-              <div class="mini" id="milestoneText" style="margin-top:8px;"></div>
-            </div>
-            <div class="summary-item" style="margin-top:12px;">
-              <div><strong>建议继续搜 / 继续看</strong></div>
-              <div class="mini" id="resourceText" style="margin-top:8px;"></div>
-            </div>
-          </section>
-        </div>
+        <section class="card" style="margin-top:14px;">
+          <h2>今日小自测</h2>
+          <div class="qa-list" id="dailyCheckList"></div>
+        </section>
 
         <section class="card" style="margin-top:14px;">
           <h2>今天的笔记与打卡</h2>
@@ -307,6 +391,18 @@
       </section>
 
       <section class="screen" id="screen-history">
+        <header class="hero" style="margin-bottom:14px;">
+          <div class="badge">📚 每天成长一点</div>
+          <h1>每天长一点</h1>
+          <p class="subtitle">你的累计进度、连续打卡和每天成长痕迹，都集中放在这里查看，不再在别的页面重复出现。</p>
+          <p class="quote" id="dailyQuote"></p>
+          <div class="hero-metrics">
+            <div class="metric"><strong id="metricDay">1</strong><span class="helper">计划天数</span></div>
+            <div class="metric"><strong id="metricWeek">1</strong><span class="helper">当前周</span></div>
+            <div class="metric"><strong id="metricWeekDay">1/7</strong><span class="helper">周内进度</span></div>
+            <div class="metric"><strong id="metricProgress">0%</strong><span class="helper">全年进度</span></div>
+          </div>
+        </header>
         <div class="grid two">
           <section class="card">
             <h2>最近 28 天打卡热力图</h2>
@@ -323,6 +419,7 @@
           <div class="history-list" id="historyList"></div>
         </section>
       </section>
+
 
       <section class="screen" id="screen-settings">
         <section class="card">
@@ -350,7 +447,6 @@
       </section>
     </main>
 
-    <div class="footer-note">你现在要做的，不是一下子学很多，而是每天打开，就学当天这一页。</div>
   </div>
 
   <nav class="tabbar">
@@ -504,16 +600,10 @@
       const stage = stageMeta[String(week.stage)] || stageMeta[week.stage];
       const lesson = (week.dailyLessons || [])[info.dayOfWeek];
 
-      byId('todayMeta').textContent = '今天是计划第 ' + (info.dayIndex + 1) + ' 天 · 第 ' + week.week + ' 周 · ' + (stage ? stage.name : '当前阶段');
-      byId('todayTitle').textContent = '本周主题：' + week.title;
-      byId('todayGoal').textContent = '本周目标：' + week.goal;
-      byId('keywordRow').innerHTML = (week.keywords || []).map(function (k) { return '<span class="pill">' + esc(k) + '</span>'; }).join('');
-      byId('focusBar').textContent = '今天的主线：' + lesson.focus;
-      byId('weekOverview').textContent = week.overview;
-      byId('dayTitle').textContent = '第 ' + lesson.day + ' 天｜' + lesson.title;
+      byId('todayMeta').textContent = '今天是计划第 ' + (info.dayIndex + 1) + ' 天 · 第 ' + week.week + ' 周第 ' + lesson.day + ' 天' + (stage ? ' · ' + stage.name : '');
+      byId('dayTitle').textContent = '今天学：' + lesson.title;
+      byId('focusBar').textContent = '今天只需要把这一件事学明白：' + lesson.focus;
       byId('dayFocus').textContent = lesson.focus;
-      byId('stageTarget').textContent = stage ? stage.target : '';
-      renderWeekStrip(info);
 
       byId('dailyCardList').innerHTML = lesson.cards.length
         ? lesson.cards.map(function (card, idx) {
@@ -536,9 +626,6 @@
       }).join('');
 
       byId('todayDeliverable').textContent = lesson.deliverable;
-      byId('weekOutputText').textContent = week.output;
-      byId('milestoneText').textContent = week.milestone;
-      byId('resourceText').textContent = week.resource;
 
       const notes = getNotes();
       byId('noteBox').value = notes[info.now] || '';
