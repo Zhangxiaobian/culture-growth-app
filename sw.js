@@ -1,4 +1,4 @@
-const CACHE_NAME = 'culture-growth-course-v4';
+const CACHE_NAME = 'culture-growth-pwa-v7';
 const PRECACHE_URLS = [
   './',
   './index.html',
